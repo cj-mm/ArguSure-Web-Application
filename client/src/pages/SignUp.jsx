@@ -1,31 +1,85 @@
-import React from "react";
-import { Button, Label, TextInput } from "flowbite-react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function SignUp() {
+  const [formData, setFormData] = useState({});
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (
+      !formData.firstName ||
+      !formData.lastName ||
+      !formData.email ||
+      !formData.password ||
+      !formData.confirmpassword
+    ) {
+      console.log(formData);
+      return setErrorMessage("Please fill out all fields!");
+    }
+    if (formData.password !== formData.confirmpassword) {
+      return setErrorMessage("Passwords do not match!");
+    }
+
+    try {
+      setLoading(true);
+      setErrorMessage(null);
+
+      const { confirmpassword, ...otherProperties } = formData;
+      const formDataFinal = { ...otherProperties };
+
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formDataFinal),
+      });
+
+      const data = await res.json();
+      setLoading(false);
+      if (data.success === false) {
+        return setErrorMessage(data.message);
+      }
+      if (res.ok) {
+        navigate("/sign-in");
+      }
+    } catch (error) {
+      setErrorMessage(error.message);
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="bg-clight text-cgreen shadow-2xl w-3/4 lg:w-1/3 rounded-md self-center flex-col mx-auto mt-7">
       <div className="mt-5 flex ">
-        <svg
-          className="w-5 h-5 text-cbrown cursor-pointer absolute ml-3"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 8 14"
-        >
-          <path
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M7 1 1.3 6.326a.91.91 0 0 0 0 1.348L7 13"
-          />
-        </svg>
+        <Link to="/home">
+          <svg
+            className="w-5 h-5 text-cbrown cursor-pointer absolute ml-3"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 8 14"
+          >
+            <path
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M7 1 1.3 6.326a.91.91 0 0 0 0 1.348L7 13"
+            />
+          </svg>
+        </Link>
         <span className="font-black text-3xl m-auto">Sign up</span>
         {/* <div className="right flex-1"></div> */}
       </div>
       <div className="my-5 mx-10">
-        <form className="flex flex-col gap-4 ">
+        <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <div>
             <Label
               value="First Name"
@@ -34,8 +88,9 @@ export default function SignUp() {
             <TextInput
               type="text"
               placeholder="Enter your first name"
-              id="firstname"
+              id="firstName"
               className="text-cbrown"
+              onChange={handleChange}
             />
           </div>
           <div>
@@ -46,12 +101,18 @@ export default function SignUp() {
             <TextInput
               type="text"
               placeholder="Enter your last name"
-              id="lastname"
+              id="lastName"
+              onChange={handleChange}
             />
           </div>
           <div>
             <Label value="Email" className="text-cgreen text-sm font-normal" />
-            <TextInput type="text" placeholder="Enter your email" id="email" />
+            <TextInput
+              type="email"
+              placeholder="Enter your email"
+              id="email"
+              onChange={handleChange}
+            />
           </div>
           <div>
             <Label
@@ -59,9 +120,10 @@ export default function SignUp() {
               className="text-cgreen text-sm font-normal"
             />
             <TextInput
-              type="text"
+              type="password"
               placeholder="Enter your password"
               id="password"
+              onChange={handleChange}
             />
           </div>
           <div>
@@ -70,16 +132,24 @@ export default function SignUp() {
               className="text-cgreen text-sm font-normal"
             />
             <TextInput
-              type="text"
+              type="password"
               placeholder="Confirm password"
               id="confirmpassword"
+              onChange={handleChange}
             />
           </div>
           <Button
             className="bg-cbrown text-clight font-semibold mt-5"
             type="submit"
           >
-            Sign Up
+            {loading ? (
+              <>
+                <Spinner size="sm" />
+                <span className="pl-3">Loading...</span>
+              </>
+            ) : (
+              "Sign up"
+            )}
           </Button>
         </form>
         <div className="flex gap-2 text-sm mt-5 place-content-center">
@@ -90,6 +160,11 @@ export default function SignUp() {
           >
             Sign In
           </Link>
+        </div>
+        <div className="flex place-content-center">
+          {errorMessage && (
+            <Alert className="text-red-400">{errorMessage}</Alert>
+          )}
         </div>
       </div>
     </div>
