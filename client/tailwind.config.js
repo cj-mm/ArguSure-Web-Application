@@ -15,5 +15,5 @@ export default {
       cblack: "#32292F",
     },
   },
-  plugins: [require("flowbite/plugin")],
+  plugins: [require("flowbite/plugin"), require("tailwindcss-inner-border")],
 };

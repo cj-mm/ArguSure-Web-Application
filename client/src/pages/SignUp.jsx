@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { Link, useNavigate } from "react-router-dom";
+import OAuth from "../components/OAuth";
 
 export default function SignUp() {
   const [formData, setFormData] = useState({});
@@ -15,8 +16,7 @@ export default function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (
-      !formData.firstName ||
-      !formData.lastName ||
+      !formData.username ||
       !formData.email ||
       !formData.password ||
       !formData.confirmpassword
@@ -82,26 +82,14 @@ export default function SignUp() {
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <div>
             <Label
-              value="First Name"
+              value="Username"
               className="text-cgreen text-sm font-normal"
             />
             <TextInput
               type="text"
-              placeholder="Enter your first name"
-              id="firstName"
+              placeholder="Enter your username"
+              id="username"
               className="text-cbrown"
-              onChange={handleChange}
-            />
-          </div>
-          <div>
-            <Label
-              value="Last Name"
-              className="text-cgreen text-sm font-normal"
-            />
-            <TextInput
-              type="text"
-              placeholder="Enter your last name"
-              id="lastName"
               onChange={handleChange}
             />
           </div>
@@ -138,19 +126,22 @@ export default function SignUp() {
               onChange={handleChange}
             />
           </div>
-          <Button
-            className="bg-cbrown text-clight font-semibold mt-5"
-            type="submit"
-          >
-            {loading ? (
-              <>
-                <Spinner size="sm" />
-                <span className="pl-3">Loading...</span>
-              </>
-            ) : (
-              "Sign up"
-            )}
-          </Button>
+          <div className="flex hover:shadow-lg bg-black rounded-xl mt-5">
+            <Button
+              className="bg-cbrown text-clight font-semibold flex-1"
+              type="submit"
+            >
+              {loading ? (
+                <>
+                  <Spinner size="sm" />
+                  <span className="pl-3">Loading...</span>
+                </>
+              ) : (
+                "Sign up"
+              )}
+            </Button>
+          </div>
+          <OAuth page={"Sign up"} />
         </form>
         <div className="flex gap-2 text-sm mt-5 place-content-center">
           <span>Already have an account?</span>
