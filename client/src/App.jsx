@@ -10,6 +10,7 @@ import Saved from "./pages/Saved";
 import History from "./pages/History";
 import AppSidebar from "./components/AppSidebar";
 import HeaderProfile from "./components/HeaderProfile";
+import PrivateRoute from "./components/PrivateRoute";
 
 export default function App() {
   return (
@@ -18,14 +19,16 @@ export default function App() {
         {/* <AppSidebar /> */}
         <HeaderProfile />
         <Routes>
+          <Route element={<PrivateRoute />}>
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/liked" element={<Liked />} />
+            <Route path="/disliked" element={<Disliked />} />
+            <Route path="/saved" element={<Saved />} />
+            <Route path="/history" element={<History />} />
+          </Route>
           <Route path="/" element={<Home />} />
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/liked" element={<Liked />} />
-          <Route path="/disliked" element={<Disliked />} />
-          <Route path="/saved" element={<Saved />} />
-          <Route path="/history" element={<History />} />
         </Routes>
       </div>
     </BrowserRouter>

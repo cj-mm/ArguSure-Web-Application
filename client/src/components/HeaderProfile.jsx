@@ -7,7 +7,7 @@ import { BsFillPersonFill, BsBoxArrowInRight } from "react-icons/bs";
 export default function HeaderProfile() {
   const { currentUser } = useSelector((state) => state.user);
   return currentUser ? (
-    <div className="absolute right-7 top-3 bg-clight shadow-xl rounded-full px-3 py-2">
+    <div className="absolute right-7 top-3 bg-clight shadow-xl rounded-full px-3 py-1">
       <Dropdown
         className="bg-clight mt-2"
         size="sm"
