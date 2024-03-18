@@ -9,12 +9,14 @@ import Disliked from "./pages/Disliked";
 import Saved from "./pages/Saved";
 import History from "./pages/History";
 import AppSidebar from "./components/AppSidebar";
+import HeaderProfile from "./components/HeaderProfile";
 
 export default function App() {
   return (
     <BrowserRouter>
       <div className="flex">
         {/* <AppSidebar /> */}
+        <HeaderProfile />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/sign-in" element={<SignIn />} />
