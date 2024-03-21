@@ -52,7 +52,7 @@ export default function SignIn() {
   return (
     <div className="bg-clight text-cgreen shadow-2xl w-3/4 lg:w-1/3 rounded-md self-center flex-col mx-auto mt-7">
       <div className="mt-5 flex ">
-        <Link to="/home">
+        <Link to="/">
           <svg
             className="w-5 h-5 text-cbrown cursor-pointer absolute ml-3"
             aria-hidden="true"
