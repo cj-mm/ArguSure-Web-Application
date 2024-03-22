@@ -1,10 +1,66 @@
-import { Button, Label, TextInput } from "flowbite-react";
-import React from "react";
+import { Alert, Button, Label, TextInput } from "flowbite-react";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { app } from "../firebase";
+import { CircularProgressbar } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
 
 export default function Profile() {
   const { currentUser } = useSelector((state) => state.user);
+  const [imageFile, setImageFile] = useState(null);
+  const [imageFileUrl, setImageFileUrl] = useState(null);
+  const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
+  const [imageFileUploadError, setImageFileUploadError] = useState(null);
+  const filePickerRef = useRef();
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      setImageFileUrl(URL.createObjectURL(file));
+    }
+  };
+
+  useEffect(() => {
+    if (imageFile) {
+      uploadImage();
+    }
+  }, [imageFile]);
+
+  const uploadImage = async () => {
+    setImageFileUploadError(null);
+    const storage = getStorage(app);
+    const fileName = new Date().getTime() + imageFile.name;
+    const storageRef = ref(storage, fileName);
+    const uploadTask = uploadBytesResumable(storageRef, imageFile);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setImageFileUploadProgress(progress.toFixed(0));
+      },
+      (error) => {
+        setImageFileUploadError("Could not upload image");
+        setImageFileUploadProgress(null);
+        setImageFile(null);
+        setImageFileUrl(null);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setImageFileUrl(downloadURL);
+        });
+      }
+    );
+  };
+
   return (
     <div className="bg-clight text-cgreen shadow-2xl w-3/4 lg:w-1/2 rounded-md self-center flex-col mx-auto mt-7">
       <div className="mt-5 flex ">
@@ -29,13 +85,53 @@ export default function Profile() {
       </div>
       <div className="my-5 mx-10">
         <form className="flex flex-col">
-          <div className="w-32 h-32 self-center cursor-pointer shadow-md overflow-hidden rounded-full">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            ref={filePickerRef}
+            hidden
+          />
+          <div
+            className="relative w-32 h-32 self-center cursor-pointer shadow-md overflow-hidden rounded-full"
+            onClick={() => filePickerRef.current.click()}
+          >
+            {imageFileUploadProgress && (
+              <CircularProgressbar
+                value={imageFileUploadProgress || 0}
+                text={`${imageFileUploadProgress}%`}
+                strokeWidth={5}
+                styles={{
+                  root: {
+                    width: "100%",
+                    height: "100%",
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                  },
+                  path: {
+                    stroke: `rgba(62, 152, 199, ${
+                      imageFileUploadProgress / 100
+                    })`,
+                  },
+                }}
+              />
+            )}
             <img
-              src={currentUser.profilePicture}
+              src={imageFileUrl || currentUser.profilePicture}
               alt="user"
-              className="rounded-full w-full h-full object-cover border-4"
+              className={`rounded-full w-full h-full object-cover border-8 border-[lightgray] ${
+                imageFileUploadProgress &&
+                imageFileUploadProgress < 100 &&
+                "opacity-60"
+              }`}
             />
           </div>
+          {imageFileUploadError && (
+            <Alert className="text-red-400 mx-auto text-xs">
+              {imageFileUploadError}
+            </Alert>
+          )}
           <div className="flex gap-5 mt-5">
             <div className="flex-1 flex flex-col gap-3">
               <div>
