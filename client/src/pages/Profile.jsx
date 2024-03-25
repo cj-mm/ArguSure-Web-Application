@@ -163,17 +163,6 @@ export default function Profile() {
             <div className="flex-1 flex flex-col gap-3">
               <div>
                 <Label
-                  value="Current Password"
-                  className="text-cgreen text-sm font-normal"
-                />
-                <TextInput
-                  type="password"
-                  placeholder="Enter your password"
-                  id="currentpassword"
-                />
-              </div>
-              <div>
-                <Label
                   value="New Password"
                   className="text-cgreen text-sm font-normal"
                 />
@@ -192,6 +181,17 @@ export default function Profile() {
                   type="password"
                   placeholder="Confirm password"
                   id="confirmnewpassword"
+                />
+              </div>
+              <div>
+                <Label
+                  value="Current Password"
+                  className="text-cgreen text-sm font-normal"
+                />
+                <TextInput
+                  type="password"
+                  placeholder="Enter your password"
+                  id="currentpassword"
                 />
               </div>
             </div>
