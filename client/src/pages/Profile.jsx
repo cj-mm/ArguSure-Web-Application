@@ -11,6 +11,12 @@ import { useSelector } from "react-redux";
 import { app } from "../firebase";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import {
+  updateStart,
+  updateSuccess,
+  updateFailure,
+} from "../redux/user/userSlice";
+import { useDispatch } from "react-redux";
 
 export default function Profile() {
   const { currentUser } = useSelector((state) => state.user);
@@ -18,7 +24,12 @@ export default function Profile() {
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
   const [imageFileUploadError, setImageFileUploadError] = useState(null);
+  const [imageFileUploading, setImageFileUploading] = useState(false);
+  const [updateUserSuccess, setUpdateUserSuccess] = useState(null);
+  const [updateUserError, setUpdateUserError] = useState(null);
+  const [formData, setFormData] = useState({});
   const filePickerRef = useRef();
+  const dispatch = useDispatch();
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -35,6 +46,7 @@ export default function Profile() {
   }, [imageFile]);
 
   const uploadImage = async () => {
+    setImageFileUploading(true);
     setImageFileUploadError(null);
     const storage = getStorage(app);
     const fileName = new Date().getTime() + imageFile.name;
@@ -52,14 +64,84 @@ export default function Profile() {
         setImageFileUploadProgress(null);
         setImageFile(null);
         setImageFileUrl(null);
+        setImageFileUploading(false);
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setImageFileUrl(downloadURL);
+          setFormData({ ...formData, profilePicture: downloadURL });
+          setImageFileUploading(false);
         });
       }
     );
   };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setUpdateUserSuccess(null);
+    setUpdateUserError(null);
+
+    if (
+      Object.keys(formData).length === 0 ||
+      (formData.newpassword === "" &&
+        formData.username === currentUser.username)
+    ) {
+      setUpdateUserError("No changes made");
+      return;
+    }
+
+    if (!formData.curpassword) {
+      setUpdateUserError("Please fill in current password");
+      return;
+    }
+
+    if (formData.newpassword) {
+      if (formData.newpassword !== formData.confirmpassword) {
+        setUpdateUserError("Passwords do not match");
+      }
+    }
+
+    if (imageFileUploading) {
+      setUpdateUserError("Please wait for image to upload");
+      return;
+    }
+
+    try {
+      dispatch(updateStart());
+      const res = await fetch(`/api/user/update/${currentUser._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        dispatch(updateFailure(data.message));
+        setUpdateUserError(data.message);
+      } else {
+        dispatch(updateSuccess(data));
+        setUpdateUserSuccess("User's profile updated successfully");
+      }
+    } catch (error) {
+      setUpdateUserError(error.message);
+      dispatch(updateFailure(error.message));
+    }
+  };
+
+  // const handleCancel = () => {
+  //   setFormData({
+  //     username: currentUser.username,
+  //     newpassword: "",
+  //     confirmpassword: "",
+  //     curpassword: "",
+  //   });
+  // };
 
   return (
     <div className="bg-clight text-cgreen shadow-2xl w-3/4 lg:w-1/2 rounded-md self-center flex-col mx-auto mt-7">
@@ -84,7 +166,7 @@ export default function Profile() {
         <span className="font-black text-3xl m-auto">Profile</span>
       </div>
       <div className="my-5 mx-10">
-        <form className="flex flex-col">
+        <form className="flex flex-col" onSubmit={handleSubmit}>
           <input
             type="file"
             accept="image/*"
@@ -144,6 +226,7 @@ export default function Profile() {
                   placeholder="Enter your username"
                   id="username"
                   defaultValue={currentUser.username}
+                  onChange={handleChange}
                 />
               </div>
               <div>
@@ -156,6 +239,8 @@ export default function Profile() {
                   placeholder="Enter your email"
                   id="email"
                   defaultValue={currentUser.email}
+                  readOnly
+                  disabled
                 />
               </div>
             </div>
@@ -170,6 +255,7 @@ export default function Profile() {
                   type="password"
                   placeholder="Enter your password"
                   id="newpassword"
+                  onChange={handleChange}
                 />
               </div>
               <div>
@@ -180,7 +266,9 @@ export default function Profile() {
                 <TextInput
                   type="password"
                   placeholder="Confirm password"
-                  id="confirmnewpassword"
+                  id="confirmpassword"
+                  onChange={handleChange}
+                  disabled={formData.newpassword ? false : true}
                 />
               </div>
               <div>
@@ -191,7 +279,15 @@ export default function Profile() {
                 <TextInput
                   type="password"
                   placeholder="Enter your password"
-                  id="currentpassword"
+                  id="curpassword"
+                  onChange={handleChange}
+                  disabled={
+                    Object.keys(formData).length === 0 ||
+                    (formData.newpassword === "" &&
+                      formData.username === currentUser.username)
+                      ? true
+                      : false
+                  }
                 />
               </div>
             </div>
@@ -204,19 +300,31 @@ export default function Profile() {
               Update
             </Button>
           </div>
-          <div className="flex hover:shadow-lg rounded-xl w-1/2 mx-auto">
+          {/* <div className="flex hover:shadow-lg rounded-xl w-1/2 mx-auto">
             <Button
               type="button"
               className="inner-border-cbrown bg-clight inner-border-solid inner-border-2 flex-1 mt-2"
+              // disabled
+              onClick={handleCancel}
             >
               <span className="text-cbrown font-semibold">Cancel</span>
             </Button>
-          </div>
+          </div> */}
         </form>
         <div className=" text-sm text-cbrown underline flex justify-between mt-2 w-1/2 mx-auto">
           <span className="cursor-pointer">Delete Account</span>
           <span className="cursor-pointer">Sign Out</span>
         </div>
+        {updateUserSuccess && (
+          <div className="flex place-content-center">
+            <Alert className="text-green-400">{updateUserSuccess}</Alert>
+          </div>
+        )}
+        {updateUserError && (
+          <div className="flex place-content-center">
+            <Alert className="text-red-400">{updateUserError}</Alert>
+          </div>
+        )}
       </div>
     </div>
   );

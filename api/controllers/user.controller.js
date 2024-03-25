@@ -14,9 +14,9 @@ export const updateUser = async (req, res, next) => {
 
   // check this for json
   const updatedUsername = req.body.username;
-  const updatedPassword = req.body.newPassword;
-  const confirmPassword = req.body.confirmPassword;
-  const curPassword = req.body.curPassword;
+  const updatedPassword = req.body.newpassword;
+  const confirmPassword = req.body.confirmpassword;
+  const curPassword = req.body.curpassword;
 
   if (updatedUsername) {
     const usernameResult = checkUsername(updatedUsername);
@@ -35,7 +35,7 @@ export const updateUser = async (req, res, next) => {
       return next(errorHandler(400, "Passwords do not match"));
     }
 
-    req.body.newPassword = bcryptjs.hashSync(req.body.newPassword, 10);
+    req.body.newpassword = bcryptjs.hashSync(req.body.newpassword, 10);
   }
 
   try {
@@ -59,7 +59,7 @@ export const updateUser = async (req, res, next) => {
           username: req.body.username,
           email: validUser.email,
           profilePicture: req.body.profilePicture,
-          password: req.body.newPassword,
+          password: req.body.newpassword,
         },
       },
       { new: true }
