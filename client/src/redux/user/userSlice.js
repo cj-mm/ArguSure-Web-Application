@@ -4,6 +4,7 @@ const initialState = {
   currentUser: null,
   error: null,
   loading: false,
+  showModal: false,
 };
 
 const userSlice = createSlice({
@@ -36,6 +37,25 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    deleteUserStart: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    deleteUserSuccess: (state) => {
+      state.currentUser = null;
+      state.loading = false;
+      state.error = null;
+    },
+    deleteUserFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    showDeleteModal: (state) => {
+      state.showModal = true;
+    },
+    hideDeleteModal: (state) => {
+      state.showModal = false;
+    },
   },
 });
 
@@ -46,6 +66,11 @@ export const {
   updateStart,
   updateSuccess,
   updateFailure,
+  deleteUserStart,
+  deleteUserSuccess,
+  deleteUserFailure,
+  showDeleteModal,
+  hideDeleteModal,
 } = userSlice.actions;
 
 export default userSlice.reducer;

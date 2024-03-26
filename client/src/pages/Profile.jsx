@@ -15,11 +15,13 @@ import {
   updateStart,
   updateSuccess,
   updateFailure,
+  showDeleteModal,
 } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
+import DeleteUserModal from "../components/DeleteUserModal";
 
 export default function Profile() {
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, error } = useSelector((state) => state.user);
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
@@ -312,7 +314,12 @@ export default function Profile() {
           </div> */}
         </form>
         <div className=" text-sm text-cbrown underline flex justify-between mt-2 w-1/2 mx-auto">
-          <span className="cursor-pointer">Delete Account</span>
+          <span
+            className="cursor-pointer"
+            onClick={() => dispatch(showDeleteModal())}
+          >
+            Delete Account
+          </span>
           <span className="cursor-pointer">Sign Out</span>
         </div>
         {updateUserSuccess && (
@@ -325,6 +332,8 @@ export default function Profile() {
             <Alert className="text-red-400">{updateUserError}</Alert>
           </div>
         )}
+        {error && <Alert className="text-red-400">{error}</Alert>}
+        <DeleteUserModal />
       </div>
     </div>
   );
