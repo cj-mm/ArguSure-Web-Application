@@ -40,15 +40,18 @@ export default function DeleteUserModal() {
       popup
       size="md"
     >
-      <Modal.Header />
-      <Modal.Body>
+      <Modal.Header className="bg-clight" />
+      <Modal.Body className="bg-clight">
         <div className="text-center">
-          <HiOutlineExclamationCircle className="h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto" />
-          <h3 className="mb-5 text-lg text-gray-500 dark:text-gray-400">
+          <HiOutlineExclamationCircle className="h-14 w-14 text-cblack  mb-4 mx-auto" />
+          <h3 className="mb-5 text-lg text-cblack">
             Are you sure you want to delete your account?
           </h3>
           <div className="flex justify-center gap-4">
-            <Button color="failure" onClick={handleDeleteUser}>
+            <Button
+              className="bg-cbrown text-clight font-semibold"
+              onClick={handleDeleteUser}
+            >
               {loading ? (
                 <>
                   <Spinner size="sm" />
@@ -58,8 +61,11 @@ export default function DeleteUserModal() {
                 "Yes, I'm sure"
               )}
             </Button>
-            <Button color="gray" onClick={() => dispatch(hideDeleteModal())}>
-              No, cancel
+            <Button
+              className="inner-border-cbrown bg-clight inner-border-solid inner-border-2"
+              onClick={() => dispatch(hideDeleteModal())}
+            >
+              <span className="text-cbrown font-semibold">No, cancel</span>
             </Button>
           </div>
         </div>
