@@ -16,6 +16,7 @@ import {
   updateSuccess,
   updateFailure,
   showDeleteModal,
+  signOutSuccess,
 } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 import DeleteUserModal from "../components/DeleteUserModal";
@@ -133,6 +134,22 @@ export default function Profile() {
     } catch (error) {
       setUpdateUserError(error.message);
       dispatch(updateFailure(error.message));
+    }
+  };
+
+  const handleSignout = async () => {
+    try {
+      const res = await fetch("/api/user/signout", {
+        method: "POST",
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        console.log(data.message);
+      } else {
+        dispatch(signOutSuccess());
+      }
+    } catch (error) {
+      console.log(error.message);
     }
   };
 
@@ -320,7 +337,9 @@ export default function Profile() {
           >
             Delete Account
           </span>
-          <span className="cursor-pointer">Sign Out</span>
+          <span onClick={handleSignout} className="cursor-pointer">
+            Sign Out
+          </span>
         </div>
         {updateUserSuccess && (
           <div className="flex place-content-center">

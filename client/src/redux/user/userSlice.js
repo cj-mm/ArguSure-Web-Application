@@ -56,6 +56,11 @@ const userSlice = createSlice({
     hideDeleteModal: (state) => {
       state.showModal = false;
     },
+    signOutSuccess: (state) => {
+      state.currentUser = null;
+      state.loading = false;
+      state.error = null;
+    },
   },
 });
 
@@ -71,6 +76,7 @@ export const {
   deleteUserFailure,
   showDeleteModal,
   hideDeleteModal,
+  signOutSuccess,
 } = userSlice.actions;
 
 export default userSlice.reducer;
