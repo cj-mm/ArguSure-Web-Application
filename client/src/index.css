@@ -15,3 +15,43 @@ body {
   width: 100vw;
   height: 100vh;
 }
+
+.app-sidebar > div:first-child {
+  background-color: #6eabb0;
+  border-radius: 0%;
+}
+
+[data-testid="flowbite-sidebar-items"] {
+  text-align: center;
+}
+/* 
+[data-testid="flowbite-sidebar-items"] li {
+  margin-bottom: 50px;
+}
+
+[data-testid="flowbite-sidebar-item-content"] {
+  font-weight: bold;
+  color: #32292f;
+}
+
+[aria-labelledby="flowbite-sidebar-item-"] {
+  background-color: #6eabb0;
+} */
+
+[data-testid="flowbite-sidebar-item-group"] div {
+  margin-bottom: 50px;
+  font-weight: bold;
+  color: #32292f;
+  background-color: #6eabb0;
+}
+
+[data-testid="flowbite-sidebar-item-group"] div:hover {
+  background-color: #6eabb0;
+  color: #f0f7f4;
+}
+
+.app-sidebar img {
+  width: 53px;
+  height: 50px;
+  margin-right: 5px;
+}
