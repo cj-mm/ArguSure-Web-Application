@@ -7,9 +7,9 @@ export default function AppSidebar() {
   const path = useLocation().pathname;
 
   return (
-    <Sidebar className="h-screen">
+    <Sidebar className="h-screen bg-cgreen">
       <Sidebar.Logo href="/" img={AppLogo} imgAlt="App logo" as="div">
-        Lorem Ipsum
+        <span className="text-clightgreen">Lorem Ipsum</span>
       </Sidebar.Logo>
       <Sidebar.Items>
         <Sidebar.ItemGroup>

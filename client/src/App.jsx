@@ -16,17 +16,56 @@ export default function App() {
   return (
     <BrowserRouter>
       <div className="flex">
-        {/* <AppSidebar /> */}
         <HeaderProfile />
         <Routes>
           <Route element={<PrivateRoute />}>
             <Route path="/profile" element={<Profile />} />
-            <Route path="/liked" element={<Liked />} />
-            <Route path="/disliked" element={<Disliked />} />
-            <Route path="/saved" element={<Saved />} />
-            <Route path="/history" element={<History />} />
+            <Route
+              path="/liked"
+              element={
+                <>
+                  <AppSidebar />
+                  <Liked />
+                </>
+              }
+            />
+            <Route
+              path="/disliked"
+              element={
+                <>
+                  <AppSidebar />
+                  <Disliked />
+                </>
+              }
+            />
+            <Route
+              path="/saved"
+              element={
+                <>
+                  <AppSidebar />
+                  <Saved />
+                </>
+              }
+            />
+            <Route
+              path="/history"
+              element={
+                <>
+                  <AppSidebar />
+                  <History />
+                </>
+              }
+            />
           </Route>
-          <Route path="/" element={<Home />} />
+          <Route
+            path="/"
+            element={
+              <>
+                <AppSidebar />
+                <Home />
+              </>
+            }
+          />
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
         </Routes>
