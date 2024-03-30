@@ -27,7 +27,7 @@ export default function HeaderProfile() {
   };
 
   return currentUser ? (
-    <div className="absolute right-7 top-3 bg-clight shadow-xl rounded-full px-3 py-1">
+    <div className="header-profile absolute right-7 top-3 bg-clight shadow-xl rounded-full px-3 py-1">
       <Dropdown
         className="bg-clight mt-2"
         size="sm"

@@ -42,3 +42,7 @@ body {
   background-color: #6eabb0;
   color: #f0f7f4;
 }
+
+.header-profile svg {
+  stroke: #705d55;
+}
