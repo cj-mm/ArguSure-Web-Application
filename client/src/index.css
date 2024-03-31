@@ -19,6 +19,7 @@ body {
 .app-sidebar > div:first-child {
   background-color: #6eabb0;
   border-radius: 0%;
+  width: 15rem;
 }
 
 .app-sidebar img {
@@ -45,4 +46,8 @@ body {
 
 .header-profile svg {
   stroke: #705d55;
+}
+
+.home-input textarea {
+  border-color: #705d55;
 }
