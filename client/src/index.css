@@ -12,6 +12,7 @@ body {
   background-repeat: no-repeat;
   background-position: 25%;
   background-size: 50em;
+  background-attachment: fixed;
   width: 100vw;
   height: 100vh;
 }
@@ -50,4 +51,8 @@ body {
 
 .home-input textarea {
   border-color: #705d55;
+}
+
+.read-more {
+  box-shadow: 0px -3px 10px #f0f7f4;
 }
