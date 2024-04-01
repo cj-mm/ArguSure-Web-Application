@@ -21,11 +21,11 @@ export default function CounterargsContainer({ counterargument }) {
   return (
     <div
       className={
-        "flex gap-12 mt-10 w-[60rem] mx-auto bg-clight shadow-lg p-5 rounded-lg text-cblack " +
+        "flex gap-12 my-5 w-[60rem] mx-auto bg-clight shadow-lg p-5 rounded-lg text-cblack " +
         (readMore ? "h-full" : "h-64")
       }
     >
-      <div className="flex flex-col gap-0 text-justify">
+      <div className="flex flex-col gap-0 text-justify max-w-[50rem]">
         <div className="font-bold text-base">{summary}</div>
         <div className="overflow-hidden mt-2">
           <div>{body}</div>
@@ -42,7 +42,7 @@ export default function CounterargsContainer({ counterargument }) {
           {readMore ? "Read less" : "Read more"}
         </div>
       </div>
-      <div>
+      <div className="text-cblack">
         <div className="flex justify-end ">
           <BsThreeDots className="size-8 hover:cursor-pointer" />
         </div>

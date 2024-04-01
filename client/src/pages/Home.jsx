@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Button, Textarea } from "flowbite-react";
 import CounterargsContainer from "../components/CounterargsContainer";
+import SkeletonLoader from "../components/SkeletonLoader";
 
 export default function Home() {
   const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
@@ -62,8 +63,6 @@ export default function Home() {
     setCounterarguments(counterargs);
   };
 
-  const tempArray = ["HEHHEE", "HEHHEE", "HEHHEE", "HEHHEE", "HEHHEE"];
-
   return (
     <div className="w-full h-full mt-20 ml-60">
       <div className="home-input flex gap-3 justify-center">
@@ -81,15 +80,24 @@ export default function Home() {
         </Button>
       </div>
       <div>
-        {counterarguments.length !== 0 &&
-          counterarguments.map((counterargument, index) => {
-            return (
-              <CounterargsContainer
-                key={index}
-                counterargument={counterargument}
-              />
-            );
-          })}
+        {counterarguments.length !== 0 && (
+          <div>
+            <div className="w-full mt-5 text-center text-lg font-bold text-cblack">
+              Counterarguments:
+            </div>
+            {counterarguments.map((counterargument, index) => {
+              return (
+                <CounterargsContainer
+                  key={index}
+                  counterargument={counterargument}
+                />
+              );
+            })}
+            <div className="my-5 w-full text-center text-base underline text-cbrown hover:cursor-pointer">
+              Regenerate
+            </div>
+          </div>
+        )}
       </div>
       <div></div>
     </div>
