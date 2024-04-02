@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { Button, Textarea } from "flowbite-react";
+import { Button, Spinner, Textarea } from "flowbite-react";
 import CounterargsContainer from "../components/CounterargsContainer";
 import SkeletonLoader from "../components/SkeletonLoader";
 
@@ -9,58 +9,79 @@ export default function Home() {
   const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
   const [inputClaim, setInputClaim] = useState("");
   const [counterarguments, setCounterarguments] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  // const [currentInput, setCurrentInput] = useState("");
+  const currentInput = useRef("");
 
   const handleChange = (e) => {
     setInputClaim(e.target.value);
   };
 
   const generateCounterarguments = async () => {
-    if (!inputClaim) {
-      return;
-    }
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    try {
+      if (!inputClaim) {
+        setError("Please input something!");
+        setLoading(false);
+        setCounterarguments([]);
+        return;
+      }
+      currentInput.current = inputClaim;
+      setError(null);
+      setLoading(true);
+      const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
-    const chat = model.startChat({
-      // history: [
-      //   {
-      //     role: "user",
-      //     parts: "Hello!",
-      //   },
-      //   {
-      //     role: "model",
-      //     parts: "Great to meet you. What would you like to know?",
-      //   },
-      // ],
-      generationConfig: {
-        maxOutputTokens: 4096,
-      },
-    });
+      const chat = model.startChat({
+        // history: [
+        //   {
+        //     role: "user",
+        //     parts: "Hello!",
+        //   },
+        //   {
+        //     role: "model",
+        //     parts: "Great to meet you. What would you like to know?",
+        //   },
+        // ],
+        generationConfig: {
+          maxOutputTokens: 4096,
+        },
+      });
 
-    const claim = `'${inputClaim}'`;
-    const msgs = [
-      "Provide one argument against " +
-        claim +
-        " strictly with summary (in paragraph form), body (in paragraph form), and source as the format",
-      "Provide another one with the same format",
-      "Provide another one again with the same format",
-    ];
-    const numOfCounterarguments = 3;
-    let counterargs = [];
-    for (let i = 0; i < numOfCounterarguments; i++) {
-      const msg = msgs[i];
-      const result = await chat.sendMessage(msg);
-      const response = await result.response;
-      const text = response.text();
-      const summaryPos = text.indexOf("**Summary:**");
-      const bodyPos = text.indexOf("**Body:**");
-      const sourcePos = text.indexOf("**Source:**");
-      const summary = text.substring(summaryPos + 12, bodyPos);
-      const body = text.substring(bodyPos + 9, sourcePos);
-      const source = text.substring(sourcePos + 11);
-      const counterarg = { summary, body, source };
-      counterargs.push(counterarg);
+      const claim = `'${inputClaim}'`;
+
+      const msgs = [
+        "Provide one argument against " +
+          claim +
+          " strictly with summary (in paragraph form), body (in paragraph form), and source as the format",
+        "Provide another one with the same format",
+        "Provide another one again with the same format",
+      ];
+      const numOfCounterarguments = 3;
+      let counterargs = [];
+      for (let i = 0; i < numOfCounterarguments; i++) {
+        const msg = msgs[i];
+        const result = await chat.sendMessage(msg);
+        const response = await result.response;
+        const text = response.text();
+        console.log(text);
+        const summaryPos = text.indexOf("**Summary:**");
+        const bodyPos = text.indexOf("**Body:**");
+        const sourcePos = text.indexOf("**Source:**");
+        const summary = text.substring(summaryPos + 12, bodyPos);
+        const body = text.substring(bodyPos + 9, sourcePos);
+        const source = text.substring(sourcePos + 11);
+        const counterarg = { summary, body, source };
+        counterargs.push(counterarg);
+      }
+      setLoading(false);
+      setError(null);
+      setCounterarguments(counterargs);
+    } catch (error) {
+      setLoading(false);
+      setCounterarguments([]);
+      setError("Counterargument generation failed! Please try again.");
+      console.log(error.message);
     }
-    setCounterarguments(counterargs);
   };
 
   return (
@@ -69,34 +90,55 @@ export default function Home() {
         <Textarea
           placeholder="Enter an argument"
           className="w-96 max-h-40 min-h-16"
+          id="inputclaim-area"
           onChange={handleChange}
         />
         <Button
           className="bg-cbrown text-clight font-semibold w-44 h-10 mt-2 hover:shadow-lg"
           type="button"
           onClick={generateCounterarguments}
+          disabled={inputClaim && !loading ? false : true}
         >
-          Generate
+          {loading ? (
+            <>
+              <Spinner size="sm" />
+              <span className="pl-3">Generating...</span>
+            </>
+          ) : (
+            "Generate"
+          )}
         </Button>
       </div>
+      {error ? (
+        <div className="text-center mt-5 text-red-500">{error}</div>
+      ) : (
+        <></>
+      )}
       <div>
-        {counterarguments.length !== 0 && (
-          <div>
-            <div className="w-full mt-5 text-center text-lg font-bold text-cblack">
-              Counterarguments:
+        {loading ? (
+          <SkeletonLoader />
+        ) : (
+          counterarguments.length !== 0 && (
+            <div>
+              <div className="w-full mt-5 text-center text-lg font-bold text-cblack">
+                Counterarguments:
+              </div>
+              {counterarguments.map((counterargument, index) => {
+                return (
+                  <CounterargsContainer
+                    key={index}
+                    counterargument={counterargument}
+                  />
+                );
+              })}
+              <div
+                className="my-5 w-full text-center text-base underline text-cbrown hover:cursor-pointer"
+                onClick={generateCounterarguments}
+              >
+                Regenerate
+              </div>
             </div>
-            {counterarguments.map((counterargument, index) => {
-              return (
-                <CounterargsContainer
-                  key={index}
-                  counterargument={counterargument}
-                />
-              );
-            })}
-            <div className="my-5 w-full text-center text-base underline text-cbrown hover:cursor-pointer">
-              Regenerate
-            </div>
-          </div>
+          )
         )}
       </div>
       <div></div>
