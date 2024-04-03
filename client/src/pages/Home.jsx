@@ -32,6 +32,7 @@ export default function Home() {
         setError(data.message);
       } else {
         setError(null);
+        return data;
       }
     } catch (error) {
       setError("Something went wrong");
@@ -95,17 +96,19 @@ export default function Home() {
       }
       setLoading(false);
       setError(null);
-      setCounterarguments(counterargs);
 
       for (let i = 0; i < counterargs.length; i++) {
         const counterarg = counterargs[i];
-        await handleSave(
+        const data = await handleSave(
           claim.slice(1, -1),
           counterarg.summary,
           counterarg.body,
           counterarg.source
         );
+        counterargs[i] = data;
       }
+
+      setCounterarguments(counterargs);
     } catch (error) {
       setLoading(false);
       setCounterarguments([]);
