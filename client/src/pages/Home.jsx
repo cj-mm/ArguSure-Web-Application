@@ -18,6 +18,26 @@ export default function Home() {
     setInputClaim(e.target.value);
   };
 
+  const handleSave = async (claim, summary, body, source) => {
+    const counterargData = { inputClaim: claim, summary, body, source };
+    try {
+      const res = await fetch("/api/counterarg/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(counterargData),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.message);
+      } else {
+        setError(null);
+      }
+    } catch (error) {
+      setError("Something went wrong");
+    }
+  };
+
   const generateCounterarguments = async () => {
     try {
       if (!inputClaim) {
@@ -67,15 +87,25 @@ export default function Home() {
         const summaryPos = text.indexOf("**Summary:**");
         const bodyPos = text.indexOf("**Body:**");
         const sourcePos = text.indexOf("**Source:**");
-        const summary = text.substring(summaryPos + 12, bodyPos);
-        const body = text.substring(bodyPos + 9, sourcePos);
-        const source = text.substring(sourcePos + 11);
+        const summary = text.substring(summaryPos + 12, bodyPos).trim();
+        const body = text.substring(bodyPos + 9, sourcePos).trim();
+        const source = text.substring(sourcePos + 11).trim();
         const counterarg = { summary, body, source };
         counterargs.push(counterarg);
       }
       setLoading(false);
       setError(null);
       setCounterarguments(counterargs);
+
+      for (let i = 0; i < counterargs.length; i++) {
+        const counterarg = counterargs[i];
+        await handleSave(
+          claim.slice(1, -1),
+          counterarg.summary,
+          counterarg.body,
+          counterarg.source
+        );
+      }
     } catch (error) {
       setLoading(false);
       setCounterarguments([]);

@@ -10,8 +10,7 @@ export const saveCounterarg = async (req, res, next) => {
     !req.body.inputClaim ||
     !req.body.summary ||
     !req.body.body ||
-    !req.body.source ||
-    !req.body.liked
+    !req.body.source
   ) {
     return next(errorHandler(400, "Please provide all required fields"));
   }
@@ -19,6 +18,7 @@ export const saveCounterarg = async (req, res, next) => {
   const newCounterarg = new Counterargument({
     ...req.body,
     userId: req.user.id,
+    liked: "none",
   });
 
   try {
