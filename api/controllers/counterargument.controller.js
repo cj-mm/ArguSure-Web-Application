@@ -30,7 +30,6 @@ export const saveCounterarg = async (req, res, next) => {
 };
 
 export const likeDislike = async (req, res, next) => {
-  console.log(req.user);
   if (!req.user) {
     return next(errorHandler(403, "User not signed in"));
   }
