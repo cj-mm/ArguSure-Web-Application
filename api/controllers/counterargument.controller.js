@@ -66,3 +66,62 @@ export const likeDislike = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getLikes = async (req, res, next) => {
+  try {
+    const likedCounterargs = await Counterargument.find({
+      userId: req.user.id,
+      liked: "liked",
+      ...(req.query.searchTerm && {
+        $or: [
+          { claim: { $regex: req.query.searchTerm, $options: "i" } },
+          { summary: { $regex: req.query.searchTerm, $options: "i" } },
+          { body: { $regex: req.query.searchTerm, $options: "i" } },
+          { source: { $regex: req.query.searchTerm, $options: "i" } },
+        ],
+      }),
+    }).sort({ updatedAt: "desc" });
+    res.status(200).json(likedCounterargs);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getDislikes = async (req, res, next) => {
+  try {
+    const dislikedCounterargs = await Counterargument.find({
+      userId: req.user.id,
+      liked: "disliked",
+      ...(req.query.searchTerm && {
+        $or: [
+          { claim: { $regex: req.query.searchTerm, $options: "i" } },
+          { summary: { $regex: req.query.searchTerm, $options: "i" } },
+          { body: { $regex: req.query.searchTerm, $options: "i" } },
+          { source: { $regex: req.query.searchTerm, $options: "i" } },
+        ],
+      }),
+    }).sort({ updatedAt: "desc" });
+    res.status(200).json(dislikedCounterargs);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getHistory = async (req, res, next) => {
+  try {
+    const history = await Counterargument.find({
+      userId: req.user.id,
+      ...(req.query.searchTerm && {
+        $or: [
+          { claim: { $regex: req.query.searchTerm, $options: "i" } },
+          { summary: { $regex: req.query.searchTerm, $options: "i" } },
+          { body: { $regex: req.query.searchTerm, $options: "i" } },
+          { source: { $regex: req.query.searchTerm, $options: "i" } },
+        ],
+      }),
+    }).sort({ updatedAt: "desc" });
+    res.status(200).json(history);
+  } catch (error) {
+    next(error);
+  }
+};
