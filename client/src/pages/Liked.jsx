@@ -9,6 +9,7 @@ export default function Liked() {
   const [loading, setLoading] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [showMore, setShowMore] = useState(true);
 
   const handleChange = (e) => {
     setinputSearch(e.target.value);
@@ -34,6 +35,9 @@ export default function Liked() {
           setCounterarguments(data);
           setSearchLoading(false);
           setLoading(false);
+          if (data.length < 9) {
+            setShowMore(false);
+          }
         }
       } catch (error) {
         setLoading(false);
@@ -44,6 +48,24 @@ export default function Liked() {
     };
     fetchLikes();
   }, []);
+
+  const handleShowMore = async () => {
+    const startIndex = counterarguments.length;
+    try {
+      const res = await fetch(
+        `api/counterarg/getlikes?startIndex=${startIndex}`
+      );
+      const data = await res.json();
+      if (res.ok) {
+        setCounterarguments((prev) => [...prev, ...data]);
+        if (data.length < 9) {
+          setShowMore(false);
+        }
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   return (
     <div className="w-full h-full mt-20 ml-60">
@@ -92,9 +114,14 @@ export default function Liked() {
                 />
               );
             })}
-            <div className="my-5 w-full text-center text-base underline text-cbrown hover:cursor-pointer">
-              Show more
-            </div>
+            {showMore && (
+              <div
+                className="my-5 w-full text-center text-base underline text-cbrown hover:cursor-pointer"
+                onClick={handleShowMore}
+              >
+                Show more
+              </div>
+            )}
           </div>
         ) : (
           <div className="w-full mt-5 text-center text-lg font-bold text-cblack">

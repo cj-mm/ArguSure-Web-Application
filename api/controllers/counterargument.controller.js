@@ -69,6 +69,9 @@ export const likeDislike = async (req, res, next) => {
 
 export const getLikes = async (req, res, next) => {
   try {
+    const startIndex = parseInt(req.query.startIndex) || 0;
+    const limit = parseInt(req.query.limit) || 9;
+
     const likedCounterargs = await Counterargument.find({
       userId: req.user.id,
       liked: "liked",
@@ -80,7 +83,11 @@ export const getLikes = async (req, res, next) => {
           { source: { $regex: req.query.searchTerm, $options: "i" } },
         ],
       }),
-    }).sort({ updatedAt: "desc" });
+    })
+      .sort({ updatedAt: "desc" })
+      .skip(startIndex)
+      .limit(limit);
+
     res.status(200).json(likedCounterargs);
   } catch (error) {
     next(error);
