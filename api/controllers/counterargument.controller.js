@@ -72,7 +72,7 @@ export const getCounterargs = async (req, res, next) => {
     const startIndex = parseInt(req.query.startIndex) || 0;
     const limit = parseInt(req.query.limit) || 9;
 
-    const likedCounterargs = await Counterargument.find({
+    const counterargs = await Counterargument.find({
       userId: req.user.id,
       ...(req.query.page && { liked: req.query.page }),
       ...(req.query.searchTerm && {
@@ -84,11 +84,11 @@ export const getCounterargs = async (req, res, next) => {
         ],
       }),
     })
-      .sort({ updatedAt: "desc" })
+      .sort(req.query.page ? { updatedAt: "desc" } : { createdAt: "desc" })
       .skip(startIndex)
       .limit(limit);
 
-    res.status(200).json(likedCounterargs);
+    res.status(200).json(counterargs);
   } catch (error) {
     next(error);
   }
