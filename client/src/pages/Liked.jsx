@@ -16,10 +16,11 @@ export default function Liked() {
     const startIndex = counterarguments.length;
     const urlParams = new URLSearchParams(location.search);
     const searchTermFromUrl = urlParams.get("searchTerm");
+    const page = "liked";
     try {
       const reqRoute = searchTermFromUrl
-        ? `api/counterarg/getlikes?startIndex=${startIndex}&searchTerm=${searchTermFromUrl}`
-        : `api/counterarg/getlikes?startIndex=${startIndex}`;
+        ? `api/counterarg/getcounterargs?page=${page}&startIndex=${startIndex}&searchTerm=${searchTermFromUrl}`
+        : `api/counterarg/getcounterargs?page=${page}&startIndex=${startIndex}`;
       const res = await fetch(reqRoute);
       const data = await res.json();
       if (res.ok) {
@@ -43,11 +44,12 @@ export default function Liked() {
     setShowMore(true);
     const urlParams = new URLSearchParams(location.search);
     const searchTermFromUrl = urlParams.get("searchTerm");
+    const page = "liked";
     const fetchLikes = async () => {
       try {
         const reqRoute = searchTermFromUrl
-          ? `api/counterarg/getlikes?searchTerm=${searchTermFromUrl}`
-          : "api/counterarg/getlikes";
+          ? `api/counterarg/getcounterargs?page=${page}&searchTerm=${searchTermFromUrl}`
+          : `api/counterarg/getcounterargs?page=${page}`;
         const res = await fetch(reqRoute);
         const data = await res.json();
         if (res.ok) {
