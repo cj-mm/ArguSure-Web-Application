@@ -161,6 +161,7 @@ export default function Home() {
                   <CounterargsContainer
                     key={index}
                     counterargument={counterargument}
+                    withClaim={false}
                   />
                 );
               })}
