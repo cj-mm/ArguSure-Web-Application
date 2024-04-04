@@ -77,7 +77,7 @@ export const getLikes = async (req, res, next) => {
       liked: "liked",
       ...(req.query.searchTerm && {
         $or: [
-          { claim: { $regex: req.query.searchTerm, $options: "i" } },
+          { inputClaim: { $regex: req.query.searchTerm, $options: "i" } },
           { summary: { $regex: req.query.searchTerm, $options: "i" } },
           { body: { $regex: req.query.searchTerm, $options: "i" } },
           { source: { $regex: req.query.searchTerm, $options: "i" } },

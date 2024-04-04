@@ -1,60 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { Button, Spinner, TextInput } from "flowbite-react";
+import { useLocation, useNavigate } from "react-router-dom";
 import CounterargsContainer from "../components/CounterargsContainer";
 import SkeletonLoader from "../components/SkeletonLoader";
+import Search from "../components/Search";
 
 export default function Liked() {
-  const [inputSearch, setinputSearch] = useState("");
   const [counterarguments, setCounterarguments] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [searchLoading, setSearchLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showMore, setShowMore] = useState(true);
-
-  const handleChange = (e) => {
-    setinputSearch(e.target.value);
-  };
-
-  const handleSearch = async () => {
-    try {
-    } catch (error) {
-      setSearchLoading(false);
-      setCounterarguments([]);
-      setError("Search failed! Please try again.");
-      console.log(error.message);
-    }
-  };
-
-  useEffect(() => {
-    setLoading(true);
-    const fetchLikes = async () => {
-      try {
-        const res = await fetch("api/counterarg/getlikes");
-        const data = await res.json();
-        if (res.ok) {
-          setCounterarguments(data);
-          setSearchLoading(false);
-          setLoading(false);
-          if (data.length < 9) {
-            setShowMore(false);
-          }
-        }
-      } catch (error) {
-        setLoading(false);
-        setSearchLoading(false);
-        setError(error);
-        console.log(error);
-      }
-    };
-    fetchLikes();
-  }, []);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const handleShowMore = async () => {
     const startIndex = counterarguments.length;
+    const urlParams = new URLSearchParams(location.search);
+    const searchTermFromUrl = urlParams.get("searchTerm");
     try {
-      const res = await fetch(
-        `api/counterarg/getlikes?startIndex=${startIndex}`
-      );
+      const reqRoute = searchTermFromUrl
+        ? `api/counterarg/getlikes?startIndex=${startIndex}&searchTerm=${searchTermFromUrl}`
+        : `api/counterarg/getlikes?startIndex=${startIndex}`;
+      const res = await fetch(reqRoute);
       const data = await res.json();
       if (res.ok) {
         setCounterarguments((prev) => [...prev, ...data]);
@@ -63,35 +29,46 @@ export default function Liked() {
         }
       }
     } catch (error) {
+      setError(error.message);
       console.log(error.message);
     }
   };
 
+  const handleGoBack = () => {
+    navigate("/liked");
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    setShowMore(true);
+    const urlParams = new URLSearchParams(location.search);
+    const searchTermFromUrl = urlParams.get("searchTerm");
+    const fetchLikes = async () => {
+      try {
+        const reqRoute = searchTermFromUrl
+          ? `api/counterarg/getlikes?searchTerm=${searchTermFromUrl}`
+          : "api/counterarg/getlikes";
+        const res = await fetch(reqRoute);
+        const data = await res.json();
+        if (res.ok) {
+          setCounterarguments(data);
+          setLoading(false);
+          if (data.length < 9) {
+            setShowMore(false);
+          }
+        }
+      } catch (error) {
+        setLoading(false);
+        setError(error);
+        console.log(error);
+      }
+    };
+    fetchLikes();
+  }, [location.search]);
+
   return (
     <div className="w-full h-full mt-20 ml-60">
-      <div className="search-input flex gap-3 justify-center">
-        <TextInput
-          type="text"
-          placeholder="Search"
-          className="w-96 max-h-40 min-h-16"
-          onChange={handleChange}
-        />
-        <Button
-          className="bg-cbrown text-clight font-semibold w-44 h-10 hover:shadow-lg"
-          type="button"
-          onClick={handleSearch}
-          disabled={inputSearch && !searchLoading ? false : true}
-        >
-          {searchLoading ? (
-            <>
-              <Spinner size="sm" />
-              <span className="pl-3">Searching...</span>
-            </>
-          ) : (
-            "Search"
-          )}
-        </Button>
-      </div>
+      <Search pageRoute={"liked"} />
       {error ? (
         <div className="text-center mt-5 text-red-500">{error}</div>
       ) : (
@@ -103,7 +80,20 @@ export default function Liked() {
         ) : counterarguments.length !== 0 ? (
           <div>
             <div className="w-full mt-5 text-center text-lg font-bold text-cblack">
-              Liked Counterarguments
+              {new URLSearchParams(location.search).get("searchTerm") ? (
+                <div>
+                  Results for "
+                  {new URLSearchParams(location.search).get("searchTerm")}"
+                  <div
+                    className="text-sm font-normal text-cbrown underline hover:cursor-pointer"
+                    onClick={handleGoBack}
+                  >
+                    {"<"} Go back to all liked counterarguments
+                  </div>
+                </div>
+              ) : (
+                "Liked Counterarguments"
+              )}
             </div>
             {counterarguments.map((counterargument, index) => {
               return (
@@ -125,7 +115,19 @@ export default function Liked() {
           </div>
         ) : (
           <div className="w-full mt-5 text-center text-lg font-bold text-cblack">
-            No liked counterarguments yet!
+            {new URLSearchParams(location.search).get("searchTerm") ? (
+              <div>
+                No results
+                <div
+                  className="text-sm font-normal text-cbrown underline hover:cursor-pointer"
+                  onClick={handleGoBack}
+                >
+                  {"<"} Go back to all liked counterarguments
+                </div>
+              </div>
+            ) : (
+              "No liked counterarguments yet!"
+            )}
           </div>
         )}
       </div>
