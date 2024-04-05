@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
 import counterargRoutes from "./routes/counterargument.route.js";
+import savedRoutes from "./routes/saved.route.js";
 import cookieParser from "cookie-parser";
 
 dotenv.config();
@@ -29,6 +30,7 @@ app.listen(5000, () => {
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/counterarg", counterargRoutes);
+app.use("/api/saved", savedRoutes);
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
