@@ -1,7 +1,7 @@
 import { errorHandler } from "../utils/errors.js";
 import Counterargument from "../models/counterargument.model.js";
 
-export const saveCounterarg = async (req, res, next) => {
+export const recordCounterarg = async (req, res, next) => {
   if (!req.user) {
     return next(errorHandler(403, "Counterargument saving failed"));
   }

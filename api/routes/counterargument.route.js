@@ -3,12 +3,12 @@ import { verifyToken } from "../utils/verifyUser.js";
 import {
   getCounterargs,
   likeDislike,
-  saveCounterarg,
+  recordCounterarg,
 } from "../controllers/counterargument.controller.js";
 
 const router = express.Router();
 
-router.post("/save", verifyToken, saveCounterarg);
+router.post("/record", verifyToken, recordCounterarg);
 router.put("/like", verifyToken, likeDislike);
 router.get("/getcounterargs", verifyToken, getCounterargs);
 

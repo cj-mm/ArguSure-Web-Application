@@ -18,10 +18,10 @@ export default function Home() {
     setInputClaim(e.target.value);
   };
 
-  const handleSave = async (claim, summary, body, source) => {
+  const handleRecord = async (claim, summary, body, source) => {
     const counterargData = { inputClaim: claim, summary, body, source };
     try {
-      const res = await fetch("/api/counterarg/save", {
+      const res = await fetch("/api/counterarg/record", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(counterargData),
@@ -99,7 +99,7 @@ export default function Home() {
 
       for (let i = 0; i < counterargs.length; i++) {
         const counterarg = counterargs[i];
-        const data = await handleSave(
+        const data = await handleRecord(
           claim.slice(1, -1),
           counterarg.summary,
           counterarg.body,
