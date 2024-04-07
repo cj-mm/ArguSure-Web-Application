@@ -32,7 +32,6 @@ export const saveCounterargument = async (req, res, next) => {
     }
 
     const currentUser = await User.findById(userId);
-
     let userSaved = currentUser.saved;
 
     let userSavedTopics = [];
@@ -77,7 +76,18 @@ export const saveCounterargument = async (req, res, next) => {
       },
       { new: true }
     );
-    res.status(200).json(userWithUpdatedSaved);
+
+    const counterargWithUpdatedSaved = await Counterargument.findByIdAndUpdate(
+      counterargId,
+      {
+        $set: {
+          savedTo: selectedTopics,
+        },
+      },
+      { new: true }
+    );
+
+    res.status(200).json({ userWithUpdatedSaved, counterargWithUpdatedSaved });
   } catch (error) {
     next(error);
   }

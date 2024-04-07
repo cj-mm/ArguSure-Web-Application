@@ -28,6 +28,11 @@ const counterargumentSchema = new mongoose.Schema(
       enum: ["none", "liked", "disliked"],
       required: true,
     },
+    savedTo: [
+      {
+        type: String,
+      },
+    ],
   },
   { timestamps: true }
 );
