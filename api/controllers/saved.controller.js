@@ -10,7 +10,7 @@ export const saveCounterargument = async (req, res, next) => {
   }
 
   const userId = req.body.userId;
-  const counterargId = req.body._id;
+  const counterargId = req.body.counterargId;
   const selectedTopics = req.body.selectedTopics;
 
   if (!userId || !counterargId || !selectedTopics) {
@@ -99,6 +99,8 @@ export const unSaveCounterargument = async (req, res, next) => {
 };
 
 export const getSavedCounterargs = async (req, res, next) => {};
+
+export const getTopics = async (req, res, next) => {};
 
 export const addTopic = async (req, res, next) => {};
 

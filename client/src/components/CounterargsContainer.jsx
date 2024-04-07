@@ -1,6 +1,11 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { BiDislike, BiLike, BiSolidDislike, BiSolidLike } from "react-icons/bi";
 import { BsThreeDots } from "react-icons/bs";
+import { FiSave, FiFileMinus } from "react-icons/fi";
+import { RiPlayListAddFill } from "react-icons/ri";
+import { CgPlayListRemove } from "react-icons/cg";
+import { Avatar, Dropdown } from "flowbite-react";
 
 export default function CounterargsContainer({ counterargument, withClaim }) {
   const claim =
@@ -9,8 +14,11 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
   const summary = counterargument.summary;
   const body = counterargument.body;
   const source = counterargument.source;
+  const savedTo = counterargument.savedTo;
   const [readMore, setReadMore] = useState(false);
   const [liked, setLiked] = useState(counterargument.liked);
+  const [isSaved, setIsSaved] = useState(savedTo.length !== 0);
+  const { currentUser } = useSelector((state) => state.user);
 
   const handleRead = () => {
     setReadMore(!readMore);
@@ -34,6 +42,30 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
         console.log(data.message);
       } else {
         setLiked(action);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const handleSave = async () => {
+    const dataBody = {
+      userId: currentUser._id,
+      counterargId: counterargument._id,
+      selectedTopics: ["default"],
+    };
+    try {
+      const res = await fetch("/api/saved/save", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dataBody),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        console.log(data.message);
+      } else {
+        setIsSaved(true);
       }
     } catch (error) {
       console.log(error.message);
@@ -67,7 +99,38 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
         </div>
         <div className="text-cblack">
           <div className="flex justify-end ">
-            <BsThreeDots className="size-8 hover:cursor-pointer" />
+            <Dropdown
+              className="bg-clight"
+              inline
+              arrowIcon={false}
+              label={
+                <Avatar
+                  alt="meatballs"
+                  img={BsThreeDots}
+                  className="size-5 mr-2"
+                />
+              }
+            >
+              {isSaved ? (
+                <Dropdown.Item icon={FiFileMinus} className="text-cbrown mr-3">
+                  <span className="text-cblack font-bold">Unsave</span>
+                </Dropdown.Item>
+              ) : (
+                <Dropdown.Item
+                  icon={FiSave}
+                  className="text-cbrown mr-3"
+                  onClick={handleSave}
+                >
+                  <span className="text-cblack font-bold">Save</span>
+                </Dropdown.Item>
+              )}
+              <Dropdown.Item
+                icon={RiPlayListAddFill}
+                className="text-cbrown mr-3"
+              >
+                <span className="text-cblack font-bold">Save to...</span>
+              </Dropdown.Item>
+            </Dropdown>
           </div>
           <div className="flex gap-5 mt-5">
             {liked !== "liked" ? (
