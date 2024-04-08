@@ -12,5 +12,6 @@ const router = express.Router();
 
 router.put("/save", verifyToken, saveCounterargument);
 router.put("/unsave", verifyToken, unSaveCounterargument);
+router.put("/addtopic", verifyToken, addTopic);
 
 export default router;

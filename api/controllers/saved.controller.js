@@ -70,8 +70,6 @@ export const saveCounterargument = async (req, res, next) => {
       { new: true }
     );
 
-    console.log(selectedTopics);
-
     const counterargWithUpdatedSaved = await Counterargument.findByIdAndUpdate(
       counterargId,
       {
@@ -152,11 +150,47 @@ export const unSaveCounterargument = async (req, res, next) => {
   }
 };
 
+export const addTopic = async (req, res, next) => {
+  // req.body: {userId (string), topicName (string)}
+  if (!req.user) {
+    return next(errorHandler(403, "User not signed in"));
+  }
+
+  if (!req.body.userId || !req.body.topicName) {
+    return next(errorHandler(403, "Insufficient Information"));
+  }
+
+  try {
+    const currentUser = await User.findById(req.body.userId);
+    let userSaved = currentUser.saved;
+    let userSavedTopics = [];
+    for (let i = 0; i < userSaved.length; i++) {
+      userSavedTopics.push(userSaved[i].topicName.toLowerCase());
+    }
+
+    if (userSavedTopics.includes(req.body.topicName.toLowerCase())) {
+      return next(errorHandler(400, "Topic already exists"));
+    }
+
+    userSaved.push({ topicName: req.body.topicName, counterarguments: [] });
+    const userWithUpdatedSaved = await User.findByIdAndUpdate(
+      req.body.userId,
+      {
+        $set: {
+          saved: userSaved,
+        },
+      },
+      { new: true }
+    );
+    res.status(200).json({ userWithUpdatedSaved });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const getSavedCounterargs = async (req, res, next) => {};
 
 export const getTopics = async (req, res, next) => {};
-
-export const addTopic = async (req, res, next) => {};
 
 export const renameTopic = async (req, res, next) => {};
 
