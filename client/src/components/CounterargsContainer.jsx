@@ -14,10 +14,10 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
   const summary = counterargument.summary;
   const body = counterargument.body;
   const source = counterargument.source;
-  const savedTo = counterargument.savedTo;
+  const [savedTo, setSavedTo] = useState(counterargument.savedTo);
   const [readMore, setReadMore] = useState(false);
   const [liked, setLiked] = useState(counterargument.liked);
-  const [isSaved, setIsSaved] = useState(savedTo.length !== 0);
+  const [isSaved, setIsSaved] = useState(counterargument.savedTo.length !== 0);
   const { currentUser } = useSelector((state) => state.user);
 
   const handleRead = () => {
@@ -66,6 +66,33 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
         console.log(data.message);
       } else {
         setIsSaved(true);
+        setSavedTo(["default"]);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const handleUnsave = async () => {
+    const dataBody = {
+      userId: currentUser._id,
+      counterargId: counterargument._id,
+      savedTo: savedTo,
+      removeFrom: savedTo, // need some fixes
+    };
+    try {
+      const res = await fetch("/api/saved/unsave", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dataBody),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        console.log(data.message);
+      } else {
+        setIsSaved(false);
+        setSavedTo([]);
       }
     } catch (error) {
       console.log(error.message);
@@ -112,7 +139,11 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
               }
             >
               {isSaved ? (
-                <Dropdown.Item icon={FiFileMinus} className="text-cbrown mr-3">
+                <Dropdown.Item
+                  icon={FiFileMinus}
+                  className="text-cbrown mr-3"
+                  onClick={handleUnsave}
+                >
                   <span className="text-cblack font-bold">Unsave</span>
                 </Dropdown.Item>
               ) : (

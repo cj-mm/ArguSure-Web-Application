@@ -70,6 +70,8 @@ export const saveCounterargument = async (req, res, next) => {
       { new: true }
     );
 
+    console.log(selectedTopics);
+
     const counterargWithUpdatedSaved = await Counterargument.findByIdAndUpdate(
       counterargId,
       {
