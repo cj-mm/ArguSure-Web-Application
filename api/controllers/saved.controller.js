@@ -156,7 +156,7 @@ export const addTopic = async (req, res, next) => {
     return next(errorHandler(403, "User not signed in"));
   }
 
-  if (!req.body.userId || !req.body.topicName) {
+  if (!req.body.userId || !req.body.topicName.trim()) {
     return next(errorHandler(403, "Insufficient Information"));
   }
 
