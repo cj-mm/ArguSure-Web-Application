@@ -5,6 +5,7 @@ const initialState = {
   error: null,
   loading: false,
   showModal: false,
+  saveToModal: false,
 };
 
 const userSlice = createSlice({
@@ -61,6 +62,12 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = null;
     },
+    showSaveToModal: (state) => {
+      state.saveToModal = true;
+    },
+    hideSaveToModal: (state) => {
+      state.saveToModal = false;
+    },
   },
 });
 
@@ -77,6 +84,8 @@ export const {
   showDeleteModal,
   hideDeleteModal,
   signOutSuccess,
+  showSaveToModal,
+  hideSaveToModal,
 } = userSlice.actions;
 
 export default userSlice.reducer;

@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { BiDislike, BiLike, BiSolidDislike, BiSolidLike } from "react-icons/bi";
 import { BsThreeDots } from "react-icons/bs";
 import { FiSave, FiFileMinus } from "react-icons/fi";
 import { RiPlayListAddFill } from "react-icons/ri";
 import { CgPlayListRemove } from "react-icons/cg";
 import { Avatar, Dropdown } from "flowbite-react";
+import SaveTo from "./SaveTo";
+import { showSaveToModal, updateSuccess } from "../redux/user/userSlice";
 
 export default function CounterargsContainer({ counterargument, withClaim }) {
   const claim =
@@ -19,6 +21,7 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
   const [liked, setLiked] = useState(counterargument.liked);
   const [isSaved, setIsSaved] = useState(counterargument.savedTo.length !== 0);
   const { currentUser } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   const handleRead = () => {
     setReadMore(!readMore);
@@ -67,6 +70,7 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
       } else {
         setIsSaved(true);
         setSavedTo(["default"]);
+        dispatch(updateSuccess(data.userWithUpdatedSaved));
       }
     } catch (error) {
       console.log(error.message);
@@ -93,6 +97,7 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
       } else {
         setIsSaved(false);
         setSavedTo([]);
+        dispatch(updateSuccess(data.userWithUpdatedSaved));
       }
     } catch (error) {
       console.log(error.message);
@@ -158,6 +163,7 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
               <Dropdown.Item
                 icon={RiPlayListAddFill}
                 className="text-cbrown mr-3"
+                onClick={() => dispatch(showSaveToModal())}
               >
                 <span className="text-cblack font-bold">Save to...</span>
               </Dropdown.Item>
@@ -189,6 +195,7 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
           </div>
         </div>
       </div>
+      <SaveTo />
     </div>
   );
 }

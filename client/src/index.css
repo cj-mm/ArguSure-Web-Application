@@ -66,3 +66,11 @@ body {
 [role="menuitem"] button:hover {
   background-color: rgb(235, 235, 235);
 }
+
+.addtopic-modal [role="dialog"] div {
+  max-height: 25rem;
+}
+
+[data-testid="modal-overlay"] {
+  background-color: rgba(17, 24, 39, 0.2);
+}
