@@ -1,6 +1,7 @@
 import express from "express";
 import {
   saveCounterargument,
+  unSaveCounterargument,
   addTopic,
   renameTopic,
   deleteTopic,
@@ -10,5 +11,6 @@ import { verifyToken } from "../utils/verifyUser.js";
 const router = express.Router();
 
 router.put("/save", verifyToken, saveCounterargument);
+router.put("/unsave", verifyToken, unSaveCounterargument);
 
 export default router;
