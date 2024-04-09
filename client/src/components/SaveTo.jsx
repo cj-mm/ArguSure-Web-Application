@@ -1,12 +1,22 @@
 import React, { useState } from "react";
-import { RiPlayListAddFill } from "react-icons/ri";
-import { Modal, Checkbox, Label, Button } from "flowbite-react";
-import { useSelector } from "react-redux";
-import { hideSaveToModal } from "../redux/user/userSlice";
-import { useDispatch } from "react-redux";
+import {
+  RiPlayListAddFill,
+  RiArrowDropDownLine,
+  RiArrowDropUpLine,
+} from "react-icons/ri";
+import { Modal, Checkbox, Label, Button, TextInput } from "flowbite-react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  hideSaveToModal,
+  showAddTopic,
+  hideAddTopic,
+} from "../redux/user/userSlice";
+import AddTopic from "./AddTopic";
 
-export default function SaveTo() {
-  const { currentUser, saveToModal } = useSelector((state) => state.user);
+export default function SaveTo({ counterargument }) {
+  const { currentUser, saveToModal, addTopic } = useSelector(
+    (state) => state.user
+  );
   const [checkedTopics, setCheckedTopics] = useState([]);
   const dispatch = useDispatch();
 
@@ -17,8 +27,11 @@ export default function SaveTo() {
       show={saveToModal}
       popup
       size="sm"
-      className="addtopic-modal"
-      onClose={() => dispatch(hideSaveToModal())}
+      className="saveto-modal"
+      onClose={() => {
+        dispatch(hideSaveToModal());
+        dispatch(hideAddTopic());
+      }}
     >
       <Modal.Header className="bg-clight">
         <div className="flex gap-2 mt-2 pl-4">
@@ -44,7 +57,11 @@ export default function SaveTo() {
                   className="flex items-center gap-2 bg-clightgreen p-3 rounded shadow-lg"
                   key={index}
                 >
-                  <Checkbox id={topic.topicName} />
+                  {topic.counterarguments.includes(counterargument._id) ? (
+                    <Checkbox id={topic.topicName} defaultChecked />
+                  ) : (
+                    <Checkbox id={topic.topicName} />
+                  )}
                   <Label htmlFor={topic.topicName} className="text-cblack">
                     {topic.topicName}
                   </Label>
@@ -55,20 +72,38 @@ export default function SaveTo() {
         </div>
         <div>
           <div className="flex justify-center gap-2 mt-3">
-            <Button className="bg-cbrown text-clight font-semibold w-22 h-9">
+            <Button className="bg-cbrown text-clight font-semibold w-22 h-9 hover:shadow-lg">
               Done
             </Button>
             <Button
-              className="inner-border-cbrown bg-clight inner-border-solid inner-border-2 w-20 h-9"
-              onClick={() => dispatch(hideSaveToModal())}
+              className="inner-border-cbrown bg-clight inner-border-solid inner-border-2 w-20 h-9 hover:shadow-lg"
+              onClick={() => {
+                dispatch(hideSaveToModal());
+                dispatch(hideAddTopic());
+              }}
             >
               <span className="text-cbrown font-semibold">Cancel</span>
             </Button>
           </div>
-          <div className="text-center mt-2 text-sm underline text-cbrown hover:cursor-pointer">
-            + Add a topic
+          <div className="text-center mt-2 text-sm underline text-cbrown">
+            {addTopic ? (
+              <span
+                className="hover:cursor-pointer"
+                onClick={() => dispatch(hideAddTopic())}
+              >
+                Add a topic <RiArrowDropUpLine className="inline size-6" />{" "}
+              </span>
+            ) : (
+              <span
+                className="hover:cursor-pointer"
+                onClick={() => dispatch(showAddTopic())}
+              >
+                Add a topic <RiArrowDropDownLine className="inline size-6" />
+              </span>
+            )}
           </div>
         </div>
+        <AddTopic />
       </Modal.Body>
     </Modal>
   );

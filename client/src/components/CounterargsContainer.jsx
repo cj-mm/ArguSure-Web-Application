@@ -195,7 +195,7 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
           </div>
         </div>
       </div>
-      <SaveTo />
+      <SaveTo counterargument={counterargument} />
     </div>
   );
 }
