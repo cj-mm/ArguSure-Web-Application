@@ -18,8 +18,8 @@ const counterargSlice = createSlice({
     hideSaveToModal: (state) => {
       state.saveToModal = false;
     },
-    showAddTopic: (state, action) => {
-      state.addTopic = action.payload;
+    showAddTopic: (state) => {
+      state.addTopic = true;
     },
     hideAddTopic: (state) => {
       state.addTopic = false;
