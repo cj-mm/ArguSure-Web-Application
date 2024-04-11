@@ -6,14 +6,14 @@ import { FiSave, FiFileMinus } from "react-icons/fi";
 import { CgPlayListRemove } from "react-icons/cg";
 import { RiPlayListAddFill } from "react-icons/ri";
 import { Avatar, Dropdown } from "flowbite-react";
+import { updateSuccess } from "../redux/user/userSlice";
 import {
-  updateSuccess,
   showSaveToModal,
   setSelectedCounterarg,
   setDisplayedCounterargs,
   removeFromSavedCounterargs,
   addToSavedCounterargs,
-} from "../redux/user/userSlice";
+} from "../redux/counterargument/counterargSlice";
 import SaveTo from "./SaveTo";
 
 export default function CounterargsContainer({ counterargument, withClaim }) {
@@ -25,8 +25,9 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
   const source = counterargument.source;
   const [readMore, setReadMore] = useState(false);
   const [liked, setLiked] = useState(counterargument.liked);
-  const { currentUser, displayedCounterargs, savedCounterargs } = useSelector(
-    (state) => state.user
+  const { currentUser } = useSelector((state) => state.user);
+  const { displayedCounterargs, savedCounterargs } = useSelector(
+    (state) => state.counterarg
   );
   const dispatch = useDispatch();
 

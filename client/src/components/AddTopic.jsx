@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { Modal, Button, TextInput } from "flowbite-react";
 import { IoIosCheckmarkCircle, IoMdCloseCircle } from "react-icons/io";
 import { useSelector, useDispatch } from "react-redux";
-import { hideAddTopic, updateSuccess } from "../redux/user/userSlice";
+import { updateSuccess } from "../redux/user/userSlice";
+import { hideAddTopic } from "../redux/counterargument/counterargSlice";
 
 export default function AddTopic() {
-  const { currentUser, saveToModal, addTopic } = useSelector(
-    (state) => state.user
-  );
+  const { currentUser } = useSelector((state) => state.user);
+  const { saveToModal, addTopic } = useSelector((state) => state.counterarg);
   const [inputTopic, setInputTopic] = useState("");
   const dispatch = useDispatch();
 

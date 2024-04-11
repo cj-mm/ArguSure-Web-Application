@@ -6,9 +6,11 @@ import {
   signInStart,
   signInSuccess,
   signInFailure,
+} from "../redux/user/userSlice";
+import {
   addToSavedCounterargs,
   resetSavedCounterargs,
-} from "../redux/user/userSlice";
+} from "../redux/counterargument/counterargSlice";
 import OAuth from "../components/OAuth";
 
 export default function SignIn() {
