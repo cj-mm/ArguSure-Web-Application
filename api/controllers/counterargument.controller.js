@@ -75,6 +75,7 @@ export const getCounterargs = async (req, res, next) => {
     const counterargs = await Counterargument.find({
       userId: req.user.id,
       ...(req.query.page && { liked: req.query.page }),
+      ...(req.query.counterargId && { _id: req.query.counterargId }),
       ...(req.query.searchTerm && {
         $or: [
           { inputClaim: { $regex: req.query.searchTerm, $options: "i" } },

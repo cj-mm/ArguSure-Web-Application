@@ -7,6 +7,9 @@ const initialState = {
   showModal: false,
   saveToModal: false,
   addTopic: false,
+  selectedCounterarg: null,
+  displayedCounterargs: [],
+  savedCounterargs: [],
 };
 
 const userSlice = createSlice({
@@ -69,11 +72,45 @@ const userSlice = createSlice({
     hideSaveToModal: (state) => {
       state.saveToModal = false;
     },
-    showAddTopic: (state) => {
-      state.addTopic = true;
+    showAddTopic: (state, action) => {
+      state.addTopic = action.payload;
     },
     hideAddTopic: (state) => {
       state.addTopic = false;
+    },
+    setSelectedCounterarg: (state, action) => {
+      state.selectedCounterarg = action.payload;
+    },
+    setDisplayedCounterargs: (state, action) => {
+      if (action.payload === "reset") {
+        state.displayedCounterargs = [];
+        return;
+      }
+      if (Array.isArray(state.displayedCounterargs)) {
+        state.displayedCounterargs.push(action.payload);
+      } else {
+        state.displayedCounterargs = [action.payload];
+      }
+    },
+    addToSavedCounterargs: (state, action) => {
+      if (Array.isArray(state.savedCounterargs)) {
+        if (!state.savedCounterargs.includes(action.payload)) {
+          state.savedCounterargs.push(action.payload);
+        }
+      } else {
+        state.savedCounterargs = [action.payload];
+      }
+    },
+    removeFromSavedCounterargs: (state, action) => {
+      if (Array.isArray(state.savedCounterargs)) {
+        let index = state.savedCounterargs.indexOf(action.payload);
+        if (index !== -1) {
+          state.savedCounterargs.splice(index, 1);
+        }
+      }
+    },
+    resetSavedCounterargs: (state) => {
+      state.savedCounterargs = [];
     },
   },
 });
@@ -95,6 +132,11 @@ export const {
   hideSaveToModal,
   showAddTopic,
   hideAddTopic,
+  setSelectedCounterarg,
+  setDisplayedCounterargs,
+  addToSavedCounterargs,
+  removeFromSavedCounterargs,
+  resetSavedCounterargs,
 } = userSlice.actions;
 
 export default userSlice.reducer;

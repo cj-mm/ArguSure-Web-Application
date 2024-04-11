@@ -1,26 +1,76 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   RiPlayListAddFill,
   RiArrowDropDownLine,
   RiArrowDropUpLine,
 } from "react-icons/ri";
-import { Modal, Checkbox, Label, Button, TextInput } from "flowbite-react";
+import { Modal, Checkbox, Label, Button } from "flowbite-react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   hideSaveToModal,
   showAddTopic,
   hideAddTopic,
+  updateSuccess,
+  addToSavedCounterargs,
 } from "../redux/user/userSlice";
 import AddTopic from "./AddTopic";
 
-export default function SaveTo({ counterargument }) {
-  const { currentUser, saveToModal, addTopic } = useSelector(
-    (state) => state.user
-  );
-  const [checkedTopics, setCheckedTopics] = useState([]);
+export default function SaveTo() {
+  const { currentUser, saveToModal, addTopic, selectedCounterarg } =
+    useSelector((state) => state.user);
+  const [checkedTopics, setCheckedTopics] = useState();
   const dispatch = useDispatch();
+  const counterargument = selectedCounterarg;
 
-  const handleCheckBox = (e) => {};
+  useEffect(() => {
+    let currentCheckedTopics = [];
+    for (let i = 0; i < currentUser.saved.length; i++) {
+      const topic = currentUser.saved[i];
+      if (
+        topic.counterarguments.includes(counterargument._id) &&
+        topic.topicName !== "default"
+      ) {
+        currentCheckedTopics.push(topic.topicName);
+      }
+    }
+    setCheckedTopics(currentCheckedTopics);
+  }, []);
+
+  const handleCheckBox = (e) => {
+    const { value, checked } = e.target;
+    if (checked) {
+      setCheckedTopics((pre) => [...pre, value]);
+    } else {
+      setCheckedTopics((pre) => {
+        return [...pre.filter((topic) => topic !== value)];
+      });
+    }
+  };
+
+  const handleSaveToSubmit = async () => {
+    const dataBody = {
+      userId: currentUser._id,
+      counterargId: counterargument._id,
+      selectedTopics: ["default"].concat(checkedTopics),
+    };
+    try {
+      const res = await fetch("/api/saved/save", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dataBody),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        console.log(data.message);
+      } else {
+        dispatch(addToSavedCounterargs(selectedCounterarg._id));
+        dispatch(updateSuccess(data.userWithUpdatedSaved));
+        dispatch(hideSaveToModal());
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   return (
     <Modal
@@ -58,9 +108,18 @@ export default function SaveTo({ counterargument }) {
                   key={index}
                 >
                   {topic.counterarguments.includes(counterargument._id) ? (
-                    <Checkbox id={topic.topicName} defaultChecked />
+                    <Checkbox
+                      id={topic.topicName}
+                      value={topic.topicName}
+                      defaultChecked
+                      onChange={handleCheckBox}
+                    />
                   ) : (
-                    <Checkbox id={topic.topicName} />
+                    <Checkbox
+                      id={topic.topicName}
+                      value={topic.topicName}
+                      onChange={handleCheckBox}
+                    />
                   )}
                   <Label htmlFor={topic.topicName} className="text-cblack">
                     {topic.topicName}
@@ -72,7 +131,10 @@ export default function SaveTo({ counterargument }) {
         </div>
         <div>
           <div className="flex justify-center gap-2 mt-3">
-            <Button className="bg-cbrown text-clight font-semibold w-22 h-9 hover:shadow-lg">
+            <Button
+              className="bg-cbrown text-clight font-semibold w-22 h-9 hover:shadow-lg"
+              onClick={handleSaveToSubmit}
+            >
               Done
             </Button>
             <Button

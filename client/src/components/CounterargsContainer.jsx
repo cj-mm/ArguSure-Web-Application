@@ -1,13 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { BiDislike, BiLike, BiSolidDislike, BiSolidLike } from "react-icons/bi";
 import { BsThreeDots } from "react-icons/bs";
 import { FiSave, FiFileMinus } from "react-icons/fi";
-import { RiPlayListAddFill } from "react-icons/ri";
 import { CgPlayListRemove } from "react-icons/cg";
+import { RiPlayListAddFill } from "react-icons/ri";
 import { Avatar, Dropdown } from "flowbite-react";
+import {
+  updateSuccess,
+  showSaveToModal,
+  setSelectedCounterarg,
+  setDisplayedCounterargs,
+  removeFromSavedCounterargs,
+  addToSavedCounterargs,
+} from "../redux/user/userSlice";
 import SaveTo from "./SaveTo";
-import { showSaveToModal, updateSuccess } from "../redux/user/userSlice";
 
 export default function CounterargsContainer({ counterargument, withClaim }) {
   const claim =
@@ -16,12 +23,32 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
   const summary = counterargument.summary;
   const body = counterargument.body;
   const source = counterargument.source;
-  const [savedTo, setSavedTo] = useState(counterargument.savedTo);
   const [readMore, setReadMore] = useState(false);
   const [liked, setLiked] = useState(counterargument.liked);
-  const [isSaved, setIsSaved] = useState(counterargument.savedTo.length !== 0);
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, displayedCounterargs, savedCounterargs } = useSelector(
+    (state) => state.user
+  );
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setDisplayedCounterargs(counterargument));
+
+    let tempDisplayedCounterargs = displayedCounterargs;
+    const uniqueArray = tempDisplayedCounterargs.filter((value, index) => {
+      const _value = JSON.stringify(value);
+      return (
+        index ===
+        tempDisplayedCounterargs.findIndex((obj) => {
+          return JSON.stringify(obj) === _value;
+        })
+      );
+    });
+
+    dispatch(setDisplayedCounterargs("reset"));
+    for (let i = 0; i < uniqueArray.length; i++) {
+      dispatch(setDisplayedCounterargs(uniqueArray[i]));
+    }
+  }, []);
 
   const handleRead = () => {
     setReadMore(!readMore);
@@ -68,8 +95,7 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
       if (!res.ok) {
         console.log(data.message);
       } else {
-        setIsSaved(true);
-        setSavedTo(["default"]);
+        dispatch(addToSavedCounterargs(counterargument._id));
         dispatch(updateSuccess(data.userWithUpdatedSaved));
       }
     } catch (error) {
@@ -78,11 +104,18 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
   };
 
   const handleUnsave = async () => {
+    let savedTo = [];
+    for (let i = 0; i < currentUser.saved.length; i++) {
+      const topic = currentUser.saved[i];
+      if (topic.counterarguments.includes(counterargument._id)) {
+        savedTo.push(topic.topicName);
+      }
+    }
     const dataBody = {
       userId: currentUser._id,
       counterargId: counterargument._id,
       savedTo: savedTo,
-      removeFrom: savedTo, // need some fixes
+      removeFrom: savedTo,
     };
     try {
       const res = await fetch("/api/saved/unsave", {
@@ -95,8 +128,7 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
       if (!res.ok) {
         console.log(data.message);
       } else {
-        setIsSaved(false);
-        setSavedTo([]);
+        dispatch(removeFromSavedCounterargs(counterargument._id));
         dispatch(updateSuccess(data.userWithUpdatedSaved));
       }
     } catch (error) {
@@ -143,7 +175,8 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
                 />
               }
             >
-              {isSaved ? (
+              {Array.isArray(savedCounterargs) &&
+              savedCounterargs.includes(counterargument._id) ? (
                 <Dropdown.Item
                   icon={FiFileMinus}
                   className="text-cbrown mr-3"
@@ -163,7 +196,10 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
               <Dropdown.Item
                 icon={RiPlayListAddFill}
                 className="text-cbrown mr-3"
-                onClick={() => dispatch(showSaveToModal())}
+                onClick={() => {
+                  dispatch(showSaveToModal());
+                  dispatch(setSelectedCounterarg(counterargument));
+                }}
               >
                 <span className="text-cblack font-bold">Save to...</span>
               </Dropdown.Item>
@@ -195,7 +231,7 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
           </div>
         </div>
       </div>
-      <SaveTo counterargument={counterargument} />
+      <SaveTo />
     </div>
   );
 }

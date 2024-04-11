@@ -6,6 +6,8 @@ import {
   signInStart,
   signInSuccess,
   signInFailure,
+  addToSavedCounterargs,
+  resetSavedCounterargs,
 } from "../redux/user/userSlice";
 import OAuth from "../components/OAuth";
 
@@ -35,16 +37,23 @@ export default function SignIn() {
 
       const data = await res.json();
       if (data.success === false) {
-        // return
         dispatch(signInFailure(data.message));
       }
       if (res.ok) {
-        // return
         dispatch(signInSuccess(data));
+        dispatch(resetSavedCounterargs());
+        for (let i = 0; i < data.saved.length; i++) {
+          if (data.saved[i].topicName === "default") {
+            for (let j = 0; j < data.saved[i].counterarguments.length; j++) {
+              dispatch(
+                addToSavedCounterargs(data.saved[i].counterarguments[j])
+              );
+            }
+          }
+        }
         navigate("/");
       }
     } catch (error) {
-      // return
       dispatch(signInFailure(error.message));
     }
   };
