@@ -196,6 +196,9 @@ export const getSavedCounterargs = async (req, res, next) => {
   }
 
   try {
+    const startIndex = parseInt(req.query.startIndex) || 0;
+    const limit = parseInt(req.query.limit) || 9;
+
     const currentUser = await User.findById(req.user.id);
     let counterargs = [];
     for (let i = 0; i < currentUser.saved.length; i++) {
@@ -207,7 +210,17 @@ export const getSavedCounterargs = async (req, res, next) => {
 
     const topicCounterargs = await Counterargument.find({
       _id: { $in: counterargs },
-    });
+      ...(req.query.searchTerm && {
+        $or: [
+          { inputClaim: { $regex: req.query.searchTerm, $options: "i" } },
+          { summary: { $regex: req.query.searchTerm, $options: "i" } },
+          { body: { $regex: req.query.searchTerm, $options: "i" } },
+          { source: { $regex: req.query.searchTerm, $options: "i" } },
+        ],
+      }),
+    })
+      .skip(startIndex)
+      .limit(limit);
 
     const orderedTopicCounterargs = mapOrder(
       topicCounterargs,
