@@ -250,7 +250,7 @@ export const getTopics = async (req, res, next) => {
 
   try {
     const startIndex = parseInt(req.query.startIndex) || 0;
-    const limit = parseInt(req.query.limit) || 9;
+    const limit = parseInt(req.query.limit) || 15;
 
     const userSaved = await User.find({
       _id: req.user.id,
