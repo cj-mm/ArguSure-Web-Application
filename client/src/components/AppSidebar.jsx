@@ -35,7 +35,7 @@ export default function AppSidebar() {
           </Link>
           <Link to="/saved">
             <Sidebar.Item active={path === "/saved"} as="div">
-              <span className={path === "/saved" ? "text-clight" : ""}>
+              <span className={path.includes("/saved") ? "text-clight" : ""}>
                 SAVED
               </span>
             </Sidebar.Item>
