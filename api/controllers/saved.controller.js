@@ -188,7 +188,57 @@ export const addTopic = async (req, res, next) => {
   }
 };
 
-export const getSavedCounterargs = async (req, res, next) => {};
+const mapOrder = (array, order, key) => {
+  array.sort(function (a, b) {
+    let A = a[key],
+      B = b[key];
+
+    if (order.indexOf(A) < order.indexOf(B)) {
+      return 1;
+    } else {
+      return -1;
+    }
+  });
+
+  return array;
+};
+
+export const getSavedCounterargs = async (req, res, next) => {
+  // req.body: topicName: string
+  if (!req.user) {
+    return next(errorHandler(403, "User not signed in"));
+  }
+
+  if (!req.body.topicName) {
+    return next(errorHandler(400, "Topic name not provided"));
+  }
+
+  try {
+    const currentUser = await User.findById(req.user.id);
+    let counterargs = [];
+    for (let i = 0; i < currentUser.saved.length; i++) {
+      if (currentUser.saved[i].topicName === req.body.topicName) {
+        counterargs = currentUser.saved[i].counterarguments;
+        break;
+      }
+    }
+
+    console.log(counterargs);
+
+    const topicCounterargs = await Counterargument.find({
+      _id: { $in: counterargs },
+    });
+
+    const orderedTopicCounterargs = mapOrder(
+      topicCounterargs,
+      counterargs,
+      "_id"
+    );
+    res.status(200).json(orderedTopicCounterargs);
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const getTopics = async (req, res, next) => {};
 
