@@ -186,12 +186,12 @@ const mapOrder = (array, order, key) => {
 };
 
 export const getSavedCounterargs = async (req, res, next) => {
-  // req.body: topicName: string
+  // req.query: topicName: string
   if (!req.user) {
     return next(errorHandler(403, "User not signed in"));
   }
 
-  if (!req.body.topicName) {
+  if (!req.query.topicName) {
     return next(errorHandler(400, "Topic name not provided"));
   }
 
@@ -202,7 +202,7 @@ export const getSavedCounterargs = async (req, res, next) => {
     const currentUser = await User.findById(req.user.id);
     let counterargs = [];
     for (let i = 0; i < currentUser.saved.length; i++) {
-      if (currentUser.saved[i].topicName === req.body.topicName) {
+      if (currentUser.saved[i].topicName === req.query.topicName) {
         counterargs = currentUser.saved[i].counterarguments;
         break;
       }
