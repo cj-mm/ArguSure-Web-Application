@@ -70,16 +70,7 @@ export const saveCounterargument = async (req, res, next) => {
       { new: true }
     );
 
-    const counterargWithUpdatedSaved = await Counterargument.findByIdAndUpdate(
-      counterargId,
-      {
-        $set: {
-          savedTo: selectedTopics,
-        },
-      },
-      { new: true }
-    );
-    res.status(200).json({ userWithUpdatedSaved, counterargWithUpdatedSaved });
+    res.status(200).json({ userWithUpdatedSaved });
   } catch (error) {
     next(error);
   }
@@ -135,16 +126,7 @@ export const unSaveCounterargument = async (req, res, next) => {
       let index = savedTo.indexOf(removeFrom[0]);
       savedTo.splice(index, 1);
     }
-    const counterargWithUpdatedSaved = await Counterargument.findByIdAndUpdate(
-      counterargId,
-      {
-        $set: {
-          savedTo: savedTo,
-        },
-      },
-      { new: true }
-    );
-    res.status(200).json({ userWithUpdatedSaved, counterargWithUpdatedSaved });
+    res.status(200).json({ userWithUpdatedSaved });
   } catch (error) {
     next(error);
   }
@@ -222,8 +204,6 @@ export const getSavedCounterargs = async (req, res, next) => {
         break;
       }
     }
-
-    console.log(counterargs);
 
     const topicCounterargs = await Counterargument.find({
       _id: { $in: counterargs },
