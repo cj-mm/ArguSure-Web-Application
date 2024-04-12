@@ -154,7 +154,17 @@ export const addTopic = async (req, res, next) => {
       return next(errorHandler(400, "Topic already exists"));
     }
 
-    userSaved.push({ topicName: req.body.topicName, counterarguments: [] });
+    const slug = req.body.topicName
+      .split(" ")
+      .join("-")
+      .toLowerCase()
+      .replace(/[^a-zA-Z0-9-]/g, "");
+
+    userSaved.push({
+      topicName: req.body.topicName,
+      counterarguments: [],
+      slug: slug,
+    });
     const userWithUpdatedSaved = await User.findByIdAndUpdate(
       req.body.userId,
       {

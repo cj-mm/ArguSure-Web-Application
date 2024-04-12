@@ -4,6 +4,11 @@ const topicSchema = new mongoose.Schema(
   {
     topicName: { type: String, required: true, unique: true },
     counterarguments: [],
+    slug: {
+      type: String,
+      required: true,
+      unique: true,
+    },
   },
   { timestamps: true }
 );
