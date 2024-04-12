@@ -73,7 +73,7 @@ export default function Home() {
       const msgs = [
         "Provide one argument against " +
           claim +
-          " strictly with summary (in paragraph form), body (in paragraph form), and source as the format",
+          " strictly with summary (in paragraph form labeled as **Summary:**), body (in paragraph form labeled as **Body:**), and source (labeled as **Source:**) as the format",
         "Provide another one with the same format",
         "Provide another one again with the same format",
       ];
