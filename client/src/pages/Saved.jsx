@@ -17,11 +17,11 @@ export default function Saved() {
     const startIndex = counterarguments.length;
     const urlParams = new URLSearchParams(location.search);
     const searchTermFromUrl = urlParams.get("searchTerm");
-    const topicName = "default";
+    const topicSlug = "default";
     try {
       const reqRoute = searchTermFromUrl
-        ? `api/saved/getsaved?topicName=${topicName}&startIndex=${startIndex}&searchTerm=${searchTermFromUrl}`
-        : `api/saved/getsaved?topicName=${topicName}&startIndex=${startIndex}`;
+        ? `api/saved/getsaved?topicSlug=${topicSlug}&startIndex=${startIndex}&searchTerm=${searchTermFromUrl}`
+        : `api/saved/getsaved?topicSlug=${topicSlug}&startIndex=${startIndex}`;
       const res = await fetch(reqRoute);
       const data = await res.json();
       if (res.ok) {
@@ -45,12 +45,12 @@ export default function Saved() {
     setShowMore(true);
     const urlParams = new URLSearchParams(location.search);
     const searchTermFromUrl = urlParams.get("searchTerm");
-    const topicName = "default";
+    const topicSlug = "default";
     const fetchSaved = async () => {
       try {
         const reqRoute = searchTermFromUrl
-          ? `api/saved/getsaved?topicName=${topicName}&searchTerm=${searchTermFromUrl}`
-          : `api/saved/getsaved?topicName=${topicName}`;
+          ? `api/saved/getsaved?topicSlug=${topicSlug}&searchTerm=${searchTermFromUrl}`
+          : `api/saved/getsaved?topicSlug=${topicSlug}`;
         const res = await fetch(reqRoute);
         const data = await res.json();
         if (res.ok) {

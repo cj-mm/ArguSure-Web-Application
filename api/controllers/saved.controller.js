@@ -35,7 +35,11 @@ export const saveCounterargument = async (req, res, next) => {
 
     // if the user saves the first time
     if (!userSavedTopics.includes("default")) {
-      userSaved.push({ topicName: "default", counterarguments: [] });
+      userSaved.push({
+        topicName: "default",
+        counterarguments: [],
+        slug: "default",
+      });
       userSavedTopics.push("default");
     }
     // check if all selected topics is in the created topics
@@ -149,6 +153,7 @@ export const addTopic = async (req, res, next) => {
       userSaved.push({
         topicName: "default",
         counterarguments: [],
+        slug: "default",
       });
     }
 
@@ -203,13 +208,13 @@ const mapOrder = (array, order, key) => {
 };
 
 export const getSavedCounterargs = async (req, res, next) => {
-  // req.query: topicName: string
+  // req.query: topicSlug: string
   if (!req.user) {
     return next(errorHandler(403, "User not signed in"));
   }
 
-  if (!req.query.topicName) {
-    return next(errorHandler(400, "Topic name not provided"));
+  if (!req.query.topicSlug) {
+    return next(errorHandler(400, "Topic slug not provided"));
   }
 
   try {
@@ -219,7 +224,7 @@ export const getSavedCounterargs = async (req, res, next) => {
     const currentUser = await User.findById(req.user.id);
     let counterargs = [];
     for (let i = 0; i < currentUser.saved.length; i++) {
-      if (currentUser.saved[i].topicName === req.query.topicName) {
+      if (currentUser.saved[i].slug === req.query.topicSlug) {
         counterargs = currentUser.saved[i].counterarguments;
         break;
       }
