@@ -145,6 +145,13 @@ export const addTopic = async (req, res, next) => {
   try {
     const currentUser = await User.findById(req.body.userId);
     let userSaved = currentUser.saved;
+    if (userSaved.length === 0) {
+      userSaved.push({
+        topicName: "default",
+        counterarguments: [],
+      });
+    }
+
     let userSavedTopics = [];
     for (let i = 0; i < userSaved.length; i++) {
       userSavedTopics.push(userSaved[i].topicName.toLowerCase());
