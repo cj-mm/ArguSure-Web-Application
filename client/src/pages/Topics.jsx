@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Search from "../components/Search";
 import { FaPlusSquare, FaArrowLeft } from "react-icons/fa";
-import {
-  MdOutlineDriveFileRenameOutline,
-  MdDeleteOutline,
-} from "react-icons/md";
-
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Spinner } from "flowbite-react";
 import AddTopic from "../components/AddTopic";
 import { showAddTopic } from "../redux/counterargument/counterargSlice";
+import TopicListItem from "../components/TopicListItem";
 
 export default function Topics() {
   const [topics, setTopics] = useState([]);
@@ -106,19 +102,7 @@ export default function Topics() {
           </div>
           <div className="grid grid-cols-3 grid-flow-row gap-4 w-[60rem] m-auto mt-5 mb-5">
             {topics.map((topic, index) => {
-              return (
-                <div
-                  className="bg-clightgreen cshadow rounded flex gap-1 items-center  hover:cursor-pointer h-14 p-2"
-                  key={index}
-                >
-                  <span className="text-cblack font-bold truncate w-3/4">
-                    {topic.topicName}
-                  </span>
-                  <div className="flex-1"></div>
-                  <MdOutlineDriveFileRenameOutline className="size-5 text-clight hover:text-cbrown" />
-                  <MdDeleteOutline className="size-5 text-clight hover:text-red-400" />
-                </div>
-              );
+              return <TopicListItem topic={topic} key={index} />;
             })}
           </div>
         </div>
