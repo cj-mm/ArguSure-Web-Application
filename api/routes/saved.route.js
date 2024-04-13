@@ -3,9 +3,9 @@ import {
   saveCounterargument,
   unSaveCounterargument,
   addTopic,
+  getSavedCounterargs,
   renameTopic,
   deleteTopic,
-  getSavedCounterargs,
 } from "../controllers/saved.controller.js";
 import { verifyToken } from "../utils/verifyUser.js";
 
@@ -16,5 +16,6 @@ router.put("/unsave", verifyToken, unSaveCounterargument);
 router.put("/addtopic", verifyToken, addTopic);
 router.get("/getsaved", verifyToken, getSavedCounterargs);
 router.put("/renametopic", verifyToken, renameTopic);
+router.put("/deletetopic", verifyToken, deleteTopic);
 
 export default router;

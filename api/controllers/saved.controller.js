@@ -317,4 +317,52 @@ export const renameTopic = async (req, res, next) => {
   }
 };
 
-export const deleteTopic = async (req, res, next) => {};
+export const deleteTopic = async (req, res, next) => {
+  // req.body: topicName (string)
+  if (!req.user) {
+    return next(errorHandler(403, "User not signed in"));
+  }
+
+  if (!req.body.topicName) {
+    return next(errorHandler(400, "Please select a topic"));
+  }
+
+  try {
+    const currentUser = await User.findById(req.user.id);
+    let userSaved = currentUser.saved;
+
+    let topicExists = false;
+    for (let i = 0; i < userSaved.length; i++) {
+      if (
+        userSaved[i].topicName.toLowerCase() ===
+        req.body.topicName.toLowerCase()
+      ) {
+        topicExists = true;
+      }
+    }
+
+    if (!topicExists) {
+      return next(errorHandler(400, "Selected topic does not exist"));
+    }
+
+    for (let i = 0; i < userSaved.length; i++) {
+      if (userSaved[i].topicName === req.body.topicName) {
+        userSaved.splice(i, 1);
+        break;
+      }
+    }
+
+    const userWithUpdatedSaved = await User.findByIdAndUpdate(
+      req.user.id,
+      {
+        $set: {
+          saved: userSaved,
+        },
+      },
+      { new: true }
+    );
+    res.status(200).json(userWithUpdatedSaved);
+  } catch (error) {
+    next(error);
+  }
+};
