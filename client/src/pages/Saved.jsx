@@ -50,7 +50,7 @@ export default function Saved() {
       try {
         const reqRoute = searchTermFromUrl
           ? `api/saved/getsaved?topicName=${topicName}&searchTerm=${searchTermFromUrl}`
-          : `api/saved/getsaved?topicName=${topicName}&`;
+          : `api/saved/getsaved?topicName=${topicName}`;
         const res = await fetch(reqRoute);
         const data = await res.json();
         if (res.ok) {
