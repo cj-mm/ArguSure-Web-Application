@@ -46,6 +46,28 @@ export default function TopicListItem({ topic }) {
     }
   };
 
+  const handleDeleteTopic = async () => {
+    const dataBody = {
+      topicName: topic.topicName,
+    };
+
+    try {
+      const res = await fetch("/api/saved/deletetopic", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dataBody),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        console.log(data.message);
+      } else {
+        dispatch(updateSuccess(data));
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   return (
     <div className="bg-clightgreen cshadow rounded flex gap-1 items-center hover:cursor-pointer h-14 p-2">
       {renaming ? (
@@ -67,7 +89,10 @@ export default function TopicListItem({ topic }) {
         className="size-5 text-clight hover:text-cbrown"
         onClick={() => handleRenameBtn(topic.topicName)}
       />
-      <MdDeleteOutline className="size-5 text-clight hover:text-red-400" />
+      <MdDeleteOutline
+        className="size-5 text-clight hover:text-red-400"
+        onClick={handleDeleteTopic}
+      />
     </div>
   );
 }
