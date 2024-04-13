@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Search from "../components/Search";
 import { FaPlusSquare, FaArrowLeft } from "react-icons/fa";
+import {
+  MdOutlineDriveFileRenameOutline,
+  MdDeleteOutline,
+} from "react-icons/md";
+
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Spinner } from "flowbite-react";
@@ -54,7 +59,7 @@ export default function Topics() {
     <div className="flex flex-col w-full h-full mt-20 ml-60">
       <div className="flex gap-1 w-[60rem] m-auto mb-5 text-cbrown ">
         <FaArrowLeft
-          className="size-7 hover:cursor-pointer"
+          className="size-7 hover:cursor-pointer hover:text-yellow-800"
           onClick={() => navigate("/saved")}
         />
         <div className="flex-1">
@@ -63,7 +68,7 @@ export default function Topics() {
           </div>
         </div>
         <FaPlusSquare
-          className="size-7 hover:cursor-pointer"
+          className="size-7 hover:cursor-pointer hover:text-yellow-800"
           onClick={() => dispatch(showAddTopic())}
         />
       </div>
@@ -103,12 +108,15 @@ export default function Topics() {
             {topics.map((topic, index) => {
               return (
                 <div
-                  className="bg-clightgreen shadow-lg rounded flex items-center justify-center hover:cursor-pointer h-14 p-2"
+                  className="bg-clightgreen cshadow rounded flex gap-1 items-center  hover:cursor-pointer h-14 p-2"
                   key={index}
                 >
-                  <span className="text-cblack font-bold truncate">
+                  <span className="text-cblack font-bold truncate w-3/4">
                     {topic.topicName}
                   </span>
+                  <div className="flex-1"></div>
+                  <MdOutlineDriveFileRenameOutline className="size-5 text-clight hover:text-cbrown" />
+                  <MdDeleteOutline className="size-5 text-clight hover:text-red-400" />
                 </div>
               );
             })}

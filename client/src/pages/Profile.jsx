@@ -6,7 +6,7 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import { Link } from "react-router-dom";
+import { FaArrowLeft } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { app } from "../firebase";
 import { CircularProgressbar } from "react-circular-progressbar";
@@ -20,6 +20,7 @@ import {
 } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 import DeleteUserModal from "../components/DeleteUserModal";
+import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
   const { currentUser, error } = useSelector((state) => state.user);
@@ -33,6 +34,7 @@ export default function Profile() {
   const [formData, setFormData] = useState({});
   const filePickerRef = useRef();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -165,23 +167,10 @@ export default function Profile() {
   return (
     <div className="bg-clight text-cgreen shadow-2xl w-3/4 lg:w-1/2 rounded-md self-center flex-col mx-auto mt-7">
       <div className="mt-5 flex ">
-        <Link to="/">
-          <svg
-            className="w-5 h-5 text-cbrown cursor-pointer absolute ml-3"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 8 14"
-          >
-            <path
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M7 1 1.3 6.326a.91.91 0 0 0 0 1.348L7 13"
-            />
-          </svg>
-        </Link>
+        <FaArrowLeft
+          className="size-7 text-cbrown ml-3 absolute hover:cursor-pointer hover:text-yellow-800"
+          onClick={() => navigate(-1)}
+        />
         <span className="font-black text-3xl m-auto">Profile</span>
       </div>
       <div className="my-5 mx-10">

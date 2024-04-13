@@ -138,7 +138,7 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
   };
 
   return (
-    <div className="flex flex-col w-[60rem] mx-auto my-5 shadow-lg rounded-lg bg-clight text-cblack">
+    <div className="flex flex-col w-[60rem] mx-auto my-5 cshadow rounded-lg bg-clight text-cblack">
       {withClaim && (
         <div className="font-bold text-base bg-cgreen px-5 py-3 rounded-t-lg">
           <u>Input claim</u>: {claim}
@@ -172,7 +172,7 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
                 <Avatar
                   alt="meatballs"
                   img={BsThreeDots}
-                  className="size-5 mr-2"
+                  className="size-5 w-11 rounded-full hover:bg-gray-300"
                 />
               }
             >
@@ -209,7 +209,7 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
           <div className="flex gap-5 mt-5">
             {liked !== "liked" ? (
               <BiLike
-                className="size-6 hover:cursor-pointer"
+                className="size-6 hover:cursor-pointer hover:text-cbrown"
                 onClick={() => handleLike("liked")}
               />
             ) : (
@@ -220,7 +220,7 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
             )}
             {liked !== "disliked" ? (
               <BiDislike
-                className="size-6 hover:cursor-pointer"
+                className="size-6 hover:cursor-pointer hover:text-cbrown"
                 onClick={() => handleLike("disliked")}
               />
             ) : (
