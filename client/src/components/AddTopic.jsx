@@ -4,12 +4,14 @@ import { IoIosCheckmarkCircle, IoMdCloseCircle } from "react-icons/io";
 import { useSelector, useDispatch } from "react-redux";
 import { updateSuccess } from "../redux/user/userSlice";
 import { hideAddTopic } from "../redux/counterargument/counterargSlice";
+import { useLocation } from "react-router-dom";
 
 export default function AddTopic() {
   const { currentUser } = useSelector((state) => state.user);
-  const { saveToModal, addTopic } = useSelector((state) => state.counterarg);
+  const { addTopic } = useSelector((state) => state.counterarg);
   const [inputTopic, setInputTopic] = useState("");
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const handleChange = (e) => {
     setInputTopic(e.target.value);
@@ -40,28 +42,35 @@ export default function AddTopic() {
     }
   };
 
-  return false ? (
+  return location.pathname === "/saved/topics" ? (
     <Modal
-      show={true}
+      show={addTopic}
       popup
       size="sm"
       className="addtopic-modal"
-      // onClose={() => dispatch(hideSaveToModal())}
+      onClose={() => dispatch(hideAddTopic())}
     >
       <Modal.Header className="bg-clight">
         <span className="font-bold text-base text-cblack">Add a topic</span>
       </Modal.Header>
       <Modal.Body className="bg-clight">
         <div className="mt-3">
-          <form action="">
-            <TextInput type="text" placeholder="Topic name" />
+          <form onSubmit={handleAddTopic}>
+            <TextInput
+              type="text"
+              placeholder="Topic name"
+              onChange={handleChange}
+            />
             <div className="flex justify-center gap-2 mt-3">
-              <Button className="bg-cbrown text-clight font-semibold w-22 h-9 px-2">
+              <Button
+                type="submit"
+                className="bg-cbrown text-clight font-semibold w-22 h-9 px-2"
+              >
                 Add
               </Button>
               <Button
                 className="inner-border-cbrown bg-clight inner-border-solid inner-border-2 w-20 h-9"
-                // onClick={() => dispatch(hideSaveToModal())}
+                onClick={() => dispatch(hideAddTopic())}
               >
                 <span className="text-cbrown font-semibold">Cancel</span>
               </Button>
