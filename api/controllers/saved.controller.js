@@ -260,10 +260,6 @@ export const renameTopic = async (req, res, next) => {
     return next(errorHandler(400, "Empty value is not allowed"));
   }
 
-  if (req.body.curTopicName === req.body.newTopicName) {
-    return next(errorHandler(400, "Nothing to change"));
-  }
-
   try {
     const currentUser = await User.findById(req.user.id);
     let userSaved = currentUser.saved;
@@ -284,7 +280,11 @@ export const renameTopic = async (req, res, next) => {
       return next(errorHandler(400, "Selected topic does not exist"));
     }
 
-    if (userSavedTopics.includes(req.body.newTopicName.toLowerCase())) {
+    if (
+      userSavedTopics.includes(req.body.newTopicName.toLowerCase()) &&
+      req.body.curTopicName.toLowerCase() !==
+        req.body.newTopicName.toLowerCase()
+    ) {
       return next(errorHandler(400, "Topic already exists"));
     }
 
