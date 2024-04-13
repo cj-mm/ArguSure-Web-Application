@@ -8,7 +8,7 @@ import AddTopic from "../components/AddTopic";
 import { showAddTopic } from "../redux/counterargument/counterargSlice";
 import TopicListItem from "../components/TopicListItem";
 
-export default function Topics() {
+export default function TopicList() {
   const [topics, setTopics] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);

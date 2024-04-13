@@ -11,7 +11,7 @@ import History from "./pages/History";
 import AppSidebar from "./components/AppSidebar";
 import HeaderProfile from "./components/HeaderProfile";
 import PrivateRoute from "./components/PrivateRoute";
-import Topics from "./pages/Topics";
+import TopicList from "./pages/TopicList";
 
 export default function App() {
   return (
@@ -62,7 +62,7 @@ export default function App() {
               element={
                 <>
                   <AppSidebar />
-                  <Topics />
+                  <TopicList />
                 </>
               }
             />
