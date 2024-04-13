@@ -250,43 +250,6 @@ export const getSavedCounterargs = async (req, res, next) => {
   }
 };
 
-export const getTopics = async (req, res, next) => {
-  if (!req.user) {
-    return next(errorHandler(403, "User not signed in"));
-  }
-
-  try {
-    const startIndex = parseInt(req.query.startIndex) || 0;
-    const limit = parseInt(req.query.limit) || 15;
-
-    const userSaved = await User.find({
-      _id: req.user.id,
-    }).select("saved");
-    userSaved[0].saved.splice(0, 1); // remove default
-    const tempTopics = userSaved[0].saved;
-    let topics = [];
-
-    if (req.query.searchTerm) {
-      for (let i = 0; i < tempTopics.length; i++) {
-        if (
-          tempTopics[i].topicName
-            .toLowerCase()
-            .includes(req.query.searchTerm.toLowerCase())
-        ) {
-          topics.push(tempTopics[i]);
-        }
-      }
-    } else {
-      topics = tempTopics;
-    }
-
-    const result = topics.slice(startIndex, startIndex + limit);
-    res.status(200).json(result);
-  } catch (error) {
-    next(error);
-  }
-};
-
 export const renameTopic = async (req, res, next) => {};
 
 export const deleteTopic = async (req, res, next) => {};
