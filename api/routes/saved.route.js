@@ -15,5 +15,6 @@ router.put("/save", verifyToken, saveCounterargument);
 router.put("/unsave", verifyToken, unSaveCounterargument);
 router.put("/addtopic", verifyToken, addTopic);
 router.get("/getsaved", verifyToken, getSavedCounterargs);
+router.put("/renametopic", verifyToken, renameTopic);
 
 export default router;

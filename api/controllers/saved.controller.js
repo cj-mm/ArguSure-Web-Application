@@ -250,6 +250,71 @@ export const getSavedCounterargs = async (req, res, next) => {
   }
 };
 
-export const renameTopic = async (req, res, next) => {};
+export const renameTopic = async (req, res, next) => {
+  // req.body: curTopicName (string), newTopicName (string)
+  if (!req.user) {
+    return next(errorHandler(403, "User not signed in"));
+  }
+
+  if (!req.body.curTopicName || !req.body.newTopicName) {
+    return next(errorHandler(400, "Empty value is not allowed"));
+  }
+
+  if (req.body.curTopicName === req.body.newTopicName) {
+    return next(errorHandler(400, "Nothing to change"));
+  }
+
+  try {
+    const currentUser = await User.findById(req.user.id);
+    let userSaved = currentUser.saved;
+
+    let userSavedTopics = [];
+    let topicExists = false;
+    for (let i = 0; i < userSaved.length; i++) {
+      userSavedTopics.push(userSaved[i].topicName.toLowerCase());
+      if (
+        userSaved[i].topicName.toLowerCase() ===
+        req.body.curTopicName.toLowerCase()
+      ) {
+        topicExists = true;
+      }
+    }
+
+    if (!topicExists) {
+      return next(errorHandler(400, "Selected topic does not exist"));
+    }
+
+    if (userSavedTopics.includes(req.body.newTopicName.toLowerCase())) {
+      return next(errorHandler(400, "Topic already exists"));
+    }
+
+    const slug = req.body.newTopicName
+      .split(" ")
+      .join("-")
+      .toLowerCase()
+      .replace(/[^a-zA-Z0-9-]/g, "");
+
+    for (let i = 0; i < userSaved.length; i++) {
+      if (userSaved[i].topicName === req.body.curTopicName) {
+        userSaved[i].topicName = req.body.newTopicName;
+        userSaved[i].slug = slug;
+        break;
+      }
+    }
+
+    const userWithUpdatedSaved = await User.findByIdAndUpdate(
+      req.user.id,
+      {
+        $set: {
+          saved: userSaved,
+        },
+      },
+      { new: true }
+    );
+    res.status(200).json(userWithUpdatedSaved);
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const deleteTopic = async (req, res, next) => {};
