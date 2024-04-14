@@ -25,8 +25,11 @@ export default function Saved() {
       const res = await fetch(reqRoute);
       const data = await res.json();
       if (res.ok) {
-        setCounterarguments((prev) => [...prev, ...data]);
-        if (data.length < 9) {
+        setCounterarguments((prev) => [
+          ...prev,
+          ...data.orderedTopicCounterargs,
+        ]);
+        if (data.orderedTopicCounterargs.length < 9) {
           setShowMore(false);
         }
       }
@@ -54,9 +57,9 @@ export default function Saved() {
         const res = await fetch(reqRoute);
         const data = await res.json();
         if (res.ok) {
-          setCounterarguments(data);
+          setCounterarguments(data.orderedTopicCounterargs);
           setLoading(false);
-          if (data.length < 9) {
+          if (data.orderedTopicCounterargs.length < 9) {
             setShowMore(false);
           }
         }
