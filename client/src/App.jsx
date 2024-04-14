@@ -12,6 +12,7 @@ import AppSidebar from "./components/AppSidebar";
 import HeaderProfile from "./components/HeaderProfile";
 import PrivateRoute from "./components/PrivateRoute";
 import TopicList from "./pages/TopicList";
+import Topic from "./pages/Topic";
 
 export default function App() {
   return (
@@ -63,6 +64,15 @@ export default function App() {
                 <>
                   <AppSidebar />
                   <TopicList />
+                </>
+              }
+            />
+            <Route
+              path="/saved/topics/:topicSlug"
+              element={
+                <>
+                  <AppSidebar />
+                  <Topic />
                 </>
               }
             />
