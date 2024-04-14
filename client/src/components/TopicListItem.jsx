@@ -6,23 +6,27 @@ import {
   MdDeleteOutline,
 } from "react-icons/md";
 import { updateSuccess } from "../redux/user/userSlice";
+import { useNavigate } from "react-router-dom";
 
 export default function TopicListItem({ topic }) {
   const [renameValue, setRenameValue] = useState("");
   const [renaming, setRenaming] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setRenameValue(e.target.value);
   };
 
-  const handleRenameBtn = (curName) => {
-    setRenameValue(curName);
+  const handleRenameBtn = (e) => {
+    e.stopPropagation();
+    setRenameValue(topic.topicName);
     setRenaming(!renaming);
   };
 
   const handleRenameTopic = async (e) => {
     e.preventDefault();
+    e.stopPropagation();
     const dataBody = {
       curTopicName: topic.topicName,
       newTopicName: renameValue,
@@ -46,7 +50,8 @@ export default function TopicListItem({ topic }) {
     }
   };
 
-  const handleDeleteTopic = async () => {
+  const handleDeleteTopic = async (e) => {
+    e.stopPropagation();
     const dataBody = {
       topicName: topic.topicName,
     };
@@ -69,7 +74,10 @@ export default function TopicListItem({ topic }) {
   };
 
   return (
-    <div className="bg-clightgreen cshadow rounded flex gap-1 items-center hover:cursor-pointer h-14 p-2">
+    <div
+      className="bg-clightgreen cshadow rounded flex gap-1 items-center hover:cursor-pointer h-14 p-2"
+      onClick={() => !renaming && navigate(`/saved/topics/${topic.slug}`)}
+    >
       {renaming ? (
         <form onSubmit={handleRenameTopic}>
           <TextInput
@@ -87,7 +95,7 @@ export default function TopicListItem({ topic }) {
       <div className="flex-1"></div>
       <MdOutlineDriveFileRenameOutline
         className="size-5 text-clight hover:text-cbrown"
-        onClick={() => handleRenameBtn(topic.topicName)}
+        onClick={handleRenameBtn}
       />
       <MdDeleteOutline
         className="size-5 text-clight hover:text-red-400"
