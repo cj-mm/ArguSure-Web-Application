@@ -5,6 +5,7 @@ import { BsThreeDots } from "react-icons/bs";
 import { FiSave, FiFileMinus } from "react-icons/fi";
 import { CgPlayListRemove } from "react-icons/cg";
 import { RiPlayListAddFill } from "react-icons/ri";
+import { IoIosRemoveCircleOutline } from "react-icons/io";
 import { Avatar, Dropdown } from "flowbite-react";
 import { updateSuccess } from "../redux/user/userSlice";
 import {
@@ -15,6 +16,7 @@ import {
   addToSavedCounterargs,
 } from "../redux/counterargument/counterargSlice";
 import SaveTo from "./SaveTo";
+import { useLocation, useParams } from "react-router-dom";
 
 export default function CounterargsContainer({ counterargument, withClaim }) {
   const claim =
@@ -30,6 +32,8 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
     (state) => state.counterarg
   );
   const dispatch = useDispatch();
+  const location = useLocation();
+  const { topicSlug } = useParams();
 
   useEffect(() => {
     dispatch(setDisplayedCounterargs(counterargument));
@@ -80,10 +84,22 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
   };
 
   const handleSave = async () => {
+    let savedTo = [];
+    if (topicSlug) {
+      for (let i = 0; i < currentUser.saved.length; i++) {
+        const topic = currentUser.saved[i];
+        if (
+          topic.counterarguments.includes(counterargument._id) ||
+          topic.slug === topicSlug
+        ) {
+          savedTo.push(topic.topicName);
+        }
+      }
+    }
     const dataBody = {
       userId: currentUser._id,
       counterargId: counterargument._id,
-      selectedTopics: ["default"],
+      selectedTopics: topicSlug ? savedTo : ["default"],
     };
     try {
       const res = await fetch("/api/saved/save", {
@@ -106,17 +122,21 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
 
   const handleUnsave = async () => {
     let savedTo = [];
+    let removeFromTopic = "";
     for (let i = 0; i < currentUser.saved.length; i++) {
       const topic = currentUser.saved[i];
       if (topic.counterarguments.includes(counterargument._id)) {
         savedTo.push(topic.topicName);
+      }
+      if (topic.slug === topicSlug) {
+        removeFromTopic = topic.topicName;
       }
     }
     const dataBody = {
       userId: currentUser._id,
       counterargId: counterargument._id,
       savedTo: savedTo,
-      removeFrom: savedTo,
+      removeFrom: topicSlug ? removeFromTopic : savedTo,
     };
     try {
       const res = await fetch("/api/saved/unsave", {
@@ -178,12 +198,32 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
             >
               {Array.isArray(savedCounterargs) &&
               savedCounterargs.includes(counterargument._id) ? (
+                location.pathname.includes("/saved/topics") ? (
+                  <Dropdown.Item
+                    icon={IoIosRemoveCircleOutline}
+                    className="text-cbrown mr-3"
+                    onClick={handleUnsave}
+                  >
+                    <span className="text-cblack font-bold">
+                      Remove from topic
+                    </span>
+                  </Dropdown.Item>
+                ) : (
+                  <Dropdown.Item
+                    icon={FiFileMinus}
+                    className="text-cbrown mr-3"
+                    onClick={handleUnsave}
+                  >
+                    <span className="text-cblack font-bold">Unsave</span>
+                  </Dropdown.Item>
+                )
+              ) : location.pathname.includes("/saved/topics") ? (
                 <Dropdown.Item
-                  icon={FiFileMinus}
+                  icon={FiSave}
                   className="text-cbrown mr-3"
-                  onClick={handleUnsave}
+                  onClick={handleSave}
                 >
-                  <span className="text-cblack font-bold">Unsave</span>
+                  <span className="text-cblack font-bold">Add to topic</span>
                 </Dropdown.Item>
               ) : (
                 <Dropdown.Item
