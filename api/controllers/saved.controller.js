@@ -222,9 +222,11 @@ export const getSavedCounterargs = async (req, res, next) => {
     const limit = parseInt(req.query.limit) || 9;
 
     const currentUser = await User.findById(req.user.id);
+    let selectedTopic = {};
     let counterargs = [];
     for (let i = 0; i < currentUser.saved.length; i++) {
       if (currentUser.saved[i].slug === req.query.topicSlug) {
+        selectedTopic = currentUser.saved[i];
         counterargs = currentUser.saved[i].counterarguments;
         break;
       }
@@ -249,7 +251,7 @@ export const getSavedCounterargs = async (req, res, next) => {
       counterargs,
       "_id"
     );
-    res.status(200).json(orderedTopicCounterargs);
+    res.status(200).json({ orderedTopicCounterargs, selectedTopic });
   } catch (error) {
     next(error);
   }
