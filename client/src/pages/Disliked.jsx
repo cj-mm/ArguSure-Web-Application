@@ -70,7 +70,7 @@ export default function Disliked() {
 
   return (
     <div className="w-full h-full mt-5 ml-60">
-      <div className="w-full my-5 text-center text-lg font-bold text-cblack">
+      <div className="w-full my-5 text-center text-xl font-bold text-cblack">
         Disliked Counterarguments
       </div>
       <Search pageRoute={"disliked"} />

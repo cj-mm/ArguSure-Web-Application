@@ -76,7 +76,7 @@ export default function Saved() {
     <div className="w-full h-full mt-5 ml-60">
       <div className="flex justify-between gap-1 w-[60rem] m-auto text-cbrown ">
         <div className="w-1/3"></div>
-        <div className="my-5 w-1/3 text-center text-lg font-bold text-cblack">
+        <div className="my-5 w-1/3 text-center text-xl font-bold text-cblack">
           Saved Counterarguments
         </div>
         <div className="flex w-1/3 gap-1 m-auto text-cbrown justify-end">

@@ -82,7 +82,7 @@ export default function Topic() {
           onClick={() => navigate("/saved/topics")}
         />
         <div className="flex-1">
-          <div className="w-full text-center text-lg font-bold text-cblack">
+          <div className="w-full text-center text-xl font-bold text-cblack">
             {topic.topicName}
           </div>
         </div>

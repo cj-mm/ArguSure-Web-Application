@@ -59,7 +59,7 @@ export default function TopicList() {
           onClick={() => navigate("/saved")}
         />
         <div className="flex-1">
-          <div className="w-full text-center text-lg font-bold text-cblack">
+          <div className="w-full text-center text-xl font-bold text-cblack">
             Topic List
           </div>
         </div>
