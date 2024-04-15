@@ -1,6 +1,7 @@
 import User from "../models/user.model.js";
 import bcryptjs from "bcryptjs";
 import { errorHandler } from "../utils/errors.js";
+import { checkUsername, checkPassword } from "../utils/validator.js";
 import jwt from "jsonwebtoken";
 
 export const signup = async (req, res, next) => {
@@ -15,6 +16,16 @@ export const signup = async (req, res, next) => {
     password === ""
   ) {
     next(errorHandler(400, "All fields are required"));
+  }
+
+  const usernameResult = checkUsername(username);
+  if (usernameResult !== "Success") {
+    return next(errorHandler(400, usernameResult));
+  }
+
+  const passwordResult = checkPassword(password);
+  if (passwordResult !== "Success") {
+    return next(errorHandler(400, passwordResult));
   }
 
   const hashedPassword = bcryptjs.hashSync(password, 10);

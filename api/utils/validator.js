@@ -15,8 +15,8 @@ export const checkUsername = (username) => {
 };
 
 export const checkPassword = (password) => {
-  if (password.length < 6) {
-    return "Password must be at least 6 characters";
+  if (password.length < 7) {
+    return "Password must be at least 7 characters";
   }
   if (password.includes(" ")) {
     return "Password cannot contain spaces";
