@@ -165,7 +165,7 @@ export default function Profile() {
   // };
 
   return (
-    <div className="w-full h-full ml-60 mt-10">
+    <div className="w-full h-full ml-60 mt-5">
       <div className="bg-clight text-cgreen shadow-2xl w-3/4 lg:w-2/3 rounded-md self-center flex-col mx-auto mt-7 p-2">
         <div className="mt-5 flex">
           <FaArrowLeft
@@ -341,7 +341,6 @@ export default function Profile() {
               <Alert className="text-red-400">{updateUserError}</Alert>
             </div>
           )}
-          {error && <Alert className="text-red-400">{error}</Alert>}
           <DeleteUserModal />
         </div>
       </div>
