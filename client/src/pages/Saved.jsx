@@ -147,7 +147,17 @@ export default function Saved() {
                 </div>
               </div>
             ) : (
-              "No saved counterarguments yet!"
+              <div>
+                No saved counterarguments yet!
+                <div className="text-sm font-normal text-cbrown underline mt-1">
+                  <span
+                    className="hover:cursor-pointer"
+                    onClick={() => navigate("/")}
+                  >
+                    Go to home to generate counterarguments
+                  </span>
+                </div>
+              </div>
             )}
           </div>
         )}

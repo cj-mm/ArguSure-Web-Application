@@ -129,7 +129,17 @@ export default function History() {
                 </div>
               </div>
             ) : (
-              "No generated counterarguments yet!"
+              <div>
+                No generated counterarguments yet!
+                <div className="text-sm font-normal text-cbrown underline mt-1">
+                  <span
+                    className="hover:cursor-pointer"
+                    onClick={() => navigate("/")}
+                  >
+                    Go to home to generate counterarguments
+                  </span>
+                </div>
+              </div>
             )}
           </div>
         )}
