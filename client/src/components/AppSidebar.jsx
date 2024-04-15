@@ -2,6 +2,7 @@ import React from "react";
 import { Sidebar } from "flowbite-react";
 import { Link, useLocation } from "react-router-dom";
 import AppLogo from "../assets/logo.png";
+import HeaderProfile from "./HeaderProfile";
 
 export default function AppSidebar() {
   const path = useLocation().pathname;
@@ -16,7 +17,9 @@ export default function AppSidebar() {
         <Sidebar.ItemGroup>
           <Link to="/">
             <Sidebar.Item active={path === "/"} as="div">
-              <span className={path === "/" ? "text-clight" : ""}>HOME</span>
+              <section className={path === "/" ? "text-clight" : ""}>
+                HOME
+              </section>
             </Sidebar.Item>
           </Link>
           <Link to="/liked">
@@ -49,6 +52,7 @@ export default function AppSidebar() {
           </Link>
         </Sidebar.ItemGroup>
       </Sidebar.Items>
+      <HeaderProfile />
     </Sidebar>
   );
 }

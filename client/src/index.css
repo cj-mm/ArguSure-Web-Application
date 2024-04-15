@@ -51,6 +51,31 @@ body {
   stroke: #705d55;
 }
 
+.header-profile div {
+  margin-bottom: 0px;
+  font-weight: bold;
+  color: #32292f;
+  background-color: #6eabb0;
+}
+
+.header-profile [data-testid="flowbite-dropdown"] {
+  background-color: #6eabb0;
+  color: #32292f;
+  border-color: #6eabb0;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
+}
+
+.header-profile
+  [data-testid="flowbite-dropdown"]
+  [role="menuitem"]
+  button:hover {
+  background-color: rgba(128, 128, 128, 0.2);
+}
+
+.header-profile > button:first-child {
+  width: 100%;
+}
+
 .home-input textarea {
   border-color: #705d55;
 }
@@ -61,10 +86,6 @@ body {
 
 .search-input input {
   border-color: #705d55;
-}
-
-[role="menuitem"] button:hover {
-  background-color: rgb(235, 235, 235);
 }
 
 .saveto-modal [role="dialog"] div {

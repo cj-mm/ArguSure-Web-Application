@@ -9,7 +9,6 @@ import Disliked from "./pages/Disliked";
 import Saved from "./pages/Saved";
 import History from "./pages/History";
 import AppSidebar from "./components/AppSidebar";
-import HeaderProfile from "./components/HeaderProfile";
 import PrivateRoute from "./components/PrivateRoute";
 import TopicList from "./pages/TopicList";
 import Topic from "./pages/Topic";
@@ -19,7 +18,6 @@ export default function App() {
   return (
     <BrowserRouter>
       <div className="flex">
-        <HeaderProfile />
         <Routes>
           <Route element={<PrivateRoute />}>
             <Route path="/profile" element={<Profile />} />
