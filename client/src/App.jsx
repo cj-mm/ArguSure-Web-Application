@@ -13,6 +13,7 @@ import HeaderProfile from "./components/HeaderProfile";
 import PrivateRoute from "./components/PrivateRoute";
 import TopicList from "./pages/TopicList";
 import Topic from "./pages/Topic";
+import PublicRoute from "./components/PublicRoute";
 
 export default function App() {
   return (
@@ -76,18 +77,20 @@ export default function App() {
                 </>
               }
             />
+            <Route
+              path="/"
+              element={
+                <>
+                  <AppSidebar />
+                  <Home />
+                </>
+              }
+            />
           </Route>
-          <Route
-            path="/"
-            element={
-              <>
-                <AppSidebar />
-                <Home />
-              </>
-            }
-          />
-          <Route path="/sign-in" element={<SignIn />} />
-          <Route path="/sign-up" element={<SignUp />} />
+          <Route element={<PublicRoute />}>
+            <Route path="/sign-in" element={<SignIn />} />
+            <Route path="/sign-up" element={<SignUp />} />
+          </Route>
         </Routes>
       </div>
     </BrowserRouter>
