@@ -69,7 +69,10 @@ export default function Disliked() {
   }, [location.search]);
 
   return (
-    <div className="w-full h-full mt-20 ml-60">
+    <div className="w-full h-full mt-5 ml-60">
+      <div className="w-full my-5 text-center text-lg font-bold text-cblack">
+        Disliked Counterarguments
+      </div>
       <Search pageRoute={"disliked"} />
       {error ? (
         <div className="text-center mt-5 text-red-500">{error}</div>
@@ -94,7 +97,7 @@ export default function Disliked() {
                   </div>
                 </div>
               ) : (
-                "Disliked Counterarguments"
+                <></>
               )}
             </div>
             {counterarguments.map((counterargument, index) => {

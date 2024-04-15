@@ -2,7 +2,7 @@ import React from "react";
 
 export default function SkeletonLoader() {
   return (
-    <div className="border shadow-lg bg-clight rounded-md p-4 w-[60rem] h-64 mx-auto mt-16">
+    <div className="border shadow-lg bg-clight rounded-md p-4 w-[60rem] h-64 mx-auto mt-5">
       <div className="animate-pulse flex space-x-4">
         <div className="flex-1 space-y-6 py-1">
           <div className="h-2 bg-gray-300 rounded"></div>

@@ -69,7 +69,10 @@ export default function Liked() {
   }, [location.search]);
 
   return (
-    <div className="w-full h-full mt-20 ml-60">
+    <div className="w-full h-full mt-5 ml-60">
+      <div className="w-full my-5 text-center text-lg font-bold text-cblack">
+        Liked Counterarguments
+      </div>
       <Search pageRoute={"liked"} />
       {error ? (
         <div className="text-center mt-5 text-red-500">{error}</div>
@@ -94,7 +97,7 @@ export default function Liked() {
                   </div>
                 </div>
               ) : (
-                "Liked Counterarguments"
+                <></>
               )}
             </div>
             {counterarguments.map((counterargument, index) => {

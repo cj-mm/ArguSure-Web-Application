@@ -20,7 +20,15 @@ export default function App() {
       <div className="flex">
         <Routes>
           <Route element={<PrivateRoute />}>
-            <Route path="/profile" element={<Profile />} />
+            <Route
+              path="/profile"
+              element={
+                <>
+                  <AppSidebar />
+                  <Profile />
+                </>
+              }
+            />
             <Route
               path="/liked"
               element={

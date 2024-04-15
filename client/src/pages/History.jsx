@@ -67,7 +67,10 @@ export default function History() {
   }, [location.search]);
 
   return (
-    <div className="w-full h-full mt-20 ml-60">
+    <div className="w-full h-full mt-5 ml-60">
+      <div className="w-full my-5 text-center text-lg font-bold text-cblack">
+        Counterargument Generation History
+      </div>
       <Search pageRoute={"history"} />
       {error ? (
         <div className="text-center mt-5 text-red-500">{error}</div>
@@ -92,7 +95,7 @@ export default function History() {
                   </div>
                 </div>
               ) : (
-                "Counterargument Generation History"
+                <></>
               )}
             </div>
             {counterarguments.map((counterargument, index) => {

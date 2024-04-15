@@ -75,7 +75,7 @@ export default function Topic() {
   }, [location.search]);
 
   return (
-    <div className="w-full h-full mt-20 ml-60">
+    <div className="w-full h-full mt-10 ml-60">
       <div className="flex gap-1 w-[60rem] m-auto mb-5 text-cbrown ">
         <FaArrowLeft
           className="size-7 hover:cursor-pointer hover:text-yellow-800"

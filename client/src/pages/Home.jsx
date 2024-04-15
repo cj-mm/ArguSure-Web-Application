@@ -154,7 +154,7 @@ export default function Home() {
           counterarguments.length !== 0 && (
             <div>
               <div className="w-full mt-5 text-center text-lg font-bold text-cblack">
-                Counterarguments:
+                Why this might be wrong?
               </div>
               {counterarguments.map((counterargument, index) => {
                 return (

@@ -165,150 +165,151 @@ export default function Profile() {
   // };
 
   return (
-    <div className="bg-clight text-cgreen shadow-2xl w-3/4 lg:w-1/2 rounded-md self-center flex-col mx-auto mt-7">
-      <div className="mt-5 flex ">
-        <FaArrowLeft
-          className="size-7 text-cbrown ml-3 absolute hover:cursor-pointer hover:text-yellow-800"
-          onClick={() => navigate(-1)}
-        />
-        <span className="font-black text-3xl m-auto">Profile</span>
-      </div>
-      <div className="my-5 mx-10">
-        <form className="flex flex-col" onSubmit={handleSubmit}>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            ref={filePickerRef}
-            hidden
+    <div className="w-full h-full ml-60 mt-10">
+      <div className="bg-clight text-cgreen shadow-2xl w-3/4 lg:w-2/3 rounded-md self-center flex-col mx-auto mt-7 p-2">
+        <div className="mt-5 flex">
+          <FaArrowLeft
+            className="size-7 text-cbrown ml-3 absolute hover:cursor-pointer hover:text-yellow-800"
+            onClick={() => navigate(-1)}
           />
-          <div
-            className="relative w-32 h-32 self-center cursor-pointer shadow-md overflow-hidden rounded-full"
-            onClick={() => filePickerRef.current.click()}
-          >
-            {imageFileUploadProgress && (
-              <CircularProgressbar
-                value={imageFileUploadProgress || 0}
-                text={`${imageFileUploadProgress}%`}
-                strokeWidth={5}
-                styles={{
-                  root: {
-                    width: "100%",
-                    height: "100%",
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                  },
-                  path: {
-                    stroke: `rgba(62, 152, 199, ${
-                      imageFileUploadProgress / 100
-                    })`,
-                  },
-                }}
-              />
-            )}
-            <img
-              src={imageFileUrl || currentUser.profilePicture}
-              alt="user"
-              className={`rounded-full w-full h-full object-cover border-8 border-[lightgray] ${
-                imageFileUploadProgress &&
-                imageFileUploadProgress < 100 &&
-                "opacity-60"
-              }`}
+          <span className="font-black text-3xl m-auto">Profile</span>
+        </div>
+        <div className="my-5 mx-10">
+          <form className="flex flex-col" onSubmit={handleSubmit}>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              ref={filePickerRef}
+              hidden
             />
-          </div>
-          {imageFileUploadError && (
-            <Alert className="text-red-400 mx-auto text-xs">
-              {imageFileUploadError}
-            </Alert>
-          )}
-          <div className="flex gap-5 mt-5">
-            <div className="flex-1 flex flex-col gap-3">
-              <div>
-                <Label
-                  value="Username"
-                  className="text-cgreen text-sm font-normal"
-                />
-                <TextInput
-                  type="text"
-                  placeholder="Enter your username"
-                  id="username"
-                  defaultValue={currentUser.username}
-                  onChange={handleChange}
-                />
-              </div>
-              <div>
-                <Label
-                  value="Email"
-                  className="text-cgreen text-sm font-normal"
-                />
-                <TextInput
-                  type="email"
-                  placeholder="Enter your email"
-                  id="email"
-                  defaultValue={currentUser.email}
-                  readOnly
-                  disabled
-                />
-              </div>
-            </div>
-
-            <div className="flex-1 flex flex-col gap-3">
-              <div>
-                <Label
-                  value="New Password"
-                  className="text-cgreen text-sm font-normal"
-                />
-                <TextInput
-                  type="password"
-                  placeholder="Enter your password"
-                  id="newpassword"
-                  onChange={handleChange}
-                />
-              </div>
-              <div>
-                <Label
-                  value="Confirm New Password"
-                  className="text-cgreen text-sm font-normal"
-                />
-                <TextInput
-                  type="password"
-                  placeholder="Confirm password"
-                  id="confirmpassword"
-                  onChange={handleChange}
-                  disabled={formData.newpassword ? false : true}
-                />
-              </div>
-              <div>
-                <Label
-                  value="Current Password"
-                  className="text-cgreen text-sm font-normal"
-                />
-                <TextInput
-                  type="password"
-                  placeholder="Enter your password"
-                  id="curpassword"
-                  onChange={handleChange}
-                  disabled={
-                    Object.keys(formData).length === 0 ||
-                    (formData.newpassword === "" &&
-                      formData.username === currentUser.username)
-                      ? true
-                      : false
-                  }
-                />
-              </div>
-            </div>
-          </div>
-          <div className="flex hover:shadow-lg bg-black rounded-xl mt-5 w-1/2 mx-auto">
-            <Button
-              className="bg-cbrown text-clight font-semibold flex-1"
-              type="submit"
+            <div
+              className="relative w-32 h-32 self-center cursor-pointer shadow-md overflow-hidden rounded-full"
+              onClick={() => filePickerRef.current.click()}
             >
-              Update
-            </Button>
-          </div>
-          {/* <div className="flex hover:shadow-lg rounded-xl w-1/2 mx-auto">
+              {imageFileUploadProgress && (
+                <CircularProgressbar
+                  value={imageFileUploadProgress || 0}
+                  text={`${imageFileUploadProgress}%`}
+                  strokeWidth={5}
+                  styles={{
+                    root: {
+                      width: "100%",
+                      height: "100%",
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                    },
+                    path: {
+                      stroke: `rgba(62, 152, 199, ${
+                        imageFileUploadProgress / 100
+                      })`,
+                    },
+                  }}
+                />
+              )}
+              <img
+                src={imageFileUrl || currentUser.profilePicture}
+                alt="user"
+                className={`rounded-full w-full h-full object-cover border-8 border-[lightgray] ${
+                  imageFileUploadProgress &&
+                  imageFileUploadProgress < 100 &&
+                  "opacity-60"
+                }`}
+              />
+            </div>
+            {imageFileUploadError && (
+              <Alert className="text-red-400 mx-auto text-xs">
+                {imageFileUploadError}
+              </Alert>
+            )}
+            <div className="flex gap-5 mt-5">
+              <div className="flex-1 flex flex-col gap-3">
+                <div>
+                  <Label
+                    value="Username"
+                    className="text-cgreen text-sm font-normal"
+                  />
+                  <TextInput
+                    type="text"
+                    placeholder="Enter your username"
+                    id="username"
+                    defaultValue={currentUser.username}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div>
+                  <Label
+                    value="Email"
+                    className="text-cgreen text-sm font-normal"
+                  />
+                  <TextInput
+                    type="email"
+                    placeholder="Enter your email"
+                    id="email"
+                    defaultValue={currentUser.email}
+                    readOnly
+                    disabled
+                  />
+                </div>
+              </div>
+
+              <div className="flex-1 flex flex-col gap-3">
+                <div>
+                  <Label
+                    value="New Password"
+                    className="text-cgreen text-sm font-normal"
+                  />
+                  <TextInput
+                    type="password"
+                    placeholder="Enter your password"
+                    id="newpassword"
+                    onChange={handleChange}
+                  />
+                </div>
+                <div>
+                  <Label
+                    value="Confirm New Password"
+                    className="text-cgreen text-sm font-normal"
+                  />
+                  <TextInput
+                    type="password"
+                    placeholder="Confirm password"
+                    id="confirmpassword"
+                    onChange={handleChange}
+                    disabled={formData.newpassword ? false : true}
+                  />
+                </div>
+                <div>
+                  <Label
+                    value="Current Password"
+                    className="text-cgreen text-sm font-normal"
+                  />
+                  <TextInput
+                    type="password"
+                    placeholder="Enter your password"
+                    id="curpassword"
+                    onChange={handleChange}
+                    disabled={
+                      Object.keys(formData).length === 0 ||
+                      (formData.newpassword === "" &&
+                        formData.username === currentUser.username)
+                        ? true
+                        : false
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="flex hover:shadow-lg bg-black rounded-xl mt-5 w-1/2 mx-auto">
+              <Button
+                className="bg-cbrown text-clight font-semibold flex-1"
+                type="submit"
+              >
+                Update
+              </Button>
+            </div>
+            {/* <div className="flex hover:shadow-lg rounded-xl w-1/2 mx-auto">
             <Button
               type="button"
               className="inner-border-cbrown bg-clight inner-border-solid inner-border-2 flex-1 mt-2"
@@ -318,30 +319,31 @@ export default function Profile() {
               <span className="text-cbrown font-semibold">Cancel</span>
             </Button>
           </div> */}
-        </form>
-        <div className=" text-sm text-cbrown underline flex justify-between mt-2 w-1/2 mx-auto">
-          <span
-            className="cursor-pointer"
-            onClick={() => dispatch(showDeleteModal())}
-          >
-            Delete Account
-          </span>
-          <span onClick={handleSignout} className="cursor-pointer">
-            Sign Out
-          </span>
+          </form>
+          <div className=" text-sm text-cbrown underline flex justify-between mt-2 w-1/2 mx-auto">
+            <span
+              className="cursor-pointer"
+              onClick={() => dispatch(showDeleteModal())}
+            >
+              Delete Account
+            </span>
+            <span onClick={handleSignout} className="cursor-pointer">
+              Sign Out
+            </span>
+          </div>
+          {updateUserSuccess && (
+            <div className="flex place-content-center">
+              <Alert className="text-green-400">{updateUserSuccess}</Alert>
+            </div>
+          )}
+          {updateUserError && (
+            <div className="flex place-content-center">
+              <Alert className="text-red-400">{updateUserError}</Alert>
+            </div>
+          )}
+          {error && <Alert className="text-red-400">{error}</Alert>}
+          <DeleteUserModal />
         </div>
-        {updateUserSuccess && (
-          <div className="flex place-content-center">
-            <Alert className="text-green-400">{updateUserSuccess}</Alert>
-          </div>
-        )}
-        {updateUserError && (
-          <div className="flex place-content-center">
-            <Alert className="text-red-400">{updateUserError}</Alert>
-          </div>
-        )}
-        {error && <Alert className="text-red-400">{error}</Alert>}
-        <DeleteUserModal />
       </div>
     </div>
   );
