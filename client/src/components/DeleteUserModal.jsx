@@ -43,10 +43,10 @@ export default function DeleteUserModal() {
       <Modal.Header className="bg-clight" />
       <Modal.Body className="bg-clight">
         <div className="text-center">
-          <HiOutlineExclamationCircle className="h-14 w-14 text-cblack  mb-4 mx-auto" />
-          <h3 className="mb-5 text-lg text-cblack">
+          <HiOutlineExclamationCircle className="h-14 w-14 text-cblack mb-2 mx-auto" />
+          <div className="mb-5 text-lg text-cblack font-semibold">
             Are you sure you want to delete your account?
-          </h3>
+          </div>
           <div className="flex justify-center gap-4">
             <Button
               className="bg-cbrown text-clight font-semibold"
