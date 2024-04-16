@@ -6,6 +6,8 @@ const initialState = {
   selectedCounterarg: null,
   displayedCounterargs: [],
   savedCounterargs: [],
+  unsaveModal: false,
+  unsaveDataBody: {},
 };
 
 const counterargSlice = createSlice({
@@ -58,6 +60,15 @@ const counterargSlice = createSlice({
     resetSavedCounterargs: (state) => {
       state.savedCounterargs = [];
     },
+    showUnsaveModal: (state) => {
+      state.unsaveModal = true;
+    },
+    hideUnsaveModal: (state) => {
+      state.unsaveModal = false;
+    },
+    setUnsaveDataBody: (state, action) => {
+      state.unsaveDataBody = action.payload;
+    },
   },
 });
 
@@ -71,6 +82,9 @@ export const {
   addToSavedCounterargs,
   removeFromSavedCounterargs,
   resetSavedCounterargs,
+  showUnsaveModal,
+  hideUnsaveModal,
+  setUnsaveDataBody,
 } = counterargSlice.actions;
 
 export default counterargSlice.reducer;

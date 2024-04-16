@@ -1,9 +1,8 @@
-import React, { useEffect, useReducer, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { BiDislike, BiLike, BiSolidDislike, BiSolidLike } from "react-icons/bi";
 import { BsThreeDots } from "react-icons/bs";
 import { FiSave, FiFileMinus } from "react-icons/fi";
-import { CgPlayListRemove } from "react-icons/cg";
 import { RiPlayListAddFill } from "react-icons/ri";
 import { IoIosRemoveCircleOutline } from "react-icons/io";
 import { Avatar, Dropdown } from "flowbite-react";
@@ -12,11 +11,13 @@ import {
   showSaveToModal,
   setSelectedCounterarg,
   setDisplayedCounterargs,
-  removeFromSavedCounterargs,
   addToSavedCounterargs,
+  showUnsaveModal,
+  setUnsaveDataBody,
 } from "../redux/counterargument/counterargSlice";
 import SaveTo from "./SaveTo";
 import { useLocation, useParams } from "react-router-dom";
+import UnsaveModal from "./UnsaveModal";
 
 export default function CounterargsContainer({ counterargument, withClaim }) {
   const claim =
@@ -138,23 +139,8 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
       savedTo: savedTo,
       removeFrom: topicSlug ? removeFromTopic : savedTo,
     };
-    try {
-      const res = await fetch("/api/saved/unsave", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(dataBody),
-      });
-      const data = await res.json();
-
-      if (!res.ok) {
-        console.log(data.message);
-      } else {
-        dispatch(removeFromSavedCounterargs(counterargument._id));
-        dispatch(updateSuccess(data.userWithUpdatedSaved));
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
+    dispatch(setUnsaveDataBody(dataBody));
+    dispatch(showUnsaveModal());
   };
 
   return (
@@ -273,6 +259,7 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
         </div>
       </div>
       <SaveTo />
+      <UnsaveModal />
     </div>
   );
 }
