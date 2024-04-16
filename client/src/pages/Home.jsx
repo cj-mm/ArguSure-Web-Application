@@ -150,29 +150,43 @@ export default function Home() {
       <div>
         {loading ? (
           <SkeletonLoader />
-        ) : (
-          counterarguments.length !== 0 && (
-            <div>
-              <div className="w-full mt-5 text-center text-lg font-bold text-cblack">
-                Why this might be wrong?
-              </div>
-              {counterarguments.map((counterargument, index) => {
-                return (
-                  <CounterargsContainer
-                    key={index}
-                    counterargument={counterargument}
-                    withClaim={false}
-                  />
-                );
-              })}
-              <div
-                className="my-5 w-full text-center text-base underline text-cbrown hover:cursor-pointer"
-                onClick={generateCounterarguments}
-              >
-                Regenerate
-              </div>
+        ) : counterarguments.length !== 0 ? (
+          <div>
+            <div className="w-full mt-5 text-center text-lg font-bold text-cblack">
+              Why this might be wrong?
             </div>
-          )
+            {counterarguments.map((counterargument, index) => {
+              return (
+                <CounterargsContainer
+                  key={index}
+                  counterargument={counterargument}
+                  withClaim={false}
+                />
+              );
+            })}
+            <div
+              className="my-5 w-full text-center text-base underline text-cbrown hover:cursor-pointer"
+              onClick={generateCounterarguments}
+            >
+              Regenerate
+            </div>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-10 m-auto text-center w-[40rem] my-10">
+            <div className="text-4xl text-cgreen font-extrabold">
+              Lorem Ipsum Dolor
+            </div>
+            <div className="text-cblack italic">
+              ..... Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+              sodales velit vulputate magna euismod, vel maximus quam aliquam.
+              Nulla eu sem vitae metus fringilla fermentum. Integer ante tortor,
+              dictum a augue eget, efficitur tristique tellus. Quisque pretium
+              feugiat blandit. Nam scelerisque rutrum dolor eget finibus.
+              Vivamus nec nisl ultrices, auctor ante vitae, lacinia lorem.
+              Aenean ullamcorper tristique ullamcorper. Vestibulum finibus erat
+              nibh, nec mollis nisl eleifend non .....
+            </div>
+          </div>
         )}
       </div>
       <div></div>
