@@ -7,6 +7,11 @@ import {
 } from "react-icons/md";
 import { updateSuccess } from "../redux/user/userSlice";
 import { useNavigate } from "react-router-dom";
+import DeleteTopicModal from "./DeleteTopicModal";
+import {
+  setDeleteTopicDataBody,
+  showDeleteTopicModal,
+} from "../redux/counterargument/counterargSlice";
 
 export default function TopicListItem({ topic }) {
   const [renameValue, setRenameValue] = useState("");
@@ -55,52 +60,41 @@ export default function TopicListItem({ topic }) {
     const dataBody = {
       topicName: topic.topicName,
     };
-
-    try {
-      const res = await fetch("/api/saved/deletetopic", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(dataBody),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        console.log(data.message);
-      } else {
-        dispatch(updateSuccess(data));
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
+    dispatch(setDeleteTopicDataBody(dataBody));
+    dispatch(showDeleteTopicModal());
   };
 
   return (
-    <div
-      className="bg-clightgreen cshadow rounded flex gap-1 items-center hover:cursor-pointer h-14 p-2"
-      onClick={() => !renaming && navigate(`/saved/topics/${topic.slug}`)}
-    >
-      {renaming ? (
-        <form onSubmit={handleRenameTopic}>
-          <TextInput
-            type="text"
-            placeholder="Enter to rename"
-            onChange={handleChange}
-            value={renameValue}
-          />
-        </form>
-      ) : (
-        <span className="text-cblack font-bold truncate w-3/4">
-          {topic.topicName}
-        </span>
-      )}
-      <div className="flex-1"></div>
-      <MdOutlineDriveFileRenameOutline
-        className="size-5 text-clight hover:text-cbrown"
-        onClick={handleRenameBtn}
-      />
-      <MdDeleteOutline
-        className="size-5 text-clight hover:text-red-400"
-        onClick={handleDeleteTopic}
-      />
+    <div>
+      <div
+        className="bg-clightgreen cshadow rounded flex gap-1 items-center hover:cursor-pointer h-14 p-2"
+        onClick={() => !renaming && navigate(`/saved/topics/${topic.slug}`)}
+      >
+        {renaming ? (
+          <form onSubmit={handleRenameTopic}>
+            <TextInput
+              type="text"
+              placeholder="Enter to rename"
+              onChange={handleChange}
+              value={renameValue}
+            />
+          </form>
+        ) : (
+          <span className="text-cblack font-bold truncate w-3/4">
+            {topic.topicName}
+          </span>
+        )}
+        <div className="flex-1"></div>
+        <MdOutlineDriveFileRenameOutline
+          className="size-5 text-clight hover:text-cbrown"
+          onClick={handleRenameBtn}
+        />
+        <MdDeleteOutline
+          className="size-5 text-clight hover:text-red-400"
+          onClick={handleDeleteTopic}
+        />
+      </div>
+      <DeleteTopicModal />
     </div>
   );
 }
