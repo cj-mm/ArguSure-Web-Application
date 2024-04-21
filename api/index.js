@@ -6,6 +6,7 @@ import authRoutes from "./routes/auth.route.js";
 import counterargRoutes from "./routes/counterargument.route.js";
 import savedRoutes from "./routes/saved.route.js";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors());
 
 app.listen(5000, () => {
   console.log("Server is running on Port 5000");
