@@ -4,7 +4,6 @@ const initialState = {
   saveToModal: false,
   addTopic: false,
   selectedCounterarg: null,
-  displayedCounterargs: [],
   savedCounterargs: [],
   unsaveModal: false,
   unsaveDataBody: {},
@@ -31,17 +30,6 @@ const counterargSlice = createSlice({
     setSelectedCounterarg: (state, action) => {
       state.selectedCounterarg = action.payload;
     },
-    setDisplayedCounterargs: (state, action) => {
-      if (action.payload === "reset") {
-        state.displayedCounterargs = [];
-        return;
-      }
-      if (Array.isArray(state.displayedCounterargs)) {
-        state.displayedCounterargs.push(action.payload);
-      } else {
-        state.displayedCounterargs = [action.payload];
-      }
-    },
     addToSavedCounterargs: (state, action) => {
       if (Array.isArray(state.savedCounterargs)) {
         if (!state.savedCounterargs.includes(action.payload)) {
@@ -58,6 +46,9 @@ const counterargSlice = createSlice({
           state.savedCounterargs.splice(index, 1);
         }
       }
+    },
+    setSavedCounterargs: (state, action) => {
+      state.savedCounterargs = action.payload;
     },
     resetSavedCounterargs: (state) => {
       state.savedCounterargs = [];
@@ -92,6 +83,7 @@ export const {
   setDisplayedCounterargs,
   addToSavedCounterargs,
   removeFromSavedCounterargs,
+  setSavedCounterargs,
   resetSavedCounterargs,
   showUnsaveModal,
   hideUnsaveModal,

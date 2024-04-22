@@ -4,6 +4,8 @@ import CounterargsContainer from "../components/CounterargsContainer";
 import SkeletonLoader from "../components/SkeletonLoader";
 import Search from "../components/Search";
 import { FaArrowLeft } from "react-icons/fa";
+import { useDispatch } from "react-redux";
+import { updateSuccess } from "../redux/user/userSlice";
 
 export default function Topic() {
   const { topicSlug } = useParams();
@@ -12,6 +14,7 @@ export default function Topic() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showMore, setShowMore] = useState(true);
+  const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -46,6 +49,23 @@ export default function Topic() {
   };
 
   useEffect(() => {
+    const getCurrentUser = async () => {
+      try {
+        const res = await fetch(`/api/user/getuser`, {
+          method: "GET",
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          console.log(data.message);
+          dispatch(updateSuccess(null));
+        } else {
+          dispatch(updateSuccess(data));
+        }
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    getCurrentUser();
     setLoading(true);
     setShowMore(true);
     const urlParams = new URLSearchParams(location.search);

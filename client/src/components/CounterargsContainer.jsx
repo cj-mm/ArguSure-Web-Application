@@ -10,10 +10,11 @@ import { updateSuccess } from "../redux/user/userSlice";
 import {
   showSaveToModal,
   setSelectedCounterarg,
-  setDisplayedCounterargs,
   addToSavedCounterargs,
   showUnsaveModal,
   setUnsaveDataBody,
+  resetSavedCounterargs,
+  setSavedCounterargs,
 } from "../redux/counterargument/counterargSlice";
 import SaveTo from "./SaveTo";
 import { useLocation, useParams } from "react-router-dom";
@@ -29,30 +30,34 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
   const [readMore, setReadMore] = useState(false);
   const [liked, setLiked] = useState(counterargument.liked);
   const { currentUser } = useSelector((state) => state.user);
-  const { displayedCounterargs, savedCounterargs } = useSelector(
-    (state) => state.counterarg
-  );
+  const { savedCounterargs } = useSelector((state) => state.counterarg);
   const dispatch = useDispatch();
   const location = useLocation();
   const { topicSlug } = useParams();
 
   useEffect(() => {
-    dispatch(setDisplayedCounterargs(counterargument));
-
-    let tempDisplayedCounterargs = displayedCounterargs;
-    const uniqueArray = tempDisplayedCounterargs.filter((value, index) => {
-      const _value = JSON.stringify(value);
-      return (
-        index ===
-        tempDisplayedCounterargs.findIndex((obj) => {
-          return JSON.stringify(obj) === _value;
-        })
-      );
-    });
-
-    dispatch(setDisplayedCounterargs("reset"));
-    for (let i = 0; i < uniqueArray.length; i++) {
-      dispatch(setDisplayedCounterargs(uniqueArray[i]));
+    const getCurrentUser = async () => {
+      try {
+        const res = await fetch(`/api/user/getuser`, {
+          method: "GET",
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          console.log(data.message);
+          dispatch(updateSuccess(null));
+        } else {
+          dispatch(updateSuccess(data));
+        }
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    getCurrentUser();
+    dispatch(resetSavedCounterargs());
+    for (let i = 0; i < currentUser.saved.length; i++) {
+      if (currentUser.saved[i].topicName === "default") {
+        dispatch(setSavedCounterargs(currentUser.saved[i].counterarguments));
+      }
     }
   }, []);
 

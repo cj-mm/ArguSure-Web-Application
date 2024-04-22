@@ -26,6 +26,23 @@ export default function SaveTo() {
 
   useEffect(() => {
     if (counterargument) {
+      const getCurrentUser = async () => {
+        try {
+          const res = await fetch(`/api/user/getuser`, {
+            method: "GET",
+          });
+          const data = await res.json();
+          if (!res.ok) {
+            console.log(data.message);
+            dispatch(updateSuccess(null));
+          } else {
+            dispatch(updateSuccess(data));
+          }
+        } catch (error) {
+          console.log(error.message);
+        }
+      };
+      getCurrentUser();
       let currentCheckedTopics = [];
       for (let i = 0; i < currentUser.saved.length; i++) {
         const topic = currentUser.saved[i];
