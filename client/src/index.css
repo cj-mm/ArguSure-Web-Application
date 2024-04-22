@@ -16,7 +16,7 @@ body {
   width: 100vw;
   height: 100vh;
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .app-sidebar > div:first-child {
@@ -110,4 +110,23 @@ body {
 
 .cshadow:hover {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
+}
+
+.window-popup {
+  background-color: #f0f7f4;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.landing-page {
+  background-image: url("./assets/bg-logo.png");
+  background-repeat: no-repeat;
+  background-position-x: left;
+  background-size: 30em;
+  background-attachment: relative;
 }

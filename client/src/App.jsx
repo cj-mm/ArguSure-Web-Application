@@ -13,6 +13,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import TopicList from "./pages/TopicList";
 import Topic from "./pages/Topic";
 import PublicRoute from "./components/PublicRoute";
+import WindowPopup from "./pages/WindowPopup";
 
 export default function App() {
   return (
@@ -97,6 +98,7 @@ export default function App() {
             <Route path="/sign-in" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />
           </Route>
+          <Route path="/window-popup" element={<WindowPopup />} />
         </Routes>
       </div>
     </BrowserRouter>
