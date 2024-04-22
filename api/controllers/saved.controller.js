@@ -53,7 +53,7 @@ export const saveCounterargument = async (req, res, next) => {
       if (selectedTopics.includes(userSaved[i].topicName)) {
         // if the topic is selected and it does not contain the counterargument, add it to the topic
         if (!userSaved[i].counterarguments.includes(counterargId)) {
-          userSaved[i].counterarguments.push(counterargId);
+          userSaved[i].counterarguments.unshift(counterargId);
         }
       } else {
         let index = userSaved[i].counterarguments.indexOf(counterargId);
@@ -197,7 +197,7 @@ const mapOrder = (array, order, key) => {
     let A = a[key],
       B = b[key];
 
-    if (order.indexOf(A) < order.indexOf(B)) {
+    if (order.indexOf(A) > order.indexOf(B)) {
       return 1;
     } else {
       return -1;
@@ -231,6 +231,7 @@ export const getSavedCounterargs = async (req, res, next) => {
         break;
       }
     }
+    counterargs = counterargs.slice(startIndex, startIndex + limit);
 
     const topicCounterargs = await Counterargument.find({
       _id: { $in: counterargs },
@@ -242,15 +243,14 @@ export const getSavedCounterargs = async (req, res, next) => {
           { source: { $regex: req.query.searchTerm, $options: "i" } },
         ],
       }),
-    })
-      .skip(startIndex)
-      .limit(limit);
+    });
 
     const orderedTopicCounterargs = mapOrder(
       topicCounterargs,
       counterargs,
       "_id"
     );
+
     res.status(200).json({ orderedTopicCounterargs, selectedTopic });
   } catch (error) {
     next(error);
