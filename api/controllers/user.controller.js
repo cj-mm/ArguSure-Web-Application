@@ -2,6 +2,7 @@ import { errorHandler } from "../utils/errors.js";
 import { checkUsername, checkPassword } from "../utils/validator.js";
 import bcryptjs from "bcryptjs";
 import User from "../models/user.model.js";
+import Counterargument from "../models/counterargument.model.js";
 
 export const getSignedInUser = async (req, res) => {
   if (!req.user) {
@@ -87,7 +88,8 @@ export const deleteUser = async (req, res, next) => {
   }
   try {
     await User.findByIdAndDelete(req.params.userId);
-    res.status(200).json("User has been deleted successfully");
+    await Counterargument.deleteMany({ userId: req.params.userId });
+    await res.status(200).json("User has been deleted successfully");
   } catch (error) {
     next(error);
   }
