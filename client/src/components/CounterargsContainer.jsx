@@ -15,10 +15,14 @@ import {
   setUnsaveDataBody,
   resetSavedCounterargs,
   setSavedCounterargs,
+  setPromptText,
+  showPrompt,
+  hidePrompt,
 } from "../redux/counterargument/counterargSlice";
 import SaveTo from "./SaveTo";
 import { useLocation, useParams } from "react-router-dom";
 import UnsaveModal from "./UnsaveModal";
+import Prompt from "./Prompt";
 
 export default function CounterargsContainer({ counterargument, withClaim }) {
   const claim =
@@ -30,10 +34,13 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
   const [readMore, setReadMore] = useState(false);
   const [liked, setLiked] = useState(counterargument.liked);
   const { currentUser } = useSelector((state) => state.user);
-  const { savedCounterargs } = useSelector((state) => state.counterarg);
+  const { savedCounterargs, prompt, promptText } = useSelector(
+    (state) => state.counterarg
+  );
   const dispatch = useDispatch();
   const location = useLocation();
   const { topicSlug } = useParams();
+  const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
   useEffect(() => {
     const getCurrentUser = async () => {
@@ -120,6 +127,10 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
       } else {
         dispatch(addToSavedCounterargs(counterargument._id));
         dispatch(updateSuccess(data.userWithUpdatedSaved));
+        dispatch(setPromptText("SAVED"));
+        dispatch(showPrompt());
+        await delay(2000);
+        dispatch(hidePrompt());
       }
     } catch (error) {
       console.log(error.message);
@@ -265,6 +276,7 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
       </div>
       <SaveTo />
       <UnsaveModal />
+      {prompt && promptText && <Prompt promptText={promptText} />}
     </div>
   );
 }

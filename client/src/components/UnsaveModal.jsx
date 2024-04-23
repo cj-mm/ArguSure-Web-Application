@@ -7,6 +7,9 @@ import {
   hideUnsaveModal,
   removeFromSavedCounterargs,
   setUnsaveDataBody,
+  setPromptText,
+  showPrompt,
+  hidePrompt,
 } from "../redux/counterargument/counterargSlice";
 
 export default function UnsaveModal() {
@@ -15,6 +18,7 @@ export default function UnsaveModal() {
     (state) => state.counterarg
   );
   const dispatch = useDispatch();
+  const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
   const handleUnsave = async () => {
     try {
@@ -36,6 +40,10 @@ export default function UnsaveModal() {
     }
     dispatch(setUnsaveDataBody({}));
     dispatch(hideUnsaveModal());
+    dispatch(setPromptText("UNSAVED"));
+    dispatch(showPrompt());
+    await delay(2000);
+    dispatch(hidePrompt());
   };
 
   return (

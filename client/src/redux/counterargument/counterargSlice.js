@@ -9,6 +9,8 @@ const initialState = {
   unsaveDataBody: {},
   deleteTopicModal: false,
   deleteTopicDataBody: {},
+  prompt: false,
+  promptText: "",
 };
 
 const counterargSlice = createSlice({
@@ -71,6 +73,15 @@ const counterargSlice = createSlice({
     setDeleteTopicDataBody: (state, action) => {
       state.deleteTopicDataBody = action.payload;
     },
+    setPromptText: (state, action) => {
+      state.promptText = action.payload;
+    },
+    showPrompt: (state) => {
+      state.prompt = true;
+    },
+    hidePrompt: (state) => {
+      state.prompt = false;
+    },
   },
 });
 
@@ -91,6 +102,9 @@ export const {
   showDeleteTopicModal,
   hideDeleteTopicModal,
   setDeleteTopicDataBody,
+  setPromptText,
+  showPrompt,
+  hidePrompt,
 } = counterargSlice.actions;
 
 export default counterargSlice.reducer;
