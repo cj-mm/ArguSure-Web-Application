@@ -151,13 +151,13 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
   return (
     <div className="flex flex-col w-[60rem] mx-auto my-5 cshadow rounded-lg bg-clight text-cblack">
       {withClaim && (
-        <div className="font-bold text-base bg-cgreen px-5 py-3 rounded-t-lg">
+        <div className="font-semibold text-base bg-cgreen px-5 py-3 rounded-t-lg">
           <u>Input claim</u>: {claim}
         </div>
       )}
       <div className={"flex gap-12 p-5 " + (readMore ? "h-full" : "h-64")}>
-        <div className="flex flex-col gap-0 text-justify max-w-[50rem]">
-          <div className="font-bold text-base italic">{summary}</div>
+        <div className="flex flex-col gap-0 text-justify max-w-[55rem]">
+          <div className="font-semibold text-base italic">{summary}</div>
           <div className="overflow-hidden mt-2">
             <div>{body}</div>
             <div className="mt-2">

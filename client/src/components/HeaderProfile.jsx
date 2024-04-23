@@ -43,7 +43,7 @@ export default function HeaderProfile() {
             />
             <span
               className={
-                "text-cblack text-lg font-bold truncate " +
+                "text-cblack text-lg font-semibold truncate " +
                 (path === "/profile" ? "text-clight" : "")
               }
             >

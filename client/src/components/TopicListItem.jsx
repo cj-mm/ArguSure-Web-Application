@@ -80,7 +80,7 @@ export default function TopicListItem({ topic }) {
             />
           </form>
         ) : (
-          <span className="text-cblack font-bold truncate w-3/4">
+          <span className="text-cblack font-semibold truncate w-3/4">
             {topic.topicName}
           </span>
         )}
