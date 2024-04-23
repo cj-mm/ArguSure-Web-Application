@@ -14,6 +14,9 @@ import {
   setUnsaveDataBody,
   resetSavedCounterargs,
   setSavedCounterargs,
+  setPromptText,
+  showPrompt,
+  hidePrompt,
 } from "../redux/counterargument/counterargSlice";
 import SaveTo from "./SaveTo";
 import UnsaveModal from "./UnsaveModal";
@@ -33,6 +36,7 @@ export default function PopupCounterargContainer({
   const { currentUser } = useSelector((state) => state.user);
   const { savedCounterargs } = useSelector((state) => state.counterarg);
   const dispatch = useDispatch();
+  const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
   useEffect(() => {
     const getCurrentUser = async () => {
@@ -108,8 +112,10 @@ export default function PopupCounterargContainer({
         console.log(savedCounterargs);
         dispatch(addToSavedCounterargs(counterargument._id));
         dispatch(updateSuccess(data.userWithUpdatedSaved));
-        console.log(savedCounterargs);
-        console.log(counterargument._id);
+        dispatch(setPromptText("SAVED"));
+        dispatch(showPrompt());
+        await delay(2000);
+        dispatch(hidePrompt());
       }
     } catch (error) {
       console.log(error.message);

@@ -6,6 +6,7 @@ import AppLogo from "../assets/logo.png";
 import PopupCounterargsContainer from "../components/PopupCounterargContainer";
 import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
+import Prompt from "../components/Prompt";
 
 const WindowPopup = () => {
   const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
@@ -21,6 +22,7 @@ const WindowPopup = () => {
   const homepageRoute = "http://localhost:5173/";
   const signinRoute = "http://localhost:5173/sign-in";
   const signupRoute = "http://localhost:5173/sign-up";
+  const { prompt, promptText } = useSelector((state) => state.counterarg);
 
   useEffect(() => {
     if (currentUser) {
@@ -249,6 +251,7 @@ const WindowPopup = () => {
                 )}
               </div>
             </div>
+            {prompt && promptText && <Prompt promptText={promptText} />}
           </>
         ) : (
           <div className="landing-page flex flex-col gap-10 text-center w-full h-full py-16 px-5 overflow-hidden">
