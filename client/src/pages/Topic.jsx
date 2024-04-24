@@ -95,14 +95,14 @@ export default function Topic() {
   }, [location.search]);
 
   return (
-    <div className="w-full h-full mt-10 ml-60">
-      <div className="flex gap-1 w-[60rem] m-auto mb-5 text-cbrown ">
+    <div className="page-container w-full h-full mt-10 ml-60">
+      <div className="page flex gap-1 w-[60rem] m-auto mb-5 text-cbrown ">
         <FaArrowLeft
-          className="size-7 hover:cursor-pointer hover:text-yellow-800"
+          className="size-5 sm:size-7 hover:cursor-pointer hover:text-yellow-800"
           onClick={() => navigate("/saved/topics")}
         />
         <div className="flex-1">
-          <div className="w-full text-center text-xl font-bold text-cblack">
+          <div className="w-full text-center text-base sm:text-xl font-bold text-cblack">
             {topic.topicName}
           </div>
         </div>

@@ -140,11 +140,11 @@ export default function Home() {
   };
 
   return (
-    <div className="w-full h-full mt-20 ml-60">
-      <div className="home-input flex gap-3 justify-center">
+    <div className="home-page w-full h-full mt-20 ml-60">
+      <div className="home-input flex gap-1 sm:gap-3 justify-center">
         <Textarea
           placeholder="Enter a claim or an argument"
-          className="w-96 max-h-40 min-h-16"
+          className="home-textarea w-96 max-h-40 min-h-16"
           id="inputclaim-area"
           onChange={handleChange}
           maxLength={charLimit}
@@ -195,7 +195,7 @@ export default function Home() {
             </div>
           </div>
         ) : (
-          <div className="flex flex-col gap-10 m-auto text-center w-[40rem] my-10">
+          <div className="flex flex-col gap-10 m-auto text-center w-full sm:w-[40rem] my-10">
             <div className="text-4xl text-cgreen font-extrabold">
               Lorem Ipsum Dolor
             </div>

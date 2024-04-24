@@ -160,21 +160,32 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
   };
 
   return (
-    <div className="flex flex-col w-[60rem] mx-auto my-5 cshadow rounded-lg bg-clight text-cblack">
+    <div className="counterarg-container flex flex-col w-[60rem] mx-auto my-5 cshadow rounded-lg bg-clight text-cblack">
       {withClaim && (
-        <div className="font-semibold text-base bg-cgreen px-5 py-3 rounded-t-lg">
+        <div className="font-semibold text-sm sm:text-base bg-cgreen px-2 py-2 sm:px-5 sm:py-3 rounded-t-lg">
           <u>Input claim</u>: {claim}
         </div>
       )}
-      <div className={"flex gap-12 p-5 " + (readMore ? "h-full" : "h-64")}>
-        <div className="flex flex-col gap-0 text-justify max-w-[55rem]">
-          <div className="font-semibold text-base italic">{summary}</div>
-          <div className="overflow-hidden mt-2">
-            <div>{body}</div>
-            <div className="mt-2">
-              <span className="font-semibold">Source:</span>
-              <br />
-              {source}
+      <div
+        className={
+          "counterarg-text text-sm sm:text-base flex gap-5 sm:gap-12 p-2 sm:p-5 " +
+          (readMore ? "h-full" : "h-32 sm:h-64")
+        }
+      >
+        <div className=" flex flex-col gap-0 text-justify max-w-[55rem] break-normal ">
+          <div className="overflow-hidden">
+            <div className="font-semibold text-sm sm:text-base italic">
+              {summary}
+            </div>
+            <div className=" mt-2 ">
+              <div>{body}</div>
+              <div className="mt-2">
+                <span className="font-semibold">Source:</span>
+                <br />
+                <div className="max-w-[15rem] sm:max-w-[55rem] break-normal">
+                  {source}
+                </div>
+              </div>
             </div>
           </div>
           <div
@@ -248,26 +259,26 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
               </Dropdown.Item>
             </Dropdown>
           </div>
-          <div className="flex gap-5 mt-5">
+          <div className="flex gap-2 sm:gap-5 mt-5">
             {liked !== "liked" ? (
               <BiLike
-                className="size-6 hover:cursor-pointer hover:text-cbrown"
+                className="size-5 sm:size-6 hover:cursor-pointer hover:text-cbrown"
                 onClick={() => handleLike("liked")}
               />
             ) : (
               <BiSolidLike
-                className="size-6 text-cbrown hover:cursor-pointer"
+                className="size-5 sm:size-6 text-cbrown hover:cursor-pointer"
                 onClick={() => handleLike("none")}
               />
             )}
             {liked !== "disliked" ? (
               <BiDislike
-                className="size-6 hover:cursor-pointer hover:text-cbrown"
+                className="size-5 sm:size-6 hover:cursor-pointer hover:text-cbrown"
                 onClick={() => handleLike("disliked")}
               />
             ) : (
               <BiSolidDislike
-                className="size-6 text-cbrown hover:cursor-pointer"
+                className="size-5 sm:size-6 text-cbrown hover:cursor-pointer"
                 onClick={() => handleLike("none")}
               />
             )}

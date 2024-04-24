@@ -165,16 +165,18 @@ export default function Profile() {
   // };
 
   return (
-    <div className="w-full h-full ml-60 mt-5">
-      <div className="bg-clight text-cgreen shadow-2xl w-3/4 lg:w-2/3 rounded-md self-center flex-col mx-auto mt-7 p-2">
+    <div className="page-container w-full h-full ml-60 mt-5">
+      <div className="profile-page bg-clight text-cgreen shadow-2xl w-3/4 lg:w-2/3 rounded-md self-center flex-col mx-auto mt-7 p-2">
         <div className="mt-5 flex">
           <FaArrowLeft
-            className="size-7 text-cbrown ml-3 absolute hover:cursor-pointer hover:text-yellow-800"
+            className="size-5 sm:size-7 text-cbrown ml-3 absolute hover:cursor-pointer hover:text-yellow-800"
             onClick={() => navigate(-1)}
           />
-          <span className="font-black text-3xl m-auto">Profile</span>
+          <span className="font-black text-2xl sm:text-3xl m-auto">
+            Profile
+          </span>
         </div>
-        <div className="my-5 mx-10">
+        <div className="sm:my-5 sm:mx-10">
           <form className="flex flex-col" onSubmit={handleSubmit}>
             <input
               type="file"
@@ -223,7 +225,7 @@ export default function Profile() {
                 {imageFileUploadError}
               </Alert>
             )}
-            <div className="flex gap-5 mt-5">
+            <div className="flex flex-col sm:flex-row gap-5 mt-5">
               <div className="flex-1 flex flex-col gap-3">
                 <div>
                   <Label
@@ -301,7 +303,7 @@ export default function Profile() {
                 </div>
               </div>
             </div>
-            <div className="flex hover:shadow-lg bg-black rounded-xl mt-5 w-1/2 mx-auto">
+            <div className="flex hover:shadow-lg bg-black rounded-xl mt-5 w-full sm:w-1/2 mx-auto">
               <Button
                 className="bg-cbrown text-clight font-semibold flex-1"
                 type="submit"
@@ -320,7 +322,7 @@ export default function Profile() {
             </Button>
           </div> */}
           </form>
-          <div className=" text-sm text-cbrown underline flex justify-between mt-2 w-1/2 mx-auto">
+          <div className=" text-sm text-cbrown underline flex justify-between mt-2 w-full sm:w-1/2 mx-auto">
             <span
               className="cursor-pointer"
               onClick={() => dispatch(showDeleteModal())}

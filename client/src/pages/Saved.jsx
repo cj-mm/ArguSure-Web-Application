@@ -73,16 +73,16 @@ export default function Saved() {
   }, [location.search]);
 
   return (
-    <div className="w-full h-full mt-5 ml-60">
-      <div className="flex justify-between gap-1 w-[60rem] m-auto text-cbrown ">
-        <div className="w-1/3"></div>
-        <div className="my-5 w-1/3 text-center text-xl font-bold text-cblack">
+    <div className="page-container w-full h-full mt-5 ml-60">
+      <div className="page flex justify-between gap-1 w-[60rem] m-auto text-cbrown ">
+        <div className="w-0 sm:w-1/3"></div>
+        <div className="my-5 w-1/3 text-center text-base sm:text-xl font-bold text-cblack">
           Saved Counterarguments
         </div>
         <div className="flex w-1/3 gap-1 m-auto text-cbrown justify-end">
           <FaFolderOpen className="size-5" />
           <span
-            className="hover:cursor-pointer underline text-base"
+            className="hover:cursor-pointer underline text-sm sm:text-base"
             onClick={() => navigate("/saved/topics")}
           >
             Go to topic list

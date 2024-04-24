@@ -69,8 +69,8 @@ export default function Disliked() {
   }, [location.search]);
 
   return (
-    <div className="w-full h-full mt-5 ml-60">
-      <div className="w-full my-5 text-center text-xl font-bold text-cblack">
+    <div className="page-container w-full h-full mt-5 ml-60">
+      <div className="page w-full my-5 text-center text-base sm:text-xl font-bold text-cblack">
         Disliked Counterarguments
       </div>
       <Search pageRoute={"disliked"} />

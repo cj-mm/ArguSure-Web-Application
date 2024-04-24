@@ -164,3 +164,62 @@ body {
     left: 12px;
   }
 }
+
+@media only screen and (max-width: 1200px) {
+  .counterarg-container {
+    width: 100%;
+  }
+  .page-container {
+    margin-left: 260px;
+  }
+  .page {
+    width: 100%;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  .topic-list {
+    width: 100%;
+  }
+  .profile-page {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 930px) {
+  .app-sidebar {
+    display: none;
+  }
+  .counterarg-container {
+    width: 100%;
+  }
+  .page-container {
+    margin: 20px;
+  }
+  .page {
+    width: 100%;
+  }
+  .home-page {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  .home-textarea {
+    width: 70%;
+  }
+}
+
+/* @media only screen and (max-width: 640px) {
+  .app-sidebar {
+  }
+  .counterarg-container {
+  }
+  .page-container {
+  }
+  .page {
+    font-size: 10px;
+  }
+  .home-page {
+  }
+  .home-textarea {
+    width: 100%;
+  }
+} */

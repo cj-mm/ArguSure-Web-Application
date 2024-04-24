@@ -52,19 +52,19 @@ export default function TopicList() {
   };
 
   return (
-    <div className="flex flex-col w-full h-full mt-10 ml-60">
-      <div className="flex gap-1 w-[60rem] m-auto mb-5 text-cbrown ">
+    <div className="page-container flex flex-col w-full h-full mt-10 ml-60">
+      <div className="page flex gap-1 w-[60rem] m-auto mb-5 text-cbrown ">
         <FaArrowLeft
-          className="size-7 hover:cursor-pointer hover:text-yellow-800"
+          className="size-5 sm:size-7 hover:cursor-pointer hover:text-yellow-800"
           onClick={() => navigate("/saved")}
         />
         <div className="flex-1">
-          <div className="w-full text-center text-xl font-bold text-cblack">
+          <div className="w-full text-center text-base sm:text-xl font-bold text-cblack">
             Topic List
           </div>
         </div>
         <FaPlusSquare
-          className="size-7 hover:cursor-pointer hover:text-yellow-800"
+          className="size-5 sm:size-7 mr-5 sm:mr-0 hover:cursor-pointer hover:text-yellow-800"
           onClick={() => dispatch(showAddTopic())}
         />
       </div>
@@ -100,7 +100,7 @@ export default function TopicList() {
               <></>
             )}
           </div>
-          <div className="grid grid-cols-3 grid-flow-row gap-4 w-[60rem] m-auto mt-5 mb-5">
+          <div className="topic-list grid grid-cols-1 sm:grid-cols-3 grid-flow-row gap-4 w-[60rem] m-auto mt-5 mb-5">
             {topics.map((topic, index) => {
               return <TopicListItem topic={topic} key={index} />;
             })}
