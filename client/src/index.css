@@ -101,7 +101,7 @@ body {
 }
 
 [data-testid="modal-overlay"] {
-  background-color: rgba(17, 24, 39, 0.3);
+  background-color: rgba(17, 24, 39, 0.1);
 }
 
 .cshadow {
