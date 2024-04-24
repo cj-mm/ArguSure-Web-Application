@@ -13,6 +13,7 @@ export default function Home() {
   const [error, setError] = useState(null);
   // const [currentInput, setCurrentInput] = useState("");
   const currentInput = useRef("");
+  const charLimit = 500;
 
   const handleChange = (e) => {
     setInputClaim(e.target.value);
@@ -47,6 +48,13 @@ export default function Home() {
         setCounterarguments([]);
         return;
       }
+      if (inputClaim.length > charLimit) {
+        setError(`Please input up to ${charLimit} characters only.`);
+        setLoading(false);
+        setCounterarguments([]);
+        return;
+      }
+
       currentInput.current = inputClaim;
       setError(null);
       setLoading(true);
@@ -67,8 +75,22 @@ export default function Home() {
           maxOutputTokens: 4096,
         },
       });
-
       const claim = `'${inputClaim}'`;
+      const askClaimMsg = `Strictly yes or no, is "${claim}" a claim?`;
+      const askClaimMsgResult = await chat.sendMessage(askClaimMsg);
+      const askClaimMsgResponse = askClaimMsgResult.response.text();
+      const askArgMsg = `Strictly yes or no, is "${claim}" an argument?`;
+      const askArgMsgResult = await chat.sendMessage(askArgMsg);
+      const askArgMsgResponse = askArgMsgResult.response.text();
+      if (
+        askClaimMsgResponse.toLowerCase().includes("no") &&
+        askArgMsgResponse.toLowerCase().includes("no")
+      ) {
+        setError("The input is neither a claim nor an argument.");
+        setLoading(false);
+        setCounterarguments([]);
+        return;
+      }
 
       const msgs = [
         "Provide one argument against " +
@@ -121,10 +143,11 @@ export default function Home() {
     <div className="w-full h-full mt-20 ml-60">
       <div className="home-input flex gap-3 justify-center">
         <Textarea
-          placeholder="Enter an argument"
+          placeholder="Enter a claim or an argument"
           className="w-96 max-h-40 min-h-16"
           id="inputclaim-area"
           onChange={handleChange}
+          maxLength={charLimit}
         />
         <Button
           className="bg-cbrown text-clight font-semibold w-44 h-10 mt-2 hover:shadow-lg"

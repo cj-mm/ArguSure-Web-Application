@@ -23,6 +23,7 @@ const WindowPopup = () => {
   const signinRoute = "http://localhost:5173/sign-in";
   const signupRoute = "http://localhost:5173/sign-up";
   const { prompt, promptText } = useSelector((state) => state.counterarg);
+  const charLimit = 500;
 
   useEffect(() => {
     if (currentUser) {
@@ -68,6 +69,14 @@ const WindowPopup = () => {
         setCounterarguments([]);
         return;
       }
+
+      if (selectedClaim.current.length > charLimit) {
+        setError(`Please input up to ${charLimit} characters only.`);
+        setLoading(false);
+        setCounterarguments([]);
+        return;
+      }
+
       setError(null);
       setLoading(true);
       const model = genAI.getGenerativeModel({ model: "gemini-pro" });
@@ -79,6 +88,22 @@ const WindowPopup = () => {
       });
 
       const claim = `'${selectedClaim.current}'`;
+      const askClaimMsg = `Strictly yes or no, is "${claim}" a claim?`;
+      const askClaimMsgResult = await chat.sendMessage(askClaimMsg);
+      const askClaimMsgResponse = askClaimMsgResult.response.text();
+      const askArgMsg = `Strictly yes or no, is "${claim}" an argument?`;
+      const askArgMsgResult = await chat.sendMessage(askArgMsg);
+      const askArgMsgResponse = askArgMsgResult.response.text();
+      if (
+        askClaimMsgResponse.toLowerCase().includes("no") &&
+        askArgMsgResponse.toLowerCase().includes("no")
+      ) {
+        setError("The input is neither a claim nor an argument.");
+        setLoading(false);
+        setCounterarguments([]);
+        return;
+      }
+
       const msgs = [
         "Provide one argument against " +
           claim +
@@ -169,6 +194,7 @@ const WindowPopup = () => {
                           placeholder="Enter to edit"
                           onChange={handleChange}
                           value={claimEdit}
+                          maxLength={charLimit}
                         />
                       </form>
                     ) : (
