@@ -31,11 +31,11 @@ export default function AppSidebar() {
     if (window.innerWidth > 930) {
       sidebar.style.display = "block";
       sidebarclose.style.display = "none";
-      sidebar.style.boxShadow = "0";
+      sidebar.style.boxShadow = "none";
     } else {
       sidebar.style.display = "none";
       sidebarclose.style.display = "none";
-      sidebar.style.boxShadow = "0";
+      sidebar.style.boxShadow = "none";
     }
   });
 
