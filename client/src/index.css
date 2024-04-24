@@ -165,6 +165,34 @@ body {
   }
 }
 
+.app-sidebar {
+  animation: myThird 1s;
+  animation-direction: alternate;
+}
+
+@keyframes myThird {
+  0% {
+    left: -240px;
+  }
+  100% {
+    left: 0px;
+  }
+}
+
+.sidebar-menu-close {
+  animation: myFourth 1s;
+  animation-direction: alternate;
+}
+
+@keyframes myFourth {
+  0% {
+    left: -40px;
+  }
+  100% {
+    left: 215px;
+  }
+}
+
 @media only screen and (max-width: 1200px) {
   .counterarg-container {
     width: 100%;
@@ -189,11 +217,18 @@ body {
   .app-sidebar {
     display: none;
   }
+  .sidebar-menu {
+    position: fixed;
+    display: block;
+  }
   .counterarg-container {
     width: 100%;
   }
   .page-container {
-    margin: 20px;
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-left: 20px;
+    padding-right: 20px;
   }
   .page {
     width: 100%;
@@ -206,20 +241,3 @@ body {
     width: 70%;
   }
 }
-
-/* @media only screen and (max-width: 640px) {
-  .app-sidebar {
-  }
-  .counterarg-container {
-  }
-  .page-container {
-  }
-  .page {
-    font-size: 10px;
-  }
-  .home-page {
-  }
-  .home-textarea {
-    width: 100%;
-  }
-} */
