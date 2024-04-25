@@ -11,7 +11,7 @@ export default function Prompt({ promptText }) {
       </div>
     </div>
   ) : (
-    <div className="prompt fixed bottom-5 left-64 w-48 h-12 bg-clightgreen rounded shadow-md text-base font-semibold">
+    <div className="prompt fixed bottom-5 left-3 md:left-64 w-48 h-12 bg-clightgreen rounded shadow-md text-base font-semibold">
       <div className="flex h-full w-full">
         <span className="m-auto">{promptText}</span>
       </div>
