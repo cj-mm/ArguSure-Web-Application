@@ -211,6 +211,9 @@ body {
   .profile-page {
     width: 100%;
   }
+  .table-container {
+    width: 680px;
+  }
 }
 
 @media only screen and (max-width: 930px) {
@@ -239,6 +242,9 @@ body {
   }
   .home-textarea {
     width: 70%;
+  }
+  .table-container {
+    width: 100%;
   }
 
   .prompt {

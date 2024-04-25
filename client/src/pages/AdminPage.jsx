@@ -4,6 +4,7 @@ import { BsFillChatSquareTextFill } from "react-icons/bs";
 import { FaFolderOpen } from "react-icons/fa6";
 import { BiSolidLike, BiSolidDislike } from "react-icons/bi";
 import { PieChart } from "react-minimal-pie-chart";
+import UsersTable from "../components/UsersTable";
 
 export default function () {
   return (
@@ -94,7 +95,9 @@ export default function () {
             </div>
           </div>
         </div>
-        <div></div>
+        <div className="table-container w-[60rem] m-auto">
+          <UsersTable />
+        </div>
       </div>
     </div>
   );
