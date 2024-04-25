@@ -14,6 +14,7 @@ import TopicList from "./pages/TopicList";
 import Topic from "./pages/Topic";
 import PublicRoute from "./components/PublicRoute";
 import WindowPopup from "./pages/WindowPopup";
+import AdminPage from "./pages/AdminPage";
 
 export default function App() {
   return (
@@ -90,6 +91,15 @@ export default function App() {
                 <>
                   <AppSidebar />
                   <Home />
+                </>
+              }
+            />
+            <Route
+              path="/admin-page"
+              element={
+                <>
+                  <AppSidebar />
+                  <AdminPage />
                 </>
               }
             />
