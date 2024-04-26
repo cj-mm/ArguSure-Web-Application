@@ -8,29 +8,45 @@ import {
   deleteUserFailure,
   hideDeleteModal,
 } from "../redux/user/userSlice";
+import {
+  setPromptText,
+  showPrompt,
+  hidePrompt,
+} from "../redux/counterargument/counterargSlice";
+import Prompt from "./Prompt";
 
-export default function DeleteUserModal() {
+export default function DeleteUserModal({ userToDelete }) {
   const { currentUser, showModal, loading } = useSelector(
     (state) => state.user
   );
+  const { prompt, promptText } = useSelector((state) => state.counterarg);
   const dispatch = useDispatch();
+  const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
   const handleDeleteUser = async () => {
     try {
-      dispatch(deleteUserStart());
-      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
-        method: "DELETE",
-      });
+      !userToDelete && dispatch(deleteUserStart());
+      const res = await fetch(
+        `/api/user/delete/${userToDelete ? userToDelete : currentUser._id}`,
+        {
+          method: "DELETE",
+        }
+      );
       const data = await res.json();
       if (!res.ok) {
-        dispatch(deleteUserFailure(data.message));
+        !userToDelete && dispatch(deleteUserFailure(data.message));
       } else {
-        dispatch(deleteUserSuccess(data));
+        !userToDelete && dispatch(deleteUserSuccess(data));
       }
     } catch (error) {
-      dispatch(deleteUserFailure(error.message));
+      !userToDelete && dispatch(deleteUserFailure(error.message));
     }
     dispatch(hideDeleteModal());
+    dispatch(setPromptText("DELETED"));
+    dispatch(showPrompt());
+    await delay(2000);
+    dispatch(setPromptText(""));
+    dispatch(hidePrompt());
   };
 
   return (
@@ -45,7 +61,7 @@ export default function DeleteUserModal() {
         <div className="text-center">
           <HiOutlineExclamationCircle className="h-14 w-14 text-cblack mb-2 mx-auto" />
           <div className="mb-5 text-lg text-cblack font-semibold">
-            Are you sure you want to delete your account?
+            Are you sure you want to delete this account?
           </div>
           <div className="flex justify-center gap-4">
             <Button

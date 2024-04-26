@@ -1,11 +1,19 @@
 import { Spinner, Table } from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { showDeleteModal } from "../redux/user/userSlice";
+import DeleteUserModal from "./DeleteUserModal";
+import Prompt from "./Prompt";
 
 export default function UsersTable() {
   const [allUsers, setAllUsers] = useState([]);
   const [showMore, setShowMore] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [userToDelete, setUserToDelete] = useState("");
+  const { currentUser, showModal } = useSelector((state) => state.user);
+  const { prompt, promptText } = useSelector((state) => state.counterarg);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchAllUsers = async () => {
@@ -26,7 +34,7 @@ export default function UsersTable() {
       }
     };
     fetchAllUsers();
-  }, []);
+  }, [showModal]);
 
   const handleShowMore = async () => {
     const startIndex = allUsers.length;
@@ -48,7 +56,7 @@ export default function UsersTable() {
 
   return (
     <div className="table-auto overflow-x-auto md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300">
-      {true && allUsers.length > 0 ? (
+      {currentUser.isAdmin && allUsers.length > 0 ? (
         <>
           <Table hoverable className="shadow-md">
             <Table.Head className="text-center text-cblack">
@@ -85,7 +93,13 @@ export default function UsersTable() {
                   <Table.Cell>{user.totalCounterargs}</Table.Cell>
                   <Table.Cell>{user.totalTopics}</Table.Cell>
                   <Table.Cell>
-                    <MdDelete className="size-5 font-medium text-red-400 cursor-pointer" />
+                    <MdDelete
+                      className="size-5 font-medium text-red-400 cursor-pointer hover:text-red-500"
+                      onClick={() => {
+                        setUserToDelete(user.userId);
+                        dispatch(showDeleteModal());
+                      }}
+                    />
                   </Table.Cell>
                 </Table.Row>
               </Table.Body>
@@ -105,6 +119,8 @@ export default function UsersTable() {
       ) : (
         <p>No users yet!</p>
       )}
+      <DeleteUserModal userToDelete={userToDelete} />
+      {prompt && promptText && <Prompt promptText={promptText} />}
     </div>
   );
 }

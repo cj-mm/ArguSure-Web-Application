@@ -5,10 +5,12 @@ import { FaFolderOpen } from "react-icons/fa6";
 import { BiSolidLike, BiSolidDislike } from "react-icons/bi";
 import { PieChart } from "react-minimal-pie-chart";
 import UsersTable from "../components/UsersTable";
+import { useSelector } from "react-redux";
 
 export default function () {
   const [totalInfo, setTotalInfo] = useState({});
   const [pastMonthInfo, setPastMonthInfo] = useState({});
+  const { showModal } = useSelector((state) => state.user);
 
   useEffect(() => {
     const fetchTotalInfo = async () => {
@@ -35,7 +37,7 @@ export default function () {
       }
     };
     fetchPastMonthInfo();
-  }, []);
+  }, [showModal]);
 
   return (
     <div className="page-container w-full h-full mt-5 ml-60">
