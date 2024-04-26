@@ -87,7 +87,26 @@ export const getDetailsMonth = async (req, res, next) => {
 };
 
 export const getAllUsers = async (req, res, next) => {
+  if (!req.user.isAdmin) {
+    return next(errorHandler(403, "Unauthorized"));
+  }
   try {
+    let allUsers = [];
+    const users = await User.find();
+    for (let i = 0; i < users.length; i++) {
+      let user = {};
+      user.dateCreated = users[i].createdAt;
+      user.profilePic = users[i].profilePicture;
+      user.username = users[i].username;
+      user.email = users[i].email;
+      const userTotalCounterargs = await Counterargument.countDocuments({
+        userId: users[i]._id,
+      });
+      user.totalCounterargs = userTotalCounterargs;
+      user.totalTopics = users[i].saved.length;
+      allUsers.push(user);
+    }
+    res.status(200).json(allUsers);
   } catch (error) {
     next(error);
   }
