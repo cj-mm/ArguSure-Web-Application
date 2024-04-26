@@ -43,6 +43,7 @@ export default function UnsaveModal() {
     dispatch(setPromptText("UNSAVED"));
     dispatch(showPrompt());
     await delay(2000);
+    dispatch(setPromptText(""));
     dispatch(hidePrompt());
   };
 

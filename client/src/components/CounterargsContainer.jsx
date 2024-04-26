@@ -130,6 +130,7 @@ export default function CounterargsContainer({ counterargument, withClaim }) {
         dispatch(setPromptText("SAVED"));
         dispatch(showPrompt());
         await delay(2000);
+        dispatch(setPromptText(""));
         dispatch(hidePrompt());
       }
     } catch (error) {

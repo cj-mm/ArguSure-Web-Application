@@ -115,6 +115,7 @@ export default function PopupCounterargContainer({
         dispatch(setPromptText("SAVED"));
         dispatch(showPrompt());
         await delay(2000);
+        dispatch(setPromptText(""));
         dispatch(hidePrompt());
       }
     } catch (error) {
