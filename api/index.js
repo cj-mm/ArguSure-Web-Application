@@ -5,6 +5,7 @@ import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
 import counterargRoutes from "./routes/counterargument.route.js";
 import savedRoutes from "./routes/saved.route.js";
+import adminRoutes from "./routes/admin.route.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
@@ -33,6 +34,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/counterarg", counterargRoutes);
 app.use("/api/saved", savedRoutes);
+app.use("/api/admin", adminRoutes);
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
