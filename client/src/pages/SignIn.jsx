@@ -61,28 +61,11 @@ export default function SignIn() {
   };
 
   return (
-    <div className="bg-clight text-cgreen shadow-2xl w-3/4 lg:w-1/3 rounded-md self-center flex-col mx-auto mt-7">
+    <div className="bg-clight text-cgreen cshadow w-full sm:w-[30rem] rounded-md self-center flex-col mx-5 sm:mx-auto mt-7">
       <div className="mt-5 flex ">
-        <Link to="/">
-          <svg
-            className="w-5 h-5 text-cbrown cursor-pointer absolute ml-3"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 8 14"
-          >
-            <path
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M7 1 1.3 6.326a.91.91 0 0 0 0 1.348L7 13"
-            />
-          </svg>
-        </Link>
         <span className="font-black text-3xl m-auto">Sign in</span>
       </div>
-      <div className="my-5 mx-10">
+      <div className="my-5 mx-3 sm:mx-10">
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <div>
             <Label value="Email" className="text-cgreen text-sm font-normal" />
