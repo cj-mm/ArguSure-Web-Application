@@ -141,16 +141,16 @@ export default function Home() {
 
   return (
     <div className="home-page w-full h-full mt-20 ml-60">
-      <div className="home-input flex gap-1 sm:gap-3 justify-center">
+      <div className="home-input flex flex-col sm:flex-row gap-1 sm:gap-3 justify-center">
         <Textarea
           placeholder="Enter a claim or an argument"
-          className="home-textarea w-96 max-h-40 min-h-16"
+          className="home-textarea w-full sm:w-96 max-h-40 min-h-16"
           id="inputclaim-area"
           onChange={handleChange}
           maxLength={charLimit}
         />
         <Button
-          className="bg-cbrown text-clight font-semibold w-44 h-10 mt-2 hover:shadow-lg"
+          className="bg-cbrown text-clight font-semibold w-44 h-10 mt-2 mx-auto sm:mx-0 hover:shadow-lg"
           type="button"
           onClick={generateCounterarguments}
           disabled={inputClaim && !loading ? false : true}

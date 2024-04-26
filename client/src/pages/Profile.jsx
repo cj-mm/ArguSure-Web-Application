@@ -166,7 +166,7 @@ export default function Profile() {
 
   return (
     <div className="page-container w-full h-full ml-60 mt-5">
-      <div className="profile-page bg-clight text-cgreen shadow-2xl w-3/4 lg:w-2/3 rounded-md self-center flex-col mx-auto mt-7 p-2">
+      <div className="profile-page bg-clight text-cgreen shadow-2xl w-full lg:w-[45rem] rounded-md self-center flex-col mx-auto mt-7 p-2">
         <div className="mt-5 flex">
           <FaArrowLeft
             className="size-5 sm:size-7 text-cbrown ml-3 absolute hover:cursor-pointer hover:text-yellow-800"
@@ -213,7 +213,7 @@ export default function Profile() {
               <img
                 src={imageFileUrl || currentUser.profilePicture}
                 alt="user"
-                className={`rounded-full w-full h-full object-cover border-8 border-[lightgray] ${
+                className={`rounded-full w-full h-full object-cover border-4 border-clight ${
                   imageFileUploadProgress &&
                   imageFileUploadProgress < 100 &&
                   "opacity-60"
