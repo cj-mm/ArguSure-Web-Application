@@ -141,7 +141,7 @@ export default function () {
             </div>
           </div>
         </div>
-        <div className="table-container w-[60rem] m-auto">
+        <div className="table-container m-auto">
           <UsersTable />
         </div>
       </div>

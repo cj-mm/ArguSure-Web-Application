@@ -1,73 +1,109 @@
-import { Table } from "flowbite-react";
-import React from "react";
+import { Spinner, Table } from "flowbite-react";
+import React, { useEffect, useState } from "react";
+import { MdDelete } from "react-icons/md";
 
 export default function UsersTable() {
+  const [allUsers, setAllUsers] = useState([]);
+  const [showMore, setShowMore] = useState(true);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchAllUsers = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch("/api/admin/getallusers");
+        const data = await res.json();
+        if (res.ok) {
+          setAllUsers(data);
+          setLoading(false);
+          if (data.length < 10) {
+            setShowMore(false);
+          }
+        }
+      } catch (error) {
+        setLoading(false);
+        console.log(error);
+      }
+    };
+    fetchAllUsers();
+  }, []);
+
+  const handleShowMore = async () => {
+    const startIndex = allUsers.length;
+    try {
+      const res = await fetch(
+        `/api/admin/getallusers?startIndex=${startIndex}`
+      );
+      const data = await res.json();
+      if (res.ok) {
+        setAllUsers((prev) => [...prev, ...data]);
+        if (data.length < 10) {
+          setShowMore(false);
+        }
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   return (
     <div className="table-auto overflow-x-auto md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300">
-      {true && true ? (
+      {true && allUsers.length > 0 ? (
         <>
           <Table hoverable className="shadow-md">
             <Table.Head className="text-center text-cblack">
-              <Table.HeadCell>Date Created</Table.HeadCell>
-              <Table.HeadCell>Profile Picture</Table.HeadCell>
-              <Table.HeadCell>Username</Table.HeadCell>
-              <Table.HeadCell>Email</Table.HeadCell>
-              <Table.HeadCell>Total Counterarguments</Table.HeadCell>
-              <Table.HeadCell>Total Topics</Table.HeadCell>
-              <Table.HeadCell>Delete</Table.HeadCell>
+              <Table.HeadCell className="bg-clight">
+                Date Created
+              </Table.HeadCell>
+              <Table.HeadCell className="bg-clight">
+                Profile Picture
+              </Table.HeadCell>
+              <Table.HeadCell className="bg-clight">Username</Table.HeadCell>
+              <Table.HeadCell className="bg-clight">Email</Table.HeadCell>
+              <Table.HeadCell className="bg-clight">
+                Total Counterarguments
+              </Table.HeadCell>
+              <Table.HeadCell className="bg-clight">
+                Total Topics
+              </Table.HeadCell>
+              <Table.HeadCell className="bg-clight"></Table.HeadCell>
             </Table.Head>
-            {/* {userPosts.map((post) => (
-              <Table.Body className="divide-y">
-                <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+            {allUsers.map((user, index) => (
+              <Table.Body className="divide-y" key={index}>
+                <Table.Row className="bg-clight text-center text-cblack hover:bg-gray-200">
                   <Table.Cell>
-                    {new Date(post.updatedAt).toLocaleDateString()}
+                    {new Date(user.dateCreated).toLocaleDateString()}
                   </Table.Cell>
                   <Table.Cell>
-                    <Link to={`/post/${post.slug}`}>
-                      <img
-                        src={post.image}
-                        alt={post.title}
-                        className="w-20 h-10 object-cover bg-gray-500"
-                      />
-                    </Link>
+                    <img
+                      src={user.profilePic}
+                      className="size-10 object-cover rounded-full m-auto"
+                    />
                   </Table.Cell>
+                  <Table.Cell>{user.username}</Table.Cell>
+                  <Table.Cell>{user.email}</Table.Cell>
+                  <Table.Cell>{user.totalCounterargs}</Table.Cell>
+                  <Table.Cell>{user.totalTopics}</Table.Cell>
                   <Table.Cell>
-                    <Link
-                      className="font-medium text-gray-900 dark:text-white"
-                      to={`/post/${post.slug}`}
-                    >
-                      {post.title}
-                    </Link>
-                  </Table.Cell>
-                  <Table.Cell>{post.category}</Table.Cell>
-                  <Table.Cell>
-                    <span className="font-medium text-red-500 hover:underline cursor-pointer">
-                      Delete
-                    </span>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Link
-                      className="text-teal-500 hover:underline"
-                      to={`/update-post/${post._id}`}
-                    >
-                      <span>Edit</span>
-                    </Link>
+                    <MdDelete className="size-5 font-medium text-red-400 cursor-pointer" />
                   </Table.Cell>
                 </Table.Row>
               </Table.Body>
-            ))} */}
+            ))}
           </Table>
-          {/* {showMore && (
+          {showMore && (
             <button
               onClick={handleShowMore}
-              className="w-full text-teal-500 self-center text-sm py-7"
+              className="w-full text-cbrown underline self-center text-sm py-3"
             >
               Show more
             </button>
-          )} */}
+          )}
         </>
+      ) : loading ? (
+        <Spinner className="w-full h-14 fill-cgreen" />
       ) : (
-        <p>You have no posts yet!</p>
+        <p>No users yet!</p>
       )}
     </div>
   );

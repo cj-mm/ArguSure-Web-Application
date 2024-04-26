@@ -131,6 +131,10 @@ body {
   background-attachment: relative;
 }
 
+.table-container td {
+  padding: 10px;
+}
+
 .prompt {
   animation: myfirst 1s;
   animation-direction: alternate;
