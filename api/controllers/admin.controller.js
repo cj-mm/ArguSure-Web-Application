@@ -48,7 +48,39 @@ export const getDetailsTotal = async (req, res, next) => {
 };
 
 export const getDetailsMonth = async (req, res, next) => {
+  if (!req.user.isAdmin) {
+    return next(errorHandler(403, "Unauthorized"));
+  }
+  const now = new Date();
+  const oneMonthAgo = new Date(
+    now.getFullYear(),
+    now.getMonth() - 1,
+    now.getDate()
+  );
   try {
+    const usersPastMonth = await User.countDocuments({
+      createdAt: { $gte: oneMonthAgo },
+    });
+    const counterargsPastMonth = await Counterargument.countDocuments({
+      createdAt: { $gte: oneMonthAgo },
+    });
+    const likesPastMonth = await Counterargument.find({
+      liked: "liked",
+      createdAt: { $gte: oneMonthAgo },
+    }).countDocuments();
+    const dislikesPastMonth = await Counterargument.find({
+      liked: "disliked",
+      createdAt: { $gte: oneMonthAgo },
+    }).countDocuments();
+
+    const adminPageInfoPastMonth = {
+      usersPastMonth,
+      counterargsPastMonth,
+      likesPastMonth,
+      dislikesPastMonth,
+    };
+
+    res.status(200).json(adminPageInfoPastMonth);
   } catch (error) {
     next(error);
   }
