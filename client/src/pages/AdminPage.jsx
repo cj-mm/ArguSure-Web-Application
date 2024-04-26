@@ -81,12 +81,10 @@ export default function () {
               <div className="flex flex-col border-2 border-cgreen p-2 rounded-l truncate overflow-x-auto">
                 <span>Added Users</span>
                 <span>Generated Counterarguments</span>
-                <span>Saved Counterarguments</span>
                 <span>Liked Counterarguments</span>
                 <span>Disliked Counterarguments</span>
               </div>
               <div className="flex flex-col font-bold border-2 border-cgreen p-2 rounded-r">
-                <span>169</span>
                 <span>169</span>
                 <span>169</span>
                 <span>169</span>
