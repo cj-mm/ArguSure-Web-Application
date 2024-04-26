@@ -97,6 +97,7 @@ export const getAllUsers = async (req, res, next) => {
     const users = await User.find().skip(startIndex).limit(limit);
     for (let i = 0; i < users.length; i++) {
       let user = {};
+      user.userId = users[i]._id;
       user.dateCreated = users[i].createdAt;
       user.profilePic = users[i].profilePicture;
       user.username = users[i].username;
