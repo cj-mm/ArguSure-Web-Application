@@ -8,6 +8,7 @@ import UsersTable from "../components/UsersTable";
 
 export default function () {
   const [totalInfo, setTotalInfo] = useState({});
+  const [pastMonthInfo, setPastMonthInfo] = useState({});
 
   useEffect(() => {
     const fetchTotalInfo = async () => {
@@ -22,6 +23,18 @@ export default function () {
       }
     };
     fetchTotalInfo();
+    const fetchPastMonthInfo = async () => {
+      try {
+        const res = await fetch("/api/admin/getpastmonth");
+        const data = await res.json();
+        if (res.ok) {
+          setPastMonthInfo(data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchPastMonthInfo();
   }, []);
 
   return (
@@ -120,10 +133,10 @@ export default function () {
                 <span>Disliked Counterarguments</span>
               </div>
               <div className="flex flex-col font-bold border-2 border-cgreen p-2 rounded-r">
-                <span>169</span>
-                <span>169</span>
-                <span>169</span>
-                <span>169</span>
+                <span>{pastMonthInfo.usersPastMonth || "-"}</span>
+                <span>{pastMonthInfo.counterargsPastMonth || "-"}</span>
+                <span>{pastMonthInfo.likesPastMonth || "-"}</span>
+                <span>{pastMonthInfo.dislikesPastMonth || "-"}</span>
               </div>
             </div>
           </div>
