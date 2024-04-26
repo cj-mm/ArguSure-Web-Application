@@ -90,9 +90,11 @@ export const getAllUsers = async (req, res, next) => {
   if (!req.user.isAdmin) {
     return next(errorHandler(403, "Unauthorized"));
   }
+  const startIndex = parseInt(req.query.startIndex) || 0;
+  const limit = parseInt(req.query.limit) || 10;
   try {
     let allUsers = [];
-    const users = await User.find();
+    const users = await User.find().skip(startIndex).limit(limit);
     for (let i = 0; i < users.length; i++) {
       let user = {};
       user.dateCreated = users[i].createdAt;
