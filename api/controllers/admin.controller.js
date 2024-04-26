@@ -66,11 +66,11 @@ export const getDetailsMonth = async (req, res, next) => {
     });
     const likesPastMonth = await Counterargument.find({
       liked: "liked",
-      createdAt: { $gte: oneMonthAgo },
+      updatedAt: { $gte: oneMonthAgo },
     }).countDocuments();
     const dislikesPastMonth = await Counterargument.find({
       liked: "disliked",
-      createdAt: { $gte: oneMonthAgo },
+      updatedAt: { $gte: oneMonthAgo },
     }).countDocuments();
 
     const adminPageInfoPastMonth = {
