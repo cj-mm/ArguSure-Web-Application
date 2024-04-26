@@ -6,11 +6,14 @@ import { BiSolidLike, BiSolidDislike } from "react-icons/bi";
 import { PieChart } from "react-minimal-pie-chart";
 import UsersTable from "../components/UsersTable";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export default function () {
   const [totalInfo, setTotalInfo] = useState({});
   const [pastMonthInfo, setPastMonthInfo] = useState({});
   const { showModal } = useSelector((state) => state.user);
+  const { currentUser } = useSelector((state) => state.user);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTotalInfo = async () => {
@@ -39,7 +42,7 @@ export default function () {
     fetchPastMonthInfo();
   }, [showModal]);
 
-  return (
+  return currentUser.isAdmin ? (
     <div className="page-container w-full h-full mt-5 ml-60">
       <div className="flex flex-col gap-2 w-full m-auto mb-5">
         <div className="w-full my-5 text-center text-base sm:text-xl font-bold text-cblack">
@@ -144,7 +147,22 @@ export default function () {
           </div>
         </div>
         <div className="table-container m-auto">
+          <div className="text-center text-cblack text-sm font-bold">Users</div>
           <UsersTable />
+        </div>
+      </div>
+    </div>
+  ) : (
+    <div className="page-container w-full h-full mt-5 ml-60">
+      <div className="page w-full my-24 text-center text-base sm:text-xl font-bold text-cblack">
+        Only admins can access this page!
+        <div className="mt-5">
+          <span
+            className="text-sm text-cbrown underline font-normal cursor-pointer"
+            onClick={() => navigate("/")}
+          >
+            Go to home
+          </span>
         </div>
       </div>
     </div>
