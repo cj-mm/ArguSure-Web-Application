@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaUsers } from "react-icons/fa";
 import { BsFillChatSquareTextFill } from "react-icons/bs";
 import { FaFolderOpen } from "react-icons/fa6";
@@ -7,6 +7,23 @@ import { PieChart } from "react-minimal-pie-chart";
 import UsersTable from "../components/UsersTable";
 
 export default function () {
+  const [totalInfo, setTotalInfo] = useState({});
+
+  useEffect(() => {
+    const fetchTotalInfo = async () => {
+      try {
+        const res = await fetch("/api/admin/gettotal");
+        const data = await res.json();
+        if (res.ok) {
+          setTotalInfo(data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchTotalInfo();
+  }, []);
+
   return (
     <div className="page-container w-full h-full mt-5 ml-60">
       <div className="flex flex-col gap-2 w-full m-auto mb-5">
@@ -17,21 +34,27 @@ export default function () {
           <div className="flex gap-1 h-20 bg-clight rounded cshadow p-3">
             <div className="flex flex-1 flex-col">
               <span className="flex-1 text-sm">Users Total</span>
-              <span className="text-2xl font-bold">169</span>
+              <span className="text-2xl font-bold">
+                {totalInfo.usersTotal || "-"}
+              </span>
             </div>
             <FaUsers className="size-14 text-cgreen m-auto" />
           </div>
           <div className="flex gap-1 h-20 bg-clight rounded cshadow p-3">
             <div className="flex flex-1 flex-col">
               <span className="flex-1 text-sm">Counterarguments Total</span>
-              <span className="text-2xl font-bold">169</span>
+              <span className="text-2xl font-bold">
+                {totalInfo.counterargsTotal || "-"}
+              </span>
             </div>
             <BsFillChatSquareTextFill className="size-12 text-cgreen m-auto" />
           </div>
           <div className="flex gap-1 h-20 bg-clight rounded cshadow p-3">
             <div className="flex flex-1 flex-col">
               <span className="flex-1 text-sm">Saved Total</span>
-              <span className="text-2xl font-bold">169</span>
+              <span className="text-2xl font-bold">
+                {totalInfo.savedTotal || "-"}
+              </span>
             </div>
             <FaFolderOpen className="size-12 text-cgreen m-auto" />
           </div>
@@ -41,14 +64,18 @@ export default function () {
             <div className="flex gap-1 h-20 bg-clight rounded cshadow p-3">
               <div className="flex flex-1 flex-col">
                 <span className="flex-1 text-sm">Likes Total</span>
-                <span className="text-2xl font-bold">169</span>
+                <span className="text-2xl font-bold">
+                  {totalInfo.likesTotal || "-"}
+                </span>
               </div>
               <BiSolidLike className="size-12 text-cgreen m-auto" />
             </div>
             <div className="flex gap-1 h-20 bg-clight rounded cshadow p-3">
               <div className="flex flex-1 flex-col">
                 <span className="flex-1 text-sm">Dislikes Total</span>
-                <span className="text-2xl font-bold">169</span>
+                <span className="text-2xl font-bold">
+                  {totalInfo.dislikesTotal || "-"}
+                </span>
               </div>
               <BiSolidDislike className="size-12 text-cgreen m-auto" />
             </div>
@@ -59,17 +86,25 @@ export default function () {
               <div className="flex flex-col gap-1 h-full text-base font-bold my-auto">
                 <div className="flex gap-1">
                   <div className="h-3 w-3 bg-clightgreen rounded my-auto"></div>
-                  <span>Likes: 75%</span>
+                  <span>Likes: {totalInfo.likesRatio || "-"}%</span>
                 </div>
                 <div className="flex gap-1">
                   <div className="h-3 w-3 bg-cgreen rounded my-auto"></div>
-                  <span>Dislikes: 25%</span>
+                  <span>Dislikes: {totalInfo.dislikesRatio || "-"}%</span>
                 </div>
               </div>
               <PieChart
                 data={[
-                  { title: "Likes", value: 25, color: "#96E1D9" },
-                  { title: "Dislikes", value: 15, color: "#6EABB0" },
+                  {
+                    title: "Likes",
+                    value: totalInfo.likesTotal || 0,
+                    color: "#96E1D9",
+                  },
+                  {
+                    title: "Dislikes",
+                    value: totalInfo.dislikesTotal || 0,
+                    color: "#6EABB0",
+                  },
                 ]}
                 className="size-28"
               />
