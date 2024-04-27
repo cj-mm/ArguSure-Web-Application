@@ -11,7 +11,7 @@ import {
   addToSavedCounterargs,
   resetSavedCounterargs,
 } from "../redux/counterargument/counterargSlice";
-import OAuth from "../components/OAuth";
+import GoogleAuth from "../components/GoogleAuth";
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
@@ -103,7 +103,7 @@ export default function SignIn() {
               )}
             </Button>
           </div>
-          <OAuth page={"Sign in"} />
+          <GoogleAuth page={"Sign in"} />
         </form>
         <div className="flex gap-2 text-sm mt-5 place-content-center">
           <span>Don't have an account?</span>
