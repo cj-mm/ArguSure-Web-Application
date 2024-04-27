@@ -106,7 +106,8 @@ export const getAllUsers = async (req, res, next) => {
         userId: users[i]._id,
       });
       user.totalCounterargs = userTotalCounterargs;
-      user.totalTopics = users[i].saved.length;
+      user.totalTopics =
+        users[i].saved.length === 0 ? 0 : users[i].saved.length - 1; // subtract the default
       allUsers.push(user);
     }
     res.status(200).json(allUsers);
