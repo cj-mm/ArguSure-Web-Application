@@ -11,6 +11,7 @@ import {
   showPrompt,
   hidePrompt,
 } from "../redux/counterargument/counterargSlice";
+import { useLocation } from "react-router-dom";
 
 export default function UnsaveModal() {
   const { loading } = useSelector((state) => state.user);
@@ -19,6 +20,7 @@ export default function UnsaveModal() {
   );
   const dispatch = useDispatch();
   const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+  const location = useLocation();
 
   const handleUnsave = async () => {
     try {
@@ -58,13 +60,28 @@ export default function UnsaveModal() {
       <Modal.Body className="bg-clight">
         <div className="text-center">
           <HiOutlineExclamationCircle className="h-14 w-14 text-cblack mx-auto" />
-          <div className=" text-lg text-cblack font-semibold">
-            Are you sure you want to unsave this counterargument?
-          </div>
-          <div className="text-xs text-cblack mb-7">
-            Note: This action will remove this counterargument from saved
-            section and every topic it is saved
-          </div>
+          {location.pathname.includes("/saved/topics") ? (
+            <>
+              <div className=" text-lg text-cblack font-semibold">
+                Are you sure you want to remove the counterargument from this
+                topic?
+              </div>
+              <div className="text-xs text-cblack mb-7">
+                Note: This action will remove the counterargument from this
+                topic only and not in the saved section
+              </div>
+            </>
+          ) : (
+            <>
+              <div className=" text-lg text-cblack font-semibold">
+                Are you sure you want to unsave this counterargument?
+              </div>
+              <div className="text-xs text-cblack mb-7">
+                Note: This action will remove this counterargument from saved
+                section and every topic it is saved
+              </div>
+            </>
+          )}
           <div className="flex justify-center gap-4">
             <Button
               className="bg-cbrown text-clight font-semibold"
