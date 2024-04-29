@@ -8,7 +8,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <GoogleOAuthProvider clientId="704923764896-ffhjfu2c16j13gt9ktl9iq6af0b3a97i.apps.googleusercontent.com">
+  <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
     <PersistGate persistor={persistor}>
       <Provider store={store}>
         <App />
