@@ -114,12 +114,12 @@ export default function () {
               <PieChart
                 data={[
                   {
-                    title: "Likes",
+                    title: `${totalInfo.likesTotal || "-"} Likes`,
                     value: totalInfo.likesTotal || 0,
                     color: "#96E1D9",
                   },
                   {
-                    title: "Dislikes",
+                    title: `${totalInfo.dislikesTotal || "-"} Dislikes`,
                     value: totalInfo.dislikesTotal || 0,
                     color: "#6EABB0",
                   },
