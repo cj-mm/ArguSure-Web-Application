@@ -4,7 +4,7 @@ import {
   HarmBlockThreshold,
   HarmCategory,
 } from "@google/generative-ai";
-import { Spinner, TextInput } from "flowbite-react";
+import { Button, Spinner, TextInput } from "flowbite-react";
 import { MdOutlineDriveFileRenameOutline } from "react-icons/md";
 import AppLogo from "../assets/logo.png";
 import PopupCounterargsContainer from "../components/PopupCounterargContainer";
@@ -36,7 +36,6 @@ const WindowPopup = () => {
         "selectedText"
       );
       setClaimEdit(selectedClaim.current);
-      generateCounterarguments();
     }
   }, []);
 
@@ -344,9 +343,37 @@ const WindowPopup = () => {
                   </div>
                 ) : (
                   !error && (
-                    <div className="text-center mt-5">
-                      No Counterarguments Generated
-                    </div>
+                    <>
+                      <div className="text-center m-5 text-cblack">
+                        ..... Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed sodales velit vulputate magna euismod, vel
+                        maximus quam aliquam. Nulla eu sem vitae metus fringilla
+                        fermentum. Integer ante tortor, dictum a augue eget,
+                        efficitur tristique tellus. Quisque pretium feugiat
+                        blandit. Nam scelerisque rutrum dolor eget finibus.
+                        Vivamus nec nisl ultrices, auctor ante vitae, lacinia
+                        lorem. Aenean ullamcorper tristique ullamcorper.
+                        Vestibulum finibus erat nibh, nec mollis nisl eleifend
+                        non .....
+                      </div>
+                      <Button
+                        className="bg-cbrown text-clight font-semibold w-44 h-10 mt-10 mx-auto sm:mx-0 cshadow"
+                        type="button"
+                        onClick={generateCounterarguments}
+                        disabled={
+                          selectedClaim.current && !loading ? false : true
+                        }
+                      >
+                        {loading ? (
+                          <>
+                            <Spinner size="sm" />
+                            <span className="pl-3">Generating...</span>
+                          </>
+                        ) : (
+                          "Generate"
+                        )}
+                      </Button>
+                    </>
                   )
                 )}
               </div>
