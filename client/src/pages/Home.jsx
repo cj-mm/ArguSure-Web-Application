@@ -6,7 +6,6 @@ import {
 } from "@google/generative-ai";
 import { Button, Spinner, Textarea } from "flowbite-react";
 import CounterargsContainer from "../components/CounterargsContainer";
-import SkeletonLoader from "../components/SkeletonLoader";
 
 export default function Home() {
   const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
@@ -15,6 +14,7 @@ export default function Home() {
   const [counterarguments, setCounterarguments] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [loadingPrompt, setLoadingPrompt] = useState(null);
   const currentInput = useRef("");
   const charLimit = 500;
 
@@ -47,12 +47,14 @@ export default function Home() {
     try {
       if (!inputClaim) {
         setError("Please input something!");
+        setLoadingPrompt(null);
         setLoading(false);
         setCounterarguments([]);
         return;
       }
       if (inputClaim.length > charLimit) {
         setError(`Please input up to ${charLimit} characters only.`);
+        setLoadingPrompt(null);
         setLoading(false);
         setCounterarguments([]);
         return;
@@ -91,6 +93,7 @@ export default function Home() {
       });
       const claim = `${inputClaim}`;
 
+      setLoadingPrompt("Assessing the input...");
       const askArgMsg = `Strictly yes or no, is "${claim}" an argument? Please note that an argument is a coherent series of reasons, statements, or facts intended to support or establish a point of view.`;
       const askArgMsgResult = await chat.sendMessage(askArgMsg);
       const askArgMsgResponse = askArgMsgResult.response.text();
@@ -103,6 +106,7 @@ export default function Home() {
         console.log("Is a claim? " + askClaimMsgResponse);
 
         if (askClaimMsgResponse.toLowerCase().includes("yes")) {
+          setLoadingPrompt("Identifying the type of claim...");
           const askCategoryPrompt = `
           Categorize the sentence "${claim}" into seven categories:
   
@@ -130,18 +134,21 @@ export default function Home() {
             askCategoryPromptResponse.toLowerCase().includes("not a claim")
           ) {
             setError("The input is not suitable for counterarguments.");
+            setLoadingPrompt(null);
             setLoading(false);
             setCounterarguments([]);
             return;
           }
         } else {
           setError("The input is neither a claim nor an argument.");
+          setLoadingPrompt(null);
           setLoading(false);
           setCounterarguments([]);
           return;
         }
       }
 
+      setLoadingPrompt("Generating counterarguments...");
       const msgs = [
         `Provide one argument against "${claim}" strictly with summary (in paragraph form labeled as **Summary:**), body (in paragraph labeled as **Body:**), and source (in bullet points labeled as **Source:**) as the format.`,
         "Provide another one with the same format",
@@ -163,7 +170,9 @@ export default function Home() {
         const source = text.substring(sourcePos + 11).trim();
         const counterarg = { summary, body, source };
         counterargs.push(counterarg);
+        setLoadingPrompt(`Generated ${i + 1}/3 counterarguments...`);
       }
+      setLoadingPrompt(null);
       setLoading(false);
       setError(null);
 
@@ -180,6 +189,7 @@ export default function Home() {
 
       setCounterarguments(counterargs);
     } catch (error) {
+      setLoadingPrompt(null);
       setLoading(false);
       setCounterarguments([]);
       setError("Counterargument generation failed! Please try again.");
@@ -220,7 +230,12 @@ export default function Home() {
       )}
       <div>
         {loading ? (
-          <SkeletonLoader />
+          <div className="w-full mt-16 text-center">
+            <Spinner className="size-8 fill-cgreen mr-2" />
+            <span className="text-lg text-cgreen font-bold">
+              {loadingPrompt}
+            </span>
+          </div>
         ) : counterarguments.length !== 0 ? (
           <div>
             <div className="w-full mt-5 text-center text-lg font-bold text-cblack">

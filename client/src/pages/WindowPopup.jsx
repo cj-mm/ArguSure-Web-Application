@@ -19,6 +19,7 @@ const WindowPopup = () => {
   const [claimEdit, setClaimEdit] = useState("");
   const [editing, setEditing] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [loadingPrompt, setLoadingPrompt] = useState(null);
   const [error, setError] = useState(null);
   const { currentUser } = useSelector((state) => state.user);
   const selectedClaim = useRef("");
@@ -69,6 +70,7 @@ const WindowPopup = () => {
     try {
       if (!selectedClaim.current) {
         setError("Please select something!");
+        setLoadingPrompt(null);
         setLoading(false);
         setCounterarguments([]);
         return;
@@ -76,6 +78,7 @@ const WindowPopup = () => {
 
       if (selectedClaim.current.length > charLimit) {
         setError(`Please input up to ${charLimit} characters only.`);
+        setLoadingPrompt(null);
         setLoading(false);
         setCounterarguments([]);
         return;
@@ -113,6 +116,7 @@ const WindowPopup = () => {
 
       const claim = `${selectedClaim.current}`;
 
+      setLoadingPrompt("Assessing the input...");
       const askArgMsg = `Strictly yes or no, is "${claim}" an argument? Please note that an argument is a coherent series of reasons, statements, or facts intended to support or establish a point of view.`;
       const askArgMsgResult = await chat.sendMessage(askArgMsg);
       const askArgMsgResponse = askArgMsgResult.response.text();
@@ -125,6 +129,7 @@ const WindowPopup = () => {
         console.log("Is a claim? " + askClaimMsgResponse);
 
         if (askClaimMsgResponse.toLowerCase().includes("yes")) {
+          setLoadingPrompt("Identifying the type of claim...");
           const askCategoryPrompt = `
           Categorize the sentence "${claim}" into seven categories:
   
@@ -152,18 +157,21 @@ const WindowPopup = () => {
             askCategoryPromptResponse.toLowerCase().includes("not a claim")
           ) {
             setError("The input is not suitable for counterarguments.");
+            setLoadingPrompt(null);
             setLoading(false);
             setCounterarguments([]);
             return;
           }
         } else {
           setError("The input is neither a claim nor an argument.");
+          setLoadingPrompt(null);
           setLoading(false);
           setCounterarguments([]);
           return;
         }
       }
 
+      setLoadingPrompt("Generating counterarguments...");
       const msgs = [
         `Provide one argument against "${claim}" strictly with summary (in paragraph form labeled as **Summary:**), body (in paragraph labeled as **Body:**), and source (in bullet points labeled as **Source:**) as the format.`,
         "Provide another one with the same format",
@@ -185,6 +193,7 @@ const WindowPopup = () => {
         const source = text.substring(sourcePos + 11).trim();
         const counterarg = { summary, body, source };
         counterargs.push(counterarg);
+        setLoadingPrompt(`Generated ${i + 1}/3 counterarguments...`);
       }
 
       for (let i = 0; i < counterargs.length; i++) {
@@ -198,9 +207,11 @@ const WindowPopup = () => {
         counterargs[i] = data;
       }
       setCounterarguments(counterargs);
+      setLoadingPrompt(null);
       setLoading(false);
       setError(null);
     } catch (error) {
+      setLoadingPrompt(null);
       setLoading(false);
       setCounterarguments([]);
       setError("Counterargument generation failed! Please try again.");
@@ -313,7 +324,12 @@ const WindowPopup = () => {
               )}
               <div className="text-cblack">
                 {loading ? (
-                  <Spinner className="w-full mt-16 h-14 fill-cgreen" />
+                  <div className="w-full mt-16 text-center">
+                    <Spinner className="size-7 fill-cgreen mr-2" />
+                    <span className="text-base text-cgreen font-bold">
+                      {loadingPrompt}
+                    </span>
+                  </div>
                 ) : counterarguments.length !== 0 ? (
                   <div>
                     {counterarguments.map((counterargument, index) => {
