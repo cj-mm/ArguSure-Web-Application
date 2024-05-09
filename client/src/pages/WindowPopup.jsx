@@ -291,16 +291,17 @@ const WindowPopup = () => {
             <div className="flex m-2">
               <div className="flex-1"></div>
               <div className="flex gap-3 text-cbrown text-xs justify-center underline mt-1">
-                {loading ? (
-                  <span className="hover:cursor-not-allowed">Regenerate</span>
-                ) : (
-                  <span
-                    className="hover:cursor-pointer hover:text-yellow-800"
-                    onClick={() => generateCounterarguments()}
-                  >
-                    Regenerate
-                  </span>
-                )}
+                {counterarguments.length !== 0 &&
+                  (loading ? (
+                    <span className="hover:cursor-not-allowed">Regenerate</span>
+                  ) : (
+                    <span
+                      className="hover:cursor-pointer hover:text-yellow-800"
+                      onClick={() => generateCounterarguments()}
+                    >
+                      Regenerate
+                    </span>
+                  ))}
                 <Link
                   to={homepageRoute}
                   target="_blank"
