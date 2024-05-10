@@ -87,7 +87,7 @@ export default function Home() {
 
       const chat = model.startChat({
         generationConfig: {
-          maxOutputTokens: 4096,
+          maxOutputTokens: 2048,
         },
         safetySettings,
       });
