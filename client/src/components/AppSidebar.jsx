@@ -56,7 +56,7 @@ export default function AppSidebar() {
         className="app-sidebar h-screen w-60 fixed z-10"
       >
         <Sidebar.Logo href="/" img={AppLogo} imgAlt="App logo" as="div">
-          <span className="text-clightgreen">Lorem Ipsum</span>
+          <span className="text-clightgreen text-2xl">ArguSure</span>
         </Sidebar.Logo>
         <hr className="border-clightgreen mb-12" />
         <Sidebar.Items>

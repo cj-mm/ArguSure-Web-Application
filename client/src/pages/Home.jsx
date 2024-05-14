@@ -150,7 +150,8 @@ export default function Home() {
 
       setLoadingPrompt("Generating counterarguments...");
       const msgs = [
-        `Provide one argument against "${claim}" strictly with summary (in paragraph form labeled as **Summary:**), body (in paragraph labeled as **Body:**), and source (in bullet points labeled as **Source:**) as the format.`,
+        `Please provide one argument against "${claim}" strictly with summary (in paragraph form labeled as **Summary:**), body (in paragraph labeled as **Body:**), and source (in bullet points labeled as **Source:**) as the format. Please make sure that the argument will refute "${claim}" and not support it.`,
+        // `Please provide one reason why "${claim}" might be wrong strictly with summary (in paragraph form labeled as **Summary:**), body (in paragraph labeled as **Body:**), and source (in bullet points labeled as **Source:**) as the format. Please make sure that the reason will refute "${claim}" and not support it.`,
         "Provide another one with the same format",
         "Provide another one again with the same format",
       ];
@@ -259,18 +260,23 @@ export default function Home() {
           </div>
         ) : (
           <div className="flex flex-col gap-10 m-auto text-center w-full sm:w-[40rem] my-10">
-            <div className="text-4xl text-cgreen font-extrabold">
-              Lorem Ipsum Dolor
-            </div>
-            <div className="text-cblack italic">
-              ..... Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-              sodales velit vulputate magna euismod, vel maximus quam aliquam.
-              Nulla eu sem vitae metus fringilla fermentum. Integer ante tortor,
-              dictum a augue eget, efficitur tristique tellus. Quisque pretium
-              feugiat blandit. Nam scelerisque rutrum dolor eget finibus.
-              Vivamus nec nisl ultrices, auctor ante vitae, lacinia lorem.
-              Aenean ullamcorper tristique ullamcorper. Vestibulum finibus erat
-              nibh, nec mollis nisl eleifend non .....
+            <div className="text-4xl text-cgreen font-extrabold">ArguSure</div>
+            <div className="text-cblack italic leading-8">
+              You are browsing your social media feed and you read something you
+              agree with. You think that that is correct, but are you sure? To
+              maintain an impartial and objective stance, it might be beneficial
+              for you to think again. After all, you are probably in a{" "}
+              <a
+                className="underline"
+                href="https://www.google.com/search?q=Filter+Bubble&rlz=1C1KNTJ_enPH1072PH1072&oq=Filter+Bubble&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIGCAEQRRg9MgYIAhBFGD0yBggDEEUYPdIBCDI2NTRqMGoxqAIAsAIA&sourceid=chrome&ie=UTF-8"
+                target="_blank"
+              >
+                Filter Bubble
+              </a>
+              . No worries though, <b>ArguSure</b> is here to help! Powered by
+              Google's multimodal LLM called Gemini, it is a counterargument
+              generator that lets you conveniently seek and explore different,
+              contradictory ideas.
             </div>
           </div>
         )}
