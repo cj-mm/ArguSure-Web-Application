@@ -262,8 +262,8 @@ export default function Home() {
           <div className="flex flex-col gap-10 m-auto text-center w-full sm:w-[40rem] my-10">
             <div className="text-4xl text-cgreen font-extrabold">ArguSure</div>
             <div className="text-cblack italic leading-8">
-              You are browsing your social media feed and you read something you
-              agree with. You think that that is correct, but are you sure? To
+              You are browsing the Internet and you read something you agree
+              with. You think that that is correct, but are you sure? To
               maintain an impartial and objective stance, it might be beneficial
               for you to think again. After all, you are probably in a{" "}
               <a
