@@ -4,7 +4,7 @@ import {
   HarmBlockThreshold,
   HarmCategory,
 } from "@google/generative-ai";
-import { Button, Spinner, TextInput } from "flowbite-react";
+import { Spinner, TextInput } from "flowbite-react";
 import { MdOutlineDriveFileRenameOutline } from "react-icons/md";
 import AppLogo from "../assets/logo.png";
 import PopupCounterargsContainer from "../components/PopupCounterargContainer";
@@ -36,6 +36,7 @@ const WindowPopup = () => {
         "selectedText"
       );
       setClaimEdit(selectedClaim.current);
+      generateCounterarguments();
     }
   }, []);
 
@@ -318,7 +319,7 @@ const WindowPopup = () => {
                 Why this might be wrong?
               </div>
               {error ? (
-                <div className="text-center mt-5 text-red-500">{error}</div>
+                <div className="text-center mt-16 text-red-500">{error}</div>
               ) : (
                 <></>
               )}
@@ -344,43 +345,9 @@ const WindowPopup = () => {
                   </div>
                 ) : (
                   !error && (
-                    <>
-                      <div className="text-center m-5 text-cblack italic leading-7">
-                        You are browsing your social media feed and you read
-                        something you agree with. You think that that is
-                        correct, but are you sure? To maintain an impartial and
-                        objective stance, it might be beneficial for you to
-                        think again. After all, you are probably in a{" "}
-                        <a
-                          className="underline"
-                          href="https://www.google.com/search?q=Filter+Bubble&rlz=1C1KNTJ_enPH1072PH1072&oq=Filter+Bubble&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIGCAEQRRg9MgYIAhBFGD0yBggDEEUYPdIBCDI2NTRqMGoxqAIAsAIA&sourceid=chrome&ie=UTF-8"
-                          target="_blank"
-                        >
-                          Filter Bubble
-                        </a>
-                        . No worries though, <b>ArguSure</b> is here to help!
-                        Powered by Google's multimodal LLM called Gemini, it is
-                        a counterargument generator that lets you conveniently
-                        seek and explore different, contradictory ideas.
-                      </div>
-                      <Button
-                        className="bg-cbrown text-clight font-semibold h-10 mt-10 mx-auto sm:mx-0 cshadow"
-                        type="button"
-                        onClick={generateCounterarguments}
-                        disabled={
-                          selectedClaim.current && !loading ? false : true
-                        }
-                      >
-                        {loading ? (
-                          <>
-                            <Spinner size="sm" />
-                            <span className="pl-3">Generating...</span>
-                          </>
-                        ) : (
-                          "Generate Counterarguments"
-                        )}
-                      </Button>
-                    </>
+                    <div className="text-center mt-5">
+                      No Counterarguments Generated
+                    </div>
                   )
                 )}
               </div>
