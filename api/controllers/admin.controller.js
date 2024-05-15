@@ -94,7 +94,10 @@ export const getAllUsers = async (req, res, next) => {
   const limit = parseInt(req.query.limit) || 10;
   try {
     let allUsers = [];
-    const users = await User.find().skip(startIndex).limit(limit);
+    const users = await User.find()
+      .sort({ createdAt: "desc" })
+      .skip(startIndex)
+      .limit(limit);
     for (let i = 0; i < users.length; i++) {
       let user = {};
       user.userId = users[i]._id;
