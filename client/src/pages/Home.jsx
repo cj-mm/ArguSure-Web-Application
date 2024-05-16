@@ -162,13 +162,13 @@ export default function Home() {
       //   // "Please provide another one again with the same format",
       // ];
       const msgs = [
-        `Please provide one argument against "${claim}" strictly with summary (in paragraph form labeled as **Summary:**), body (in paragraph form labeled as **Body:**), and source (in bullet points labeled as **Source:**) as the format. The argument should well-structured and organized in a coherent manner.
+        `Please provide one argument against "${claim}" strictly with summary (in paragraph form labeled as **Summary:**), body (in paragraph form labeled as **Body:**), and source (in bullet points labeled as **Source:**) as the format. The argument should be well-structured and organized in a coherent manner.
         
         Please make sure that the argument will refute "${claim}" and not support it.`,
-        `Please provide another argument against "${claim}" strictly with summary (in paragraph form labeled as **Summary:**), body (in paragraph form labeled as **Body:**), and source (in bullet points labeled as **Source:**) as the format. The argument should well-structured and organized in a coherent manner.
+        `Please provide another argument against "${claim}" strictly with summary (in paragraph form labeled as **Summary:**), body (in paragraph form labeled as **Body:**), and source (in bullet points labeled as **Source:**) as the format. The argument should be well-structured and organized in a coherent manner.
         
         Please make sure that the argument will refute "${claim}" and not support it.`,
-        `Again, please provide another argument against "${claim}" strictly with summary (in paragraph form labeled as **Summary:**), body (in paragraph form labeled as **Body:**), and source (in bullet points labeled as **Source:**) as the format. The argument should well-structured and organized in a coherent manner.
+        `Again, please provide another argument against "${claim}" strictly with summary (in paragraph form labeled as **Summary:**), body (in paragraph form labeled as **Body:**), and source (in bullet points labeled as **Source:**) as the format. The argument should be well-structured and organized in a coherent manner.
         
         Please make sure that the argument will refute "${claim}" and not support it.`,
       ];
