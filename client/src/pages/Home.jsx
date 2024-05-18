@@ -226,7 +226,7 @@ export default function Home() {
           maxLength={charLimit}
         />
         <Button
-          className="bg-cbrown text-clight font-semibold w-44 h-10 mt-2 mx-auto sm:mx-0 hover:shadow-lg"
+          className="bg-cbrown text-clight font-semibold w-44 h-12 mt-2 mx-auto sm:mx-0 hover:shadow-lg"
           type="button"
           onClick={generateCounterarguments}
           disabled={inputClaim && !loading ? false : true}
@@ -237,7 +237,7 @@ export default function Home() {
               <span className="pl-3">Generating...</span>
             </>
           ) : (
-            "Generate"
+            "Generate Counterarguments"
           )}
         </Button>
       </div>
