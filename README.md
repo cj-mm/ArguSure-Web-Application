@@ -20,4 +20,4 @@ For more info, please see [this repository](https://github.com/cj-mm/ArguSure).
 
 #### Admin Page
 
-![Admin Page](screenshots/admin_page_users.png)
+![Admin Page](screenshots/admin_page.png)
