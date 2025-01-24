@@ -8,7 +8,7 @@ For more info, please see [this repository](https://github.com/cj-mm/ArguSure).
 
 #### Signup Page
 
-![Signup Page](screenshots/sign_up_page.png)
+![Signup page](screenshots/sign_up_page.png)
 
 #### Homepage
 
@@ -20,4 +20,4 @@ For more info, please see [this repository](https://github.com/cj-mm/ArguSure).
 
 #### Admin Page
 
-![Admin Page](screenshots/admin_page.png)
+![Admin page](screenshots/admin_page.png)
