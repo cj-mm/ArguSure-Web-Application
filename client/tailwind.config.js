@@ -1,3 +1,6 @@
+import flowbitePlugin from "flowbite/plugin";
+import innerborderPlugin from "tailwindcss-inner-border";
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -15,5 +18,5 @@ export default {
       cblack: "#32292F",
     },
   },
-  plugins: [require("flowbite/plugin"), require("tailwindcss-inner-border")],
+  plugins: [flowbitePlugin, innerborderPlugin],
 };
