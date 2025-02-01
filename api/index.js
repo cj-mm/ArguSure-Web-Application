@@ -8,6 +8,7 @@ import savedRoutes from "./routes/saved.route.js";
 import adminRoutes from "./routes/admin.route.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import path from "path";
 
 dotenv.config();
 
@@ -19,6 +20,8 @@ mongoose
   .catch((err) => {
     console.log(err);
   });
+
+const __dirname = path.resolve();
 
 const app = express();
 
@@ -35,6 +38,12 @@ app.use("/api/auth", authRoutes);
 app.use("/api/counterarg", counterargRoutes);
 app.use("/api/saved", savedRoutes);
 app.use("/api/admin", adminRoutes);
+
+app.use(express.static(path.join(__dirname, "/client/dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+});
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
