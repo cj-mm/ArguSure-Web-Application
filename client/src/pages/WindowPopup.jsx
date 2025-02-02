@@ -24,9 +24,9 @@ const WindowPopup = () => {
   const { currentUser } = useSelector((state) => state.user);
   const selectedClaim = useRef("");
   const location = useLocation();
-  const homepageRoute = "http://localhost:5173/";
-  const signinRoute = "http://localhost:5173/sign-in";
-  const signupRoute = "http://localhost:5173/sign-up";
+  const homepageRoute = "https://argusure.onrender.com/";
+  const signinRoute = "https://argusure.onrender.com/sign-in";
+  const signupRoute = "https://argusure.onrender.com/sign-up";
   const { prompt, promptText } = useSelector((state) => state.counterarg);
   const charLimit = 500;
 
@@ -224,7 +224,7 @@ const WindowPopup = () => {
   };
 
   return (
-    <div className="window-popup flex w-screen h-screen">
+    <div className="window-popup flex w-screen h-screen pr-4">
       <div className="m-auto p-2 bg-clight w-[600px] h-[580px] rounded cshadow">
         {currentUser ? (
           <>
