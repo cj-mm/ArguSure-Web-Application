@@ -126,17 +126,6 @@ export default function Profile() {
       return;
     }
 
-    // if (
-    //   Object.keys(formData).length === 0 ||
-    //   ((!("newpassword" in formData) || formData.newpassword === "") &&
-    //     (!("username" in formData) ||
-    //       formData.username === currentUser.username) &&
-    //     !("profilePicture" in formData))
-    // ) {
-    //   setUpdateUserError("No changes made");
-    //   return;
-    // }
-
     if (!currentUser.isAutoPassword && !formData.curpassword) {
       setUpdateUserError("Please fill in current password");
       return;
