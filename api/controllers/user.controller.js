@@ -76,7 +76,7 @@ export const updateUser = async (req, res, next) => {
           profilePicture: req.body.profilePicture,
           isAutoPassword:
             !isAutoPassword || req.body.newpassword ? false : true,
-          password: req.body.newpassword,
+          password: updatedPassword ? req.body.newpassword : validUser.password,
         },
       },
       { new: true }
