@@ -2,12 +2,19 @@ import React, { useState } from "react";
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { Link, useNavigate } from "react-router-dom";
 import GoogleAuth from "../components/GoogleAuth";
+import { useDispatch } from "react-redux";
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+} from "../redux/user/userSlice";
 
 export default function SignUp() {
   const [formData, setFormData] = useState({});
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
@@ -47,7 +54,42 @@ export default function SignUp() {
         return setErrorMessage(data.message);
       }
       if (res.ok) {
-        navigate("/sign-in");
+        try {
+          dispatch(signInStart());
+          const res = await fetch("/api/auth/signin", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email: formDataFinal.email,
+              password: formDataFinal.password,
+            }),
+          });
+
+          const data = await res.json();
+          if (data.success === false) {
+            dispatch(signInFailure(data.message));
+          }
+          if (res.ok) {
+            dispatch(signInSuccess(data));
+            dispatch(resetSavedCounterargs());
+            for (let i = 0; i < data.saved.length; i++) {
+              if (data.saved[i].topicName === "default") {
+                for (
+                  let j = 0;
+                  j < data.saved[i].counterarguments.length;
+                  j++
+                ) {
+                  dispatch(
+                    addToSavedCounterargs(data.saved[i].counterarguments[j])
+                  );
+                }
+              }
+            }
+            navigate("/");
+          }
+        } catch (error) {
+          dispatch(signInFailure(error.message));
+        }
       }
     } catch (error) {
       setErrorMessage(error.message);
