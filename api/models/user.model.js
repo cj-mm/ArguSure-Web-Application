@@ -28,6 +28,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    isAutoPassword: {
+      type: Boolean,
+      default: false,
+    },
     profilePicture: {
       type: String,
       default:
