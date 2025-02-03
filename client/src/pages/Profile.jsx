@@ -99,7 +99,7 @@ export default function Profile() {
       return;
     }
 
-    if (!formData.curpassword) {
+    if (!currentUser.isAutoPassword && !formData.curpassword) {
       setUpdateUserError("Please fill in current password");
       return;
     }
@@ -154,15 +154,6 @@ export default function Profile() {
       console.log(error.message);
     }
   };
-
-  // const handleCancel = () => {
-  //   setFormData({
-  //     username: currentUser.username,
-  //     newpassword: "",
-  //     confirmpassword: "",
-  //     curpassword: "",
-  //   });
-  // };
 
   return (
     <div className="page-container w-full h-full ml-60 mt-5">
@@ -282,25 +273,29 @@ export default function Profile() {
                     disabled={formData.newpassword ? false : true}
                   />
                 </div>
-                <div>
-                  <Label
-                    value="Current Password"
-                    className="text-cgreen text-sm font-normal"
-                  />
-                  <TextInput
-                    type="password"
-                    placeholder="Enter your password"
-                    id="curpassword"
-                    onChange={handleChange}
-                    disabled={
-                      Object.keys(formData).length === 0 ||
-                      (formData.newpassword === "" &&
-                        formData.username === currentUser.username)
-                        ? true
-                        : false
-                    }
-                  />
-                </div>
+                {currentUser.isAutoPassword ? (
+                  <></>
+                ) : (
+                  <div>
+                    <Label
+                      value="Current Password"
+                      className="text-cgreen text-sm font-normal"
+                    />
+                    <TextInput
+                      type="password"
+                      placeholder="Enter your password"
+                      id="curpassword"
+                      onChange={handleChange}
+                      disabled={
+                        Object.keys(formData).length === 0 ||
+                        (formData.newpassword === "" &&
+                          formData.username === currentUser.username)
+                          ? true
+                          : false
+                      }
+                    />
+                  </div>
+                )}
               </div>
             </div>
             <div className="flex hover:shadow-lg bg-black rounded-xl mt-5 w-full sm:w-1/2 mx-auto">
@@ -311,16 +306,6 @@ export default function Profile() {
                 Update
               </Button>
             </div>
-            {/* <div className="flex hover:shadow-lg rounded-xl w-1/2 mx-auto">
-            <Button
-              type="button"
-              className="inner-border-cbrown bg-clight inner-border-solid inner-border-2 flex-1 mt-2"
-              // disabled
-              onClick={handleCancel}
-            >
-              <span className="text-cbrown font-semibold">Cancel</span>
-            </Button>
-          </div> */}
           </form>
           <div className=" text-sm text-cbrown underline flex justify-between mt-2 w-full sm:w-1/2 mx-auto">
             <span
