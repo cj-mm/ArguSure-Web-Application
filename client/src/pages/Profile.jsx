@@ -32,6 +32,9 @@ export default function Profile() {
   const [updateUserSuccess, setUpdateUserSuccess] = useState(null);
   const [updateUserError, setUpdateUserError] = useState(null);
   const [formData, setFormData] = useState({});
+  const [curPW, setCurPW] = useState("");
+  const [newPW, setNewPW] = useState("");
+  const [confirmNewPW, setConfirmNewPW] = useState("");
   const filePickerRef = useRef();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -83,6 +86,22 @@ export default function Profile() {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
+    if (e.target.id === "curpassword") {
+      setCurPW(e.target.value);
+    }
+    switch (e.target.id) {
+      case "newpassword":
+        setNewPW(e.target.value);
+        break;
+      case "confirmpassword":
+        setConfirmNewPW(e.target.value);
+        break;
+      case "curpassword":
+        setCurPW(e.target.value);
+        break;
+      default:
+        break;
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -90,14 +109,33 @@ export default function Profile() {
     setUpdateUserSuccess(null);
     setUpdateUserError(null);
 
+    const isFormDataEmpty = Object.keys(formData).length === 0;
+    const isNewPWinFormData = "newpassword" in formData;
+    const isNewPWEmpty = formData.newpassword === "";
+    const isUNinFormData = "username" in formData;
+    const isUNUnchanged = formData.username === currentUser.username;
+    const isPFPinFormData = "profilePicture" in formData;
+
     if (
-      Object.keys(formData).length === 0 ||
-      (formData.newpassword === "" &&
-        formData.username === currentUser.username)
+      isFormDataEmpty ||
+      ((!isNewPWinFormData || isNewPWEmpty) &&
+        (!isUNinFormData || isUNUnchanged) &&
+        !isPFPinFormData)
     ) {
       setUpdateUserError("No changes made");
       return;
     }
+
+    // if (
+    //   Object.keys(formData).length === 0 ||
+    //   ((!("newpassword" in formData) || formData.newpassword === "") &&
+    //     (!("username" in formData) ||
+    //       formData.username === currentUser.username) &&
+    //     !("profilePicture" in formData))
+    // ) {
+    //   setUpdateUserError("No changes made");
+    //   return;
+    // }
 
     if (!currentUser.isAutoPassword && !formData.curpassword) {
       setUpdateUserError("Please fill in current password");
@@ -132,6 +170,10 @@ export default function Profile() {
       } else {
         dispatch(updateSuccess(data));
         setUpdateUserSuccess("User's profile updated successfully");
+        setFormData({});
+        setNewPW("");
+        setConfirmNewPW("");
+        setCurPW("");
       }
     } catch (error) {
       setUpdateUserError(error.message);
@@ -258,6 +300,7 @@ export default function Profile() {
                     placeholder="Enter your password"
                     id="newpassword"
                     onChange={handleChange}
+                    value={newPW}
                   />
                 </div>
                 <div>
@@ -270,6 +313,7 @@ export default function Profile() {
                     placeholder="Confirm password"
                     id="confirmpassword"
                     onChange={handleChange}
+                    value={confirmNewPW}
                     disabled={formData.newpassword ? false : true}
                   />
                 </div>
@@ -286,10 +330,14 @@ export default function Profile() {
                       placeholder="Enter your password"
                       id="curpassword"
                       onChange={handleChange}
+                      value={curPW}
                       disabled={
                         Object.keys(formData).length === 0 ||
-                        (formData.newpassword === "" &&
-                          formData.username === currentUser.username)
+                        ((!("newpassword" in formData) ||
+                          formData.newpassword === "") &&
+                          (!("username" in formData) ||
+                            formData.username === currentUser.username) &&
+                          !("profilePicture" in formData))
                           ? true
                           : false
                       }
