@@ -50,17 +50,21 @@ export const updateUser = async (req, res, next) => {
   }
 
   try {
-    if (!curPassword) {
+    const validUser = await User.findById(req.params.userId);
+    const isAutoPassword = validUser.isAutoPassword;
+
+    if (!isAutoPassword && !curPassword) {
       return next(errorHandler(400, "Please fill in current password"));
     }
 
-    const validUser = await User.findById(req.params.userId);
-    const validCurPassword = bcryptjs.compareSync(
-      curPassword,
-      validUser.password
-    );
-    if (!validCurPassword) {
-      return next(errorHandler(400, "Invalid current password!"));
+    if (!isAutoPassword) {
+      const validCurPassword = bcryptjs.compareSync(
+        curPassword,
+        validUser.password
+      );
+      if (!validCurPassword) {
+        return next(errorHandler(400, "Invalid current password!"));
+      }
     }
 
     const updatedUser = await User.findByIdAndUpdate(
@@ -70,6 +74,8 @@ export const updateUser = async (req, res, next) => {
           username: req.body.username,
           email: validUser.email,
           profilePicture: req.body.profilePicture,
+          isAutoPassword:
+            !isAutoPassword || req.body.newpassword ? false : true,
           password: req.body.newpassword,
         },
       },
