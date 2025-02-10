@@ -1,6 +1,6 @@
 # Web Application for ArguSure
 
-ArguSure is a Gemini-base Chrome Extension for Counterargument Generation. This web application is for users to view and organize their generated counterarguments, and for admins to view and organize application data/statistics and users.
+With the goal of alleviating the negative effects of Filter bubbles, ArguSure is a Gemini-based Chrome Extension for Counterargument Generation. This web application is for users to view and organize their generated counterarguments and for admins to view and manage application data and statistics.
 
 For more info, please see [this repository](https://github.com/cj-mm/ArguSure).
 
