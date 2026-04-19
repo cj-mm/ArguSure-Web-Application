@@ -81,27 +81,22 @@ export default function Home() {
           threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
         },
       ];
+      // Replace the old model + chat initialization with this
       const model = genAI.getGenerativeModel({
-        model: "gemini-pro",
-      });
-
-      const chat = model.startChat({
-        generationConfig: {
-          maxOutputTokens: 2048,
-        },
+        model: "gemini-2.5-flash",
         safetySettings,
       });
       const claim = `${inputClaim}`;
 
       setLoadingPrompt("Assessing the input...");
       const askArgMsg = `Strictly yes or no, is "${claim}" an argument? Please note that an argument is a coherent series of reasons, statements, or facts intended to support or establish a point of view.`;
-      const askArgMsgResult = await chat.sendMessage(askArgMsg);
+      const askArgMsgResult = await model.generateContent(askArgMsg);
       const askArgMsgResponse = askArgMsgResult.response.text();
       console.log("Is an argument? " + askArgMsgResponse);
 
       if (askArgMsgResponse.toLowerCase().includes("no")) {
         const askClaimMsg = `Strictly yes or no, is "${claim}" a claim? Please note that a claim is an assertion open to challenge.`;
-        const askClaimMsgResult = await chat.sendMessage(askClaimMsg);
+        const askClaimMsgResult = await model.generateContent(askClaimMsg);
         const askClaimMsgResponse = askClaimMsgResult.response.text();
         console.log("Is a claim? " + askClaimMsgResponse);
 
@@ -120,9 +115,8 @@ export default function Home() {
           
           Strictly use only one of the 7 labels (PE, Q, CC, CLO, P, OTC, NAC), do not provide any additional explanation.
           `;
-          const askCategoryPromptResult = await chat.sendMessage(
-            askCategoryPrompt
-          );
+          const askCategoryPromptResult =
+            await model.generateContent(askCategoryPrompt);
           const askCategoryPromptResponse =
             askCategoryPromptResult.response.text();
           console.log("Category? " + askCategoryPromptResponse);
@@ -176,16 +170,45 @@ export default function Home() {
       let counterargs = [];
       for (let i = 0; i < numOfCounterarguments; i++) {
         const msg = msgs[i];
-        const result = await chat.sendMessage(msg);
+        const result = await model.generateContent(msg);
         const response = await result.response;
         const text = response.text();
         console.log(text);
-        const summaryPos = text.indexOf("**Summary:**");
-        const bodyPos = text.indexOf("**Body:**");
-        const sourcePos = text.indexOf("**Source:**");
-        const summary = text.substring(summaryPos + 12, bodyPos).trim();
-        const body = text.substring(bodyPos + 9, sourcePos).trim();
-        const source = text.substring(sourcePos + 11).trim();
+        // AFTER — explicit labels, validation included
+        const SUMMARY_LABEL = "**Summary:**";
+        const BODY_LABEL = "**Body:**";
+        const SOURCE_LABEL = "**Source:**";
+
+        const summaryPos = text.indexOf(SUMMARY_LABEL);
+        const bodyPos = text.indexOf(BODY_LABEL);
+        const sourcePos = text.indexOf(SOURCE_LABEL);
+
+        // Check that all labels were actually found before trying to parse
+        if (summaryPos === -1 || bodyPos === -1 || sourcePos === -1) {
+          setError("The AI returned an unexpected format. Please try again.");
+          setLoadingPrompt(null);
+          setLoading(false);
+          setCounterarguments([]);
+          return;
+        }
+
+        const summary = text
+          .substring(summaryPos + SUMMARY_LABEL.length, bodyPos)
+          .trim();
+        const body = text
+          .substring(bodyPos + BODY_LABEL.length, sourcePos)
+          .trim();
+        const source = text.substring(sourcePos + SOURCE_LABEL.length).trim();
+
+        // Check that the extracted values are not empty even if labels were found
+        if (!summary || !body || !source) {
+          setError("The AI returned incomplete content. Please try again.");
+          setLoadingPrompt(null);
+          setLoading(false);
+          setCounterarguments([]);
+          return;
+        }
+
         const counterarg = { summary, body, source };
         counterargs.push(counterarg);
         setLoadingPrompt(`Generated ${i + 1}/3 counterarguments...`);
@@ -200,7 +223,7 @@ export default function Home() {
           claim.trim(),
           counterarg.summary,
           counterarg.body,
-          counterarg.source
+          counterarg.source,
         );
         counterargs[i] = data;
       }
