@@ -29,8 +29,8 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
 
-app.listen(5000, () => {
-  console.log("Server is running on Port 5000");
+app.listen(process.env.PORT, () => {
+  console.log(`Server is running on Port ${process.env.PORT}`);
 });
 
 app.use("/api/user", userRoutes);
