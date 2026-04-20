@@ -1,14 +1,7 @@
 import { Alert, Button, Label, TextInput } from "flowbite-react";
-import React, { useEffect, useRef, useState } from "react";
-import {
-  getDownloadURL,
-  getStorage,
-  ref,
-  uploadBytesResumable,
-} from "firebase/storage";
+import { useEffect, useRef, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { useSelector } from "react-redux";
-import { app } from "../firebase";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import {
@@ -56,32 +49,48 @@ export default function Profile() {
   const uploadImage = async () => {
     setImageFileUploading(true);
     setImageFileUploadError(null);
-    const storage = getStorage(app);
-    const fileName = new Date().getTime() + imageFile.name;
-    const storageRef = ref(storage, fileName);
-    const uploadTask = uploadBytesResumable(storageRef, imageFile);
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        setImageFileUploadProgress(progress.toFixed(0));
-      },
-      (error) => {
-        setImageFileUploadError("Could not upload image");
-        setImageFileUploadProgress(null);
-        setImageFile(null);
-        setImageFileUrl(null);
-        setImageFileUploading(false);
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          setImageFileUrl(downloadURL);
-          setFormData({ ...formData, profilePicture: downloadURL });
-          setImageFileUploading(false);
-        });
+    setImageFileUploadProgress(10); // Show immediate feedback that something is happening
+
+    try {
+      const formDataImg = new FormData();
+      formDataImg.append("file", imageFile);
+      formDataImg.append(
+        "upload_preset",
+        import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET,
+      );
+
+      setImageFileUploadProgress(40); // Upload is being prepared
+
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload`,
+        {
+          method: "POST",
+          body: formDataImg,
+        },
+      );
+
+      setImageFileUploadProgress(80); // Request sent, waiting for response
+
+      if (!response.ok) {
+        throw new Error("Upload failed. Please try again.");
       }
-    );
+
+      const data = await response.json();
+      const downloadURL = data.secure_url;
+
+      setImageFileUploadProgress(100); // Done
+      setImageFileUrl(downloadURL);
+      setFormData({ ...formData, profilePicture: downloadURL });
+      setImageFileUploading(false);
+    } catch (error) {
+      setImageFileUploadError(
+        error.message || "Could not upload image. Please try again.",
+      );
+      setImageFileUploadProgress(null);
+      setImageFile(null);
+      setImageFileUrl(null);
+      setImageFileUploading(false);
+    }
   };
 
   const handleChange = (e) => {
