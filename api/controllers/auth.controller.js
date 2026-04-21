@@ -63,14 +63,18 @@ export const signin = async (req, res, next) => {
 
     const token = jwt.sign(
       { id: validUser._id, isAdmin: validUser.isAdmin },
-      process.env.JWT_SECRET
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" },
     );
 
     const { password: pass, ...rest } = validUser._doc;
 
     res
       .status(200)
-      .cookie("access_token", token, { httpOnly: false })
+      .cookie("access_token", token, {
+        httpOnly: true,
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
+      })
       .json(rest);
   } catch (error) {
     next(error);
@@ -86,12 +90,17 @@ export const google = async (req, res, next) => {
       // sign in
       const token = jwt.sign(
         { id: user._id, isAdmin: user.isAdmin },
-        process.env.JWT_SECRET
+        process.env.JWT_SECRET,
+        { expiresIn: "7d" },
       );
       const { password, ...rest } = user._doc;
+
       res
         .status(200)
-        .cookie("access_token", token, { httpOnly: true })
+        .cookie("access_token", token, {
+          httpOnly: true,
+          maxAge: 7 * 24 * 60 * 60 * 1000,
+        })
         .json(rest);
     } else {
       // sign up
@@ -112,13 +121,17 @@ export const google = async (req, res, next) => {
       await newUser.save();
       const token = jwt.sign(
         { id: newUser._id, isAdmin: newUser.isAdmin },
-        process.env.JWT_SECRET
+        process.env.JWT_SECRET,
+        { expiresIn: "7d" },
       );
       const { password, ...rest } = newUser._doc;
 
       res
         .status(200)
-        .cookie("access_token", token, { httpOnly: true })
+        .cookie("access_token", token, {
+          httpOnly: true,
+          maxAge: 7 * 24 * 60 * 60 * 1000,
+        })
         .json(rest);
     }
   } catch (error) {
