@@ -24,9 +24,9 @@ const WindowPopup = () => {
   const { currentUser } = useSelector((state) => state.user);
   const selectedClaim = useRef("");
   const location = useLocation();
-  const homepageRoute = "https://argusure.onrender.com/";
-  const signinRoute = "https://argusure.onrender.com/sign-in";
-  const signupRoute = "https://argusure.onrender.com/sign-up";
+  const homepageRoute = `${import.meta.env.VITE_APP_BASE_URL}/`;
+  const signinRoute = `${import.meta.env.VITE_APP_BASE_URL}/sign-in`;
+  const signupRoute = `${import.meta.env.VITE_APP_BASE_URL}/sign-up`;
   const { prompt, promptText } = useSelector((state) => state.counterarg);
   const charLimit = 500;
 
