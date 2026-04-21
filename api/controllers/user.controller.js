@@ -60,7 +60,7 @@ export const updateUser = async (req, res, next) => {
     if (!isAutoPassword) {
       const validCurPassword = bcryptjs.compareSync(
         curPassword,
-        validUser.password
+        validUser.password,
       );
       if (!validCurPassword) {
         return next(errorHandler(400, "Invalid current password!"));
@@ -79,7 +79,7 @@ export const updateUser = async (req, res, next) => {
           password: updatedPassword ? req.body.newpassword : validUser.password,
         },
       },
-      { new: true }
+      { new: true },
     );
     const { password, ...rest } = updatedUser._doc;
     res.status(200).json(rest);
