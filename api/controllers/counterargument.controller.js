@@ -15,6 +15,24 @@ export const recordCounterarg = async (req, res, next) => {
     return next(errorHandler(400, "Please provide all required fields"));
   }
 
+  if (req.body.inputClaim.length > 500) {
+    return next(
+      errorHandler(400, "Input claim exceeds maximum length of 500 characters"),
+    );
+  }
+
+  if (req.body.summary.length > 5000) {
+    return next(errorHandler(400, "Summary exceeds maximum allowed length"));
+  }
+
+  if (req.body.body.length > 10000) {
+    return next(errorHandler(400, "Body exceeds maximum allowed length"));
+  }
+
+  if (req.body.source.length > 5000) {
+    return next(errorHandler(400, "Source exceeds maximum allowed length"));
+  }
+
   const newCounterarg = new Counterargument({
     ...req.body,
     userId: req.user.id,
@@ -59,7 +77,7 @@ export const likeDislike = async (req, res, next) => {
           liked: req.body.liked,
         },
       },
-      { new: true }
+      { new: true },
     );
     res.status(200).json(updatedCounterarg);
   } catch (error) {
