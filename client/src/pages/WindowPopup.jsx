@@ -400,7 +400,7 @@ const WindowPopup = () => {
                 Filter Bubble
               </a>
               . No worries though, <b>ArguSure</b> is here to help! Powered by
-              Google's multimodal LLM called Gemini, it is a counterargument
+              Google&#39;s multimodal LLM called Gemini, it is a counterargument
               generator that lets you conveniently seek and explore different,
               contradictory ideas.
             </div>
