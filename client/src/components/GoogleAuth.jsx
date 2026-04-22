@@ -1,4 +1,3 @@
-import React from "react";
 import { Button } from "flowbite-react";
 import { AiFillGoogleCircle } from "react-icons/ai";
 import { useDispatch } from "react-redux";
@@ -20,7 +19,7 @@ export default function GoogleAuth({ page }) {
               Authorization: `Bearer ${tokenResponse.access_token}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const resultsFromGoogle = await userInfo.json();
         const res = await fetch("/api/auth/google", {
