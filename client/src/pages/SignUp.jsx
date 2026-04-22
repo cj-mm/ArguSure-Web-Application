@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { Link, useNavigate } from "react-router-dom";
 import GoogleAuth from "../components/GoogleAuth";
@@ -8,6 +8,10 @@ import {
   signInSuccess,
   signInFailure,
 } from "../redux/user/userSlice";
+import {
+  addToSavedCounterargs,
+  resetSavedCounterargs,
+} from "../redux/counterargument/counterargSlice";
 
 export default function SignUp() {
   const [formData, setFormData] = useState({});
@@ -80,7 +84,7 @@ export default function SignUp() {
                   j++
                 ) {
                   dispatch(
-                    addToSavedCounterargs(data.saved[i].counterarguments[j])
+                    addToSavedCounterargs(data.saved[i].counterarguments[j]),
                   );
                 }
               }
