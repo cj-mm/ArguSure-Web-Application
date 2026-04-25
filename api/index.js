@@ -43,7 +43,24 @@ const counterargLimiter = rateLimit({
 app.use(express.json());
 app.use(mongoSanitize());
 app.use(cookieParser());
-app.use(cors());
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl)
+      // or from chrome-extension:// origins
+      if (
+        !origin ||
+        origin.startsWith("chrome-extension://") ||
+        origin === "https://argusure.onrender.com"
+      ) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  }),
+);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on Port ${process.env.PORT}`);
