@@ -141,20 +141,13 @@ export default function Home() {
       }
 
       setLoadingPrompt("Generating counterarguments...");
-      // const msgs = [
-      //   // `
-      //   // Input: "${claim}"
 
-      //   // Please provide one argument against the input above strictly with summary (in paragraph form labeled as **Summary:**), body (in paragraph labeled as **Body:**), and source (in bullet points labeled as **Source:**) as the format. The argument should well-structured and organized in a coherent manner.
+      const generationChat = model.startChat({
+        generationConfig: {
+          maxOutputTokens: 2048,
+        },
+      });
 
-      //   // Please make sure that the argument you will provide is against the input. The argument should strictly refute it and not support it.`,
-      //   `Please provide one argument against "${claim}" strictly with summary (in paragraph form labeled as **Summary:**), body (in paragraph labeled as **Body:**), and source (in bullet points labeled as **Source:**) as the format. Please make sure that the argument will refute "${claim}" and not support it.`,
-      //   // `Please provide one reason why "${claim}" might be wrong strictly with summary (in paragraph form labeled as **Summary:**), body (in paragraph labeled as **Body:**), and source (in bullet points labeled as **Source:**) as the format. Please make sure that the reason will refute "${claim}" and not support it.`,
-      //   `Please provide another argument against "${claim}" strictly with summary (in paragraph form labeled as **Summary:**), body (in paragraph labeled as **Body:**), and source (in bullet points labeled as **Source:**) as the format. Please make sure that the argument will refute "${claim}" and not support it.`,
-      //   `Again, please provide another argument against "${claim}" strictly with summary (in paragraph form labeled as **Summary:**), body (in paragraph labeled as **Body:**), and source (in bullet points labeled as **Source:**) as the format. Please make sure that the argument will refute "${claim}" and not support it.`,
-      //   // "Please provide another one with the same format",
-      //   // "Please provide another one again with the same format",
-      // ];
       const msgs = [
         `Please provide one argument against "${claim}" strictly with summary (in paragraph form labeled as **Summary:**), body (in paragraph form labeled as **Body:**), and source (in bullet points labeled as **Source:**) as the format. The argument should be well-structured and organized in a coherent manner.
         
@@ -170,7 +163,7 @@ export default function Home() {
       let counterargs = [];
       for (let i = 0; i < numOfCounterarguments; i++) {
         const msg = msgs[i];
-        const result = await model.generateContent(msg);
+        const result = await generationChat.sendMessage(msg);
         const response = await result.response;
         const text = response.text();
         console.log(text);
