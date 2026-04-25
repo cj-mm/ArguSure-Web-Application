@@ -107,7 +107,7 @@ const WindowPopup = () => {
       ];
       // Replace the old model + chat initialization with this
       const model = genAI.getGenerativeModel({
-        model: "gemini-1.5-flash",
+        model: "gemini-2.5-flash",
         safetySettings,
       });
 
