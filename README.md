@@ -11,8 +11,6 @@
 
 Users submit a claim or argument, and ArguSure runs it through a **multi-step AI pipeline** — first validating that it's an arguable claim, then categorizing it, then generating three well-structured counterarguments, each with a summary, a detailed body, and cited sources.
 
-For more info, please see [this repository](https://github.com/cj-mm/ArguSure).
-
 ---
 
 ## ✨ Features
@@ -117,6 +115,10 @@ npm run dev
 ```
 
 The backend runs on `http://localhost:5000` and the frontend on `http://localhost:5173`.
+
+---
+
+For more info, please see [this repository](https://github.com/cj-mm/ArguSure).
 
 ---
 
